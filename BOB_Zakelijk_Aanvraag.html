@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOB Zakelijk — Vraag een voorstel aan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E30613;
+  --red-glow: rgba(227,6,19,0.22);
+  --black: #0a0a0a;
+  --dark: #111111;
+  --mid: #1c1c1c;
+  --panel: #161616;
+  --border: rgba(255,255,255,0.08);
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.55);
+  --subtle: rgba(255,255,255,0.14);
+  --green: #22c55e;
+  --fd: 'Inter Tight', sans-serif;
+  --fb: 'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--text); font-family: var(--fb); line-height: 1.6; min-height: 100vh; }
+
+/* ─── NAV ─── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 16px;
+  padding: 0 48px; height: 64px;
+  background: rgba(10,10,10,0.97); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-back {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--muted); text-decoration: none; font-size: 14px;
+  font-family: var(--fd); font-weight: 600; letter-spacing: 0.5px;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--text); }
+.nav-back svg { width: 16px; height: 16px; flex-shrink: 0; }
+.nav-divider { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+.nav-logo img { height: 28px; width: auto; display: block; }
+.nav-title {
+  margin-left: auto; font-family: var(--fd); font-weight: 700;
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+}
+
+/* ─── HERO STRIP ─── */
+.zakelijk-hero {
+  background: var(--red); padding: 56px 48px; position: relative; overflow: hidden;
+}
+.zakelijk-hero::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.07) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+.zakelijk-hero-inner {
+  max-width: 1000px; margin: 0 auto; position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center;
+}
+.zakelijk-hero h1 {
+  font-family: var(--fd); font-weight: 900;
+  font-size: clamp(36px, 5vw, 56px); text-transform: uppercase;
+  line-height: 0.92; letter-spacing: -1px; margin-bottom: 14px;
+}
+.zakelijk-hero p { font-size: 16px; opacity: 0.9; max-width: 480px; line-height: 1.6; }
+.zakelijk-hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; min-width: 260px; }
+.zak-stat { background: rgba(0,0,0,0.15); padding: 20px 22px; }
+.zak-stat-num { font-family: var(--fd); font-weight: 900; font-size: 36px; line-height: 1; margin-bottom: 4px; }
+.zak-stat-num em { color: rgba(255,255,255,0.65); font-style: normal; }
+.zak-stat-label { font-size: 11px; opacity: 0.8; letter-spacing: 0.3px; }
+
+/* ─── MAIN LAYOUT ─── */
+.zakelijk-wrap {
+  max-width: 1000px; margin: 0 auto; padding: 64px 48px 120px;
+  display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 64px; align-items: start;
+}
+
+/* ─── FORMULIER ─── */
+.form-card {
+  background: var(--panel); border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.form-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+.form-inner { padding: 40px; }
+.form-title {
+  font-family: var(--fd); font-weight: 900; font-size: 24px;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+}
+.form-subtitle { font-size: 14px; color: var(--muted); margin-bottom: 36px; line-height: 1.6; }
+
+.form-section-label {
+  font-family: var(--fd); font-weight: 800; font-size: 10px;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--red);
+  margin-bottom: 18px; margin-top: 32px; display: block;
+  padding-bottom: 8px; border-bottom: 1px solid rgba(227,6,19,0.2);
+}
+.form-section-label:first-of-type { margin-top: 0; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-group { margin-bottom: 16px; }
+.form-group.full { grid-column: 1 / -1; }
+
+.form-label {
+  display: block; font-family: var(--fd); font-weight: 700;
+  font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px;
+}
+.form-label .req { color: var(--red); margin-left: 2px; }
+
+.form-input, .form-select, .form-textarea {
+  width: 100%; background: var(--mid); border: 1px solid var(--border);
+  color: var(--text); font-family: var(--fb); font-size: 15px;
+  padding: 12px 16px; outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none; appearance: none;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  border-color: var(--red); background: rgba(227,6,19,0.04);
+}
+.form-input.error, .form-select.error { border-color: #ef4444; }
+.form-input::placeholder { color: var(--subtle); }
+.form-textarea { min-height: 100px; resize: vertical; }
+.form-select { cursor: pointer; }
+.form-select option { background: var(--dark); }
+
+/* Aantal auto's selector */
+.autos-slider-wrap { margin-top: 4px; }
+.autos-slider-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.autos-waarde {
+  font-family: var(--fd); font-weight: 900; font-size: 28px;
+  color: var(--text); line-height: 1;
+}
+.autos-waarde em { color: var(--red); font-style: normal; }
+.autos-price-hint { font-size: 12px; color: var(--muted); margin-top: 2px; }
+input[type="range"].autos-range {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 4px; outline: none;
+  background: linear-gradient(90deg, var(--red) 0%, var(--red) var(--pct,0%), rgba(255,255,255,0.12) var(--pct,0%), rgba(255,255,255,0.12) 100%);
+  cursor: pointer; transition: background 0.1s;
+}
+input[type="range"].autos-range::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px;
+  background: var(--red); cursor: pointer;
+  clip-path: polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);
+  box-shadow: 0 0 12px var(--red-glow);
+}
+.autos-ticks { display: flex; justify-content: space-between; margin-top: 8px; }
+.autos-tick { font-size: 11px; color: var(--subtle); font-family: var(--fd); }
+
+/* Programma checkboxes */
+.prog-checks { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.prog-check-item { position: relative; }
+.prog-check-item input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+.prog-check-label {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 14px 8px; background: var(--mid); border: 1px solid var(--border);
+  cursor: pointer; transition: all 0.2s; text-align: center; gap: 4px;
+}
+.prog-check-label:hover { border-color: rgba(255,255,255,0.2); }
+.prog-check-item input:checked + .prog-check-label {
+  background: rgba(227,6,19,0.1); border-color: var(--red);
+}
+.prog-check-naam {
+  font-family: var(--fd); font-weight: 800; font-size: 14px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.prog-check-naam.gold { background: linear-gradient(135deg,#c8943e,#f5e2a0,#c8943e); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.prog-check-prijs { font-size: 11px; color: var(--muted); }
+.prog-check-item input:checked + .prog-check-label .prog-check-prijs { color: rgba(227,6,19,0.8); }
+
+/* Interieur toggle */
+.int-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px; background: var(--mid); border: 1px solid var(--border);
+  cursor: pointer; transition: border-color 0.2s; user-select: none;
+}
+.int-toggle-row:hover { border-color: rgba(255,255,255,0.2); }
+.int-toggle-row.active { border-color: rgba(227,6,19,0.35); background: rgba(227,6,19,0.05); }
+.int-toggle-text { font-size: 14px; font-weight: 500; }
+.int-toggle-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.toggle-switch {
+  width: 44px; height: 24px; background: rgba(255,255,255,0.1);
+  position: relative; flex-shrink: 0; transition: background 0.3s;
+}
+.toggle-switch.on { background: var(--red); }
+.toggle-knob {
+  position: absolute; width: 18px; height: 18px;
+  top: 3px; left: 3px; background: var(--muted);
+  transition: left 0.3s cubic-bezier(.34,1.56,.64,1), background 0.2s;
+}
+.toggle-switch.on .toggle-knob { left: 23px; background: #fff; }
+
+/* Submit button */
+.form-submit {
+  width: 100%; padding: 16px 20px 14px; background: var(--red); color: #fff;
+  border: none; cursor: pointer; font-family: var(--fd); font-weight: 800;
+  font-size: 15px; letter-spacing: 2px; text-transform: uppercase;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 12px 100%);
+  transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px;
+  margin-top: 28px;
+}
+.form-submit:hover { box-shadow: 0 12px 32px var(--red-glow); transform: translateY(-1px); }
+.form-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+.form-note { font-size: 12px; color: var(--subtle); text-align: center; margin-top: 14px; line-height: 1.6; }
+
+/* Error messages */
+.field-error { font-size: 11px; color: #ef4444; margin-top: 6px; display: none; }
+.field-error.show { display: block; }
+
+/* Success state */
+.success-state { display: none; padding: 64px 40px; text-align: center; }
+.success-state.show { display: block; }
+.form-content.hidden { display: none; }
+.success-icon { font-size: 56px; margin-bottom: 24px; animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes popIn { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.success-state h2 { font-family: var(--fd); font-weight: 900; font-size: 36px; text-transform: uppercase; letter-spacing: -0.5px; margin-bottom: 14px; }
+.success-state h2 em { font-style: normal; color: var(--red); }
+.success-state p { font-size: 16px; color: var(--muted); max-width: 380px; margin: 0 auto 32px; line-height: 1.65; }
+.success-back { display: inline-flex; align-items: center; gap: 10px; background: var(--red); color: #fff; font-family: var(--fd); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 14px 28px 12px; text-decoration: none; clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%); }
+
+/* ─── SIDEBAR ─── */
+.sidebar { display: flex; flex-direction: column; gap: 20px; }
+
+.sidebar-block {
+  background: var(--panel); border: 1px solid var(--border); padding: 28px;
+}
+.sidebar-block-title {
+  font-family: var(--fd); font-weight: 800; font-size: 16px;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sidebar-block-title::before {
+  content: ''; width: 4px; height: 20px; background: var(--red); flex-shrink: 0;
+}
+
+/* Voordelen lijst */
+.voordelen-list { list-style: none; display: grid; gap: 12px; }
+.voordeel-item { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: rgba(255,255,255,0.8); }
+.voordeel-check {
+  width: 18px; height: 18px; background: var(--red); flex-shrink: 0; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 100%, 4px 100%);
+}
+.voordeel-check svg { width: 9px; height: 8px; }
+
+/* Live prijsindicator */
+.prijs-indicatie {
+  background: var(--dark); border: 1px solid var(--border);
+  padding: 24px; position: relative; overflow: hidden;
+}
+.prijs-indicatie::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red); }
+.pi-label { font-size: 11px; color: var(--muted); font-family: var(--fd); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+.pi-bedrag { font-family: var(--fd); font-weight: 900; font-size: 48px; line-height: 1; letter-spacing: -2px; margin-bottom: 4px; }
+.pi-bedrag em { color: var(--red); font-style: normal; }
+.pi-period { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+.pi-breakdown { display: grid; gap: 8px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; }
+.pi-row { display: flex; justify-content: space-between; }
+.pi-row strong { color: var(--text); }
+
+/* Contactpersoon */
+.contact-person { display: flex; align-items: center; gap: 16px; }
+.contact-avatar {
+  width: 52px; height: 52px; background: var(--red); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--fd); font-weight: 900; font-size: 20px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+.contact-name { font-family: var(--fd); font-weight: 800; font-size: 18px; margin-bottom: 2px; }
+.contact-role { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+.contact-tel { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text); text-decoration: none; font-weight: 500; }
+.contact-tel:hover { color: var(--red); }
+.contact-tel::before { content: '📞'; font-size: 13px; }
+
+/* USP strip */
+.usp-strip { display: grid; gap: 10px; }
+.usp-item { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
+.usp-icon { font-size: 18px; flex-shrink: 0; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1024px) {
+  .nav { padding: 0 28px; }
+  .zakelijk-hero { padding: 48px 28px; }
+  .zakelijk-hero-inner { grid-template-columns: 1fr; gap: 28px; }
+  .zakelijk-hero-stats { grid-template-columns: repeat(4, 1fr); min-width: auto; }
+  .zakelijk-wrap { padding: 48px 28px 100px; gap: 40px; }
+}
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; height: 56px; }
+  .nav-title { display: none; }
+  .zakelijk-hero { padding: 36px 20px; }
+  .zakelijk-hero h1 { font-size: 40px; }
+  .zakelijk-hero-stats { grid-template-columns: 1fr 1fr; }
+  .zakelijk-wrap { grid-template-columns: 1fr; padding: 36px 20px 100px; gap: 32px; }
+  .form-inner { padding: 28px 20px; }
+  .form-row { grid-template-columns: 1fr; }
+  .prog-checks { grid-template-columns: 1fr 1fr 1fr; }
+  .sidebar { order: -1; }
+  .prijs-indicatie { display: none; }
+}
+@media (max-width: 480px) {
+  .zakelijk-hero-stats { grid-template-columns: 1fr 1fr; }
+  .prog-checks { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="BOB_Homepage_Responsive.html#zakelijk" class="nav-back">
+    <svg viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Terug
+  </a>
+  <div class="nav-divider"></div>
+  <div class="nav-logo">
+    <img src="data:image/webp;base64,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" alt="BOB Autowas">
+  </div>
+  <div class="nav-title">BOB Zakelijk — Aanvraag</div>
+</nav>
+
+<!-- HERO STRIP -->
+<div class="zakelijk-hero">
+  <div class="zakelijk-hero-inner">
+    <div>
+      <h1>BOB Zakelijk.<br>Eén factuur.<br>Heel wagenpark.</h1>
+      <p>Vraag een vrijblijvend voorstel aan. We nemen binnen één werkdag contact op met een op maat gemaakt aanbod voor uw vloot.</p>
+    </div>
+    <div class="zakelijk-hero-stats">
+      <div class="zak-stat"><div class="zak-stat-num"><em>€</em>24</div><div class="zak-stat-label">p/auto/mnd v.a.</div></div>
+      <div class="zak-stat"><div class="zak-stat-num">22</div><div class="zak-stat-label">locaties NL</div></div>
+      <div class="zak-stat"><div class="zak-stat-num"><em>1</em></div><div class="zak-stat-label">factuur/mnd</div></div>
+      <div class="zak-stat"><div class="zak-stat-num">5<em>+</em></div><div class="zak-stat-label">auto's min.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="zakelijk-wrap">
+
+  <!-- FORMULIER -->
+  <div class="form-card">
+    <div class="form-content" id="form-content">
+    <div class="form-inner">
+      <div class="form-title">Vraag een voorstel aan</div>
+      <div class="form-subtitle">Vul het formulier in en ontvang binnen één werkdag een persoonlijk aanbod. Volledig vrijblijvend.</div>
+
+      <form id="zakelijk-form" novalidate>
+
+        <!-- BEDRIJFSGEGEVENS -->
+        <span class="form-section-label">Bedrijfsgegevens</span>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="bedrijfsnaam">Bedrijfsnaam <span class="req">*</span></label>
+            <input type="text" id="bedrijfsnaam" class="form-input" placeholder="Uw bedrijfsnaam" required>
+            <div class="field-error" id="err-bedrijfsnaam">Vul uw bedrijfsnaam in</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="kvk">KvK-nummer</label>
+            <input type="text" id="kvk" class="form-input" placeholder="12345678" maxlength="8">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="sector">Branche / sector</label>
+          <select id="sector" class="form-select">
+            <option value="">Selecteer uw branche</option>
+            <option>Transport & Logistiek</option>
+            <option>Bouw & Installatie</option>
+            <option>Thuiszorg & Welzijn</option>
+            <option>Vastgoed & Makelaardij</option>
+            <option>Technische dienstverlening</option>
+            <option>Zakelijke dienstverlening</option>
+            <option>Retail & Horeca</option>
+            <option>Overheid & Non-profit</option>
+            <option>Lease- of fleetbeheer</option>
+            <option>Anders</option>
+          </select>
+        </div>
+
+        <!-- CONTACTPERSOON -->
+        <span class="form-section-label">Contactpersoon</span>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="voornaam">Voornaam <span class="req">*</span></label>
+            <input type="text" id="voornaam" class="form-input" placeholder="Jan" required>
+            <div class="field-error" id="err-voornaam">Vul uw voornaam in</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="achternaam">Achternaam <span class="req">*</span></label>
+            <input type="text" id="achternaam" class="form-input" placeholder="de Vries" required>
+            <div class="field-error" id="err-achternaam">Vul uw achternaam in</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="email">E-mailadres <span class="req">*</span></label>
+            <input type="email" id="email" class="form-input" placeholder="jan@bedrijf.nl" required>
+            <div class="field-error" id="err-email">Vul een geldig e-mailadres in</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="telefoon">Telefoonnummer <span class="req">*</span></label>
+            <input type="tel" id="telefoon" class="form-input" placeholder="06-12345678" required>
+            <div class="field-error" id="err-telefoon">Vul uw telefoonnummer in</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="functie">Functie</label>
+          <input type="text" id="functie" class="form-input" placeholder="Bijv. Wagenparkbeheerder">
+        </div>
+
+        <!-- WAGENPARK -->
+        <span class="form-section-label">Uw wagenpark</span>
+
+        <div class="form-group">
+          <label class="form-label">Aantal auto's in de vloot <span class="req">*</span></label>
+          <div class="autos-slider-wrap">
+            <div class="autos-slider-header">
+              <div>
+                <div class="autos-waarde"><em id="autos-val">10</em> auto's</div>
+                <div class="autos-price-hint" id="autos-price-hint">v.a. €24/auto/mnd · totaal ca. €240/mnd</div>
+              </div>
+            </div>
+            <input type="range" class="autos-range" id="autos-slider" min="5" max="100" value="10" style="--pct: 5%">
+            <div class="autos-ticks">
+              <span class="autos-tick">5</span>
+              <span class="autos-tick">25</span>
+              <span class="autos-tick">50</span>
+              <span class="autos-tick">75</span>
+              <span class="autos-tick">100+</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Gewenst wasprogramma</label>
+          <div class="prog-checks">
+            <div class="prog-check-item">
+              <input type="checkbox" id="prog-normaal" value="Normaal">
+              <label class="prog-check-label" for="prog-normaal">
+                <span class="prog-check-naam" style="color:var(--muted)">Normaal</span>
+                <span class="prog-check-prijs">€28/mnd</span>
+              </label>
+            </div>
+            <div class="prog-check-item">
+              <input type="checkbox" id="prog-intensief" value="Intensief" checked>
+              <label class="prog-check-label" for="prog-intensief">
+                <span class="prog-check-naam" style="color:#b8c4cc">Intensief</span>
+                <span class="prog-check-prijs">€34/mnd</span>
+              </label>
+            </div>
+            <div class="prog-check-item">
+              <input type="checkbox" id="prog-proteqt" value="Proteqt">
+              <label class="prog-check-label" for="prog-proteqt">
+                <span class="prog-check-naam gold">Proteqt</span>
+                <span class="prog-check-prijs">€39/mnd</span>
+              </label>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--subtle);margin-top:8px;">Meerdere programma's mogelijk — bijv. voor gemengde vloten</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Interieurband</label>
+          <div class="int-toggle-row" id="int-toggle-row" onclick="toggleInterieur()">
+            <div>
+              <div class="int-toggle-text">+ Interieurband toevoegen</div>
+              <div class="int-toggle-sub" id="int-toggle-sub">Binnenreiniging — +€18–20/auto/mnd (afhankelijk van programma)</div>
+            </div>
+            <div class="toggle-switch" id="int-toggle-sw">
+              <div class="toggle-knob"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="voorkeur-vest">Voorkeur vestiging(en)</label>
+          <select id="voorkeur-vest" class="form-select">
+            <option value="">Geen voorkeur — alle 22 vestigingen</option>
+            <optgroup label="Randstad Noord">
+              <option>Amsterdam Noord</option>
+              <option>Amsterdam Osdorp</option>
+              <option>Amsterdam Sloterdijk</option>
+              <option>Hilversum</option>
+              <option>Velserbroek</option>
+              <option>Zaandam</option>
+            </optgroup>
+            <optgroup label="Randstad Zuid">
+              <option>Berkel en Rodenrijs</option>
+              <option>Delft</option>
+              <option>Dordrecht</option>
+              <option>Gouda</option>
+              <option>Rotterdam Charlois</option>
+              <option>Rotterdam IJsselmonde</option>
+              <option>Schiedam</option>
+              <option>Waddinxveen</option>
+              <option>Zoetermeer</option>
+            </optgroup>
+            <optgroup label="Midden">
+              <option>Apeldoorn</option>
+              <option>Nijmegen</option>
+              <option>Utrecht</option>
+            </optgroup>
+            <optgroup label="Noord">
+              <option>Winschoten</option>
+            </optgroup>
+            <optgroup label="Zeeland / Zuid">
+              <option>Cuijk</option>
+              <option>Middelburg</option>
+              <option>Vlissingen</option>
+            </optgroup>
+            <optgroup label="Caribisch">
+              <option>Curaçao (2 locaties)</option>
+            </optgroup>
+          </select>
+        </div>
+
+        <!-- FACTURATIE -->
+        <span class="form-section-label">Facturatie & overig</span>
+
+        <div class="form-group">
+          <label class="form-label" for="facturatie">Facturatiemethode voorkeur</label>
+          <select id="facturatie" class="form-select">
+            <option value="">Geen voorkeur</option>
+            <option>Automatische incasso (SEPA)</option>
+            <option>Factuur per e-mail (30 dagen)</option>
+            <option>Via leasemaatschappij</option>
+            <option>Creditcard</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="startdatum">Gewenste startdatum</label>
+          <select id="startdatum" class="form-select">
+            <option value="">Zo snel mogelijk</option>
+            <option>Binnen 2 weken</option>
+            <option>Volgende maand</option>
+            <option>Over 2–3 maanden</option>
+            <option>Nog onbekend / oriënterend</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="opmerking">Aanvullende informatie of vragen</label>
+          <textarea id="opmerking" class="form-textarea" placeholder="Bijv. gemengde vloot (privé + zakelijk), specifieke wensen, meerdere vestigingen, vragen over facturatie..."></textarea>
+        </div>
+
+        <button type="submit" class="form-submit" id="submit-btn">
+          Verstuur aanvraag <span>→</span>
+        </button>
+        <div class="form-note">
+          We nemen binnen één werkdag contact op. Geen verplichtingen — volledig vrijblijvend.<br>
+          Uw gegevens worden uitsluitend gebruikt voor de behandeling van deze aanvraag.
+        </div>
+
+      </form>
+    </div>
+    </div>
+
+    <!-- SUCCESS STATE -->
+    <div class="success-state" id="success-state">
+      <div class="success-icon">✅</div>
+      <h2>Aanvraag<br><em>ontvangen!</em></h2>
+      <p>Bedankt voor uw aanvraag. Een van onze zakelijke accountmanagers neemt binnen één werkdag contact met u op voor een persoonlijk voorstel op maat.</p>
+      <a href="BOB_Homepage_Responsive.html" class="success-back">← Terug naar de homepage</a>
+    </div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <!-- Live prijsindicatie -->
+    <div class="prijs-indicatie">
+      <div class="pi-label">Indicatie maandbedrag</div>
+      <div class="pi-bedrag"><em>€</em><span id="pi-totaal">240</span></div>
+      <div class="pi-period">per maand voor <span id="pi-autos">10</span> auto's</div>
+      <div class="pi-breakdown">
+        <div class="pi-row"><span>Wasprogramma</span><span id="pi-prog">Intensief</span></div>
+        <div class="pi-row"><span>Prijs per auto</span><span><strong id="pi-pa">€24/mnd</strong></span></div>
+        <div class="pi-row"><span>Interieur</span><span id="pi-int">Niet</span></div>
+        <div class="pi-row" style="padding-top:10px;border-top:1px solid var(--border);color:var(--text);"><span><strong>Totaal/mnd</strong></span><span><strong id="pi-tot2" style="color:var(--red)">€240</strong></span></div>
+      </div>
+    </div>
+
+    <!-- Voordelen -->
+    <div class="sidebar-block">
+      <div class="sidebar-block-title">Waarom BOB Zakelijk</div>
+      <ul class="voordelen-list">
+        <li class="voordeel-item">
+          <span class="voordeel-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Kentekenherkenning — chauffeur rijdt gewoon de wasstraat in
+        </li>
+        <li class="voordeel-item">
+          <span class="voordeel-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Één factuur per maand voor de hele vloot
+        </li>
+        <li class="voordeel-item">
+          <span class="voordeel-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Vaste accountmanager — één aanspreekpunt
+        </li>
+        <li class="voordeel-item">
+          <span class="voordeel-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Geldig bij alle 22 BOB-vestigingen in Nederland
+        </li>
+        <li class="voordeel-item">
+          <span class="voordeel-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Digitaal wagenparkbeheer via uw eigen portaal
+        </li>
+        <li class="voordeel-item">
+          <span class="voordeel-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          BOVAG erkend · waterrecycling 90%
+        </li>
+      </ul>
+    </div>
+
+    <!-- Contactpersoon -->
+    <div class="sidebar-block">
+      <div class="sidebar-block-title">Uw contactpersoon</div>
+      <div class="contact-person">
+        <div class="contact-avatar">ZK</div>
+        <div>
+          <div class="contact-name">Zakelijk team BOB</div>
+          <div class="contact-role">Key Account Management</div>
+          <a href="tel:+31850001234" class="contact-tel">085 000 12 34</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- USP strip -->
+    <div class="sidebar-block">
+      <div class="usp-strip">
+        <div class="usp-item"><span class="usp-icon">⚡</span>Reactie binnen 1 werkdag</div>
+        <div class="usp-item"><span class="usp-icon">📋</span>Vrijblijvend voorstel op maat</div>
+        <div class="usp-item"><span class="usp-icon">🔓</span>Geen minimum looptijd</div>
+        <div class="usp-item"><span class="usp-icon">🚗</span>Gratis proefwasbeurt voor de vloot</div>
+      </div>
+    </div>
+
+  </aside>
+
+</div>
+
+<script>
+// ── PRIJZEN PER PROGRAMMA ─────────────────────────────────────────
+var PROG_PRIJS = { normaal: 28, intensief: 34, proteqt: 39 };
+var INT_PRIJS  = { normaal: 0,  intensief: 20, proteqt: 18 };
+var intOn = false;
+
+function getActieveProg() {
+  var checks = ['normaal','intensief','proteqt'];
+  var actief = [];
+  checks.forEach(function(p) {
+    if (document.getElementById('prog-' + p).checked) actief.push(p);
+  });
+  return actief.length ? actief : ['intensief'];
+}
+
+function getHoogstePrijs(progs) {
+  return Math.max.apply(null, progs.map(function(p) { return PROG_PRIJS[p]; }));
+}
+function getIntPrijs(progs) {
+  if (!intOn) return 0;
+  return Math.min.apply(null, progs.map(function(p) { return INT_PRIJS[p] || 20; }));
+}
+
+function updatePrijsIndicatie() {
+  var n = parseInt(document.getElementById('autos-slider').value);
+  var progs = getActieveProg();
+  var wasPA = getHoogstePrijs(progs);
+  var intPA = getIntPrijs(progs);
+  var totPA = wasPA + intPA;
+  var totaal = totPA * n;
+
+  // Slider fill
+  var pct = ((n - 5) / 95) * 100;
+  document.getElementById('autos-slider').style.setProperty('--pct', pct + '%');
+
+  // Waarde display
+  document.getElementById('autos-val').textContent = n;
+  document.getElementById('autos-price-hint').textContent =
+    'v.a. €' + totPA + '/auto/mnd · totaal ca. €' + totaal + '/mnd';
+
+  // Prijsindicatie sidebar
+  document.getElementById('pi-autos').textContent = n;
+  document.getElementById('pi-prog').textContent = progs.map(function(p) {
+    return p.charAt(0).toUpperCase() + p.slice(1);
+  }).join(' + ');
+  document.getElementById('pi-pa').textContent = '€' + totPA + '/mnd';
+  document.getElementById('pi-int').textContent = intOn ? '+ €' + getIntPrijs(progs) + '/auto/mnd' : 'Niet';
+  document.getElementById('pi-totaal').textContent = totaal;
+  document.getElementById('pi-tot2').textContent = '€' + totaal;
+}
+
+// Slider
+var slider = document.getElementById('autos-slider');
+if (slider) {
+  slider.addEventListener('input', updatePrijsIndicatie);
+}
+
+// Programma checkboxes
+document.querySelectorAll('.prog-check-item input').forEach(function(cb) {
+  cb.addEventListener('change', updatePrijsIndicatie);
+});
+
+// Interieur toggle
+function toggleInterieur() {
+  intOn = !intOn;
+  var sw = document.getElementById('int-toggle-sw');
+  var row = document.getElementById('int-toggle-row');
+  if (sw) sw.classList.toggle('on', intOn);
+  if (row) row.classList.toggle('active', intOn);
+  updatePrijsIndicatie();
+}
+
+// Init
+updatePrijsIndicatie();
+
+// ── FORM VALIDATIE & SUBMIT ────────────────────────────────────────
+function validateField(id, errId, check) {
+  var el = document.getElementById(id);
+  var err = document.getElementById(errId);
+  var ok = check(el ? el.value : '');
+  if (el) el.classList.toggle('error', !ok);
+  if (err) err.classList.toggle('show', !ok);
+  return ok;
+}
+
+document.getElementById('zakelijk-form').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  var ok = true;
+  ok = validateField('bedrijfsnaam', 'err-bedrijfsnaam', function(v) { return v.trim().length >= 2; }) && ok;
+  ok = validateField('voornaam', 'err-voornaam', function(v) { return v.trim().length >= 2; }) && ok;
+  ok = validateField('achternaam', 'err-achternaam', function(v) { return v.trim().length >= 2; }) && ok;
+  ok = validateField('email', 'err-email', function(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }) && ok;
+  ok = validateField('telefoon', 'err-telefoon', function(v) { return v.replace(/\D/g,'').length >= 9; }) && ok;
+
+  if (!ok) {
+    // Scroll naar eerste fout
+    var firstErr = document.querySelector('.form-input.error, .form-select.error');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // Submit simuleren
+  var btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Versturen...';
+
+  setTimeout(function() {
+    document.getElementById('form-content').classList.add('hidden');
+    document.getElementById('success-state').classList.add('show');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 900);
+});
+
+// Live validatie bij blur
+['bedrijfsnaam','voornaam','achternaam','email','telefoon'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('blur', function() {
+    if (el.value.trim()) {
+      var errId = 'err-' + id;
+      if (id === 'email') {
+        validateField(id, errId, function(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); });
+      } else if (id === 'telefoon') {
+        validateField(id, errId, function(v) { return v.replace(/\D/g,'').length >= 9; });
+      } else {
+        validateField(id, errId, function(v) { return v.trim().length >= 2; });
+      }
+    }
+  });
+  el.addEventListener('input', function() {
+    el.classList.remove('error');
+    var err = document.getElementById('err-' + id);
+    if (err) err.classList.remove('show');
+  });
+});
+</script>
+</body>
+</html>
