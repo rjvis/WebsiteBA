@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>De Wasclub — BOB Autowas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E30613;
+  --red-dark: #a3040d;
+  --red-glow: rgba(227,6,19,0.22);
+  --black: #0a0a0a;
+  --dark: #111111;
+  --mid: #1c1c1c;
+  --panel: #161616;
+  --border: rgba(255,255,255,0.07);
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.55);
+  --subtle: rgba(255,255,255,0.15);
+  --font-d: 'Inter Tight', sans-serif;
+  --font-b: 'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--text); font-family: var(--font-b); line-height: 1.6; overflow-x: hidden; }
+
+/* ─── NAV ─── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 72px;
+  background: rgba(10,10,10,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.logo-mark { display: grid; grid-template-columns: repeat(4,8px); grid-template-rows: repeat(4,8px); gap: 3px; }
+.logo-mark span { background: #444; border-radius: 1.5px; transition: all 0.5s cubic-bezier(.34,1.56,.64,1); }
+.logo-mark span:nth-child(2),.logo-mark span:nth-child(4),
+.logo-mark span:nth-child(11),.logo-mark span:nth-child(13) { background: #666; }
+.logo-mark span:nth-child(6) { background: var(--red); }
+.nav-logo:hover .logo-mark span:nth-child(6) { transform: scale(1.4); box-shadow: 0 0 12px var(--red-glow); }
+.logo-text { background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 900; font-size: 26px; letter-spacing: 3px; padding: 5px 14px 3px; line-height: 1; clip-path: polygon(0 0,calc(100% - 8px) 0,100% 100%,0 100%); }
+.nav-menu { display: flex; gap: 36px; list-style: none; }
+.nav-menu a { font-family: var(--font-d); font-weight: 700; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; position: relative; padding-bottom: 2px; }
+.nav-menu a::after { content:''; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+.nav-menu a:hover { color: var(--text); }
+.nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+.nav-menu a.active { color: var(--text); }
+.nav-cta { background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px 24px 9px; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); transition: all 0.2s; }
+.nav-cta:hover { box-shadow: 0 8px 32px var(--red-glow); transform: translateY(-1px); }
+
+/* ─── HERO WASCLUB ─── */
+.wc-hero {
+  min-height: 100vh; padding-top: 72px;
+  display: flex; align-items: center; position: relative; overflow: hidden;
+}
+.wc-hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 100% 80% at 50% 60%, #1a0203 0%, var(--black) 65%);
+}
+.wc-hero-grid {
+  position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(227,6,19,0.035) 1px,transparent 1px), linear-gradient(90deg,rgba(227,6,19,0.035) 1px,transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, transparent 75%);
+}
+/* Animated arch background */
+.wc-arch-left { position: absolute; left: -180px; top: 50%; transform: translateY(-50%); width: 500px; height: 500px; opacity: 0.18; pointer-events: none; }
+.wc-arch-right { position: absolute; right: -180px; top: 50%; transform: translateY(-50%) scaleX(-1); width: 500px; height: 500px; opacity: 0.18; pointer-events: none; }
+.arch-stroke { fill: none; stroke: var(--red); stroke-width: 36; stroke-linecap: square; stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: archDraw 2s 0.3s ease-out forwards; }
+@keyframes archDraw { to { stroke-dashoffset: 0; } }
+
+.wc-hero-content { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; padding: 0 48px; text-align: center; }
+
+.wc-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 1px solid rgba(227,6,19,0.35); background: rgba(227,6,19,0.08);
+  padding: 8px 20px; margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+}
+.wc-badge-dot { width: 7px; height: 7px; background: var(--red); border-radius: 50%; animation: glow 2s 1s infinite; }
+@keyframes glow { 0%,100% { box-shadow: 0 0 0 0 rgba(227,6,19,0.5); } 50% { box-shadow: 0 0 0 10px rgba(227,6,19,0); } }
+.wc-badge span { font-family: var(--font-d); font-weight: 700; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: rgba(227,6,19,0.9); }
+
+.wc-hero-h1 {
+  font-family: var(--font-d); font-weight: 900; font-size: clamp(80px,12vw,130px);
+  line-height: 0.88; text-transform: uppercase; letter-spacing: -1.5px; margin-bottom: 28px;
+  opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+}
+.wc-hero-h1 .line-red { color: var(--red); display: block; text-shadow: 0 0 80px rgba(227,6,19,0.25); }
+.wc-hero-h1 .line-white { display: block; }
+.wc-hero-h1 .line-outline { display: block; color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.2); }
+
+.wc-hero-sub {
+  font-size: 19px; color: var(--muted); line-height: 1.65; max-width: 600px; margin: 0 auto 48px;
+  opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+}
+.wc-hero-sub strong { color: var(--text); font-weight: 600; }
+
+.wc-hero-ctas {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp 0.8s 0.65s forwards;
+}
+
+.btn-primary { display: inline-flex; align-items: center; gap: 12px; background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 800; font-size: 15px; letter-spacing: 2px; text-transform: uppercase; padding: 16px 36px 14px; text-decoration: none; clip-path: polygon(0 0,calc(100% - 12px) 0,100% 100%,12px 100%); transition: all 0.2s; position: relative; overflow: hidden; }
+.btn-primary::before { content:''; position: absolute; inset: 0; background: linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent); transform: translateX(-100%); transition: transform 0.5s; }
+.btn-primary:hover::before { transform: translateX(100%); }
+.btn-primary:hover { box-shadow: 0 16px 48px var(--red-glow); transform: translateY(-2px); }
+.btn-ghost { display: inline-flex; align-items: center; gap: 12px; background: transparent; color: var(--muted); font-family: var(--font-d); font-weight: 700; font-size: 15px; letter-spacing: 2px; text-transform: uppercase; padding: 15px 32px 13px; text-decoration: none; border: 1px solid var(--subtle); clip-path: polygon(0 0,calc(100% - 12px) 0,100% 100%,12px 100%); transition: all 0.2s; }
+.btn-ghost:hover { border-color: rgba(255,255,255,0.5); color: var(--text); }
+
+.wc-hero-scroll {
+  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  font-family: var(--font-d); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+  opacity: 0; animation: fadeUp 1s 1.2s forwards;
+}
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(180deg,var(--red),transparent); animation: scrollPulse 2s infinite; }
+@keyframes scrollPulse { 0%,100% { opacity: 0.4; transform: scaleY(0.7); } 50% { opacity: 1; transform: scaleY(1); } }
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ─── MARQUEE ─── */
+.marquee { background: var(--red); overflow: hidden; white-space: nowrap; padding: 14px 0; }
+.marquee-track { display: inline-flex; gap: 0; animation: marqueeScroll 28s linear infinite; }
+.marquee-item { display: inline-flex; align-items: center; gap: 20px; padding: 0 32px; font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 3px; text-transform: uppercase; }
+.marquee-item::after { content:'◆'; font-size: 8px; opacity: 0.5; }
+@keyframes marqueeScroll { to { transform: translateX(-50%); } }
+
+/* ─── BESPARINGS-CALCULATOR ─── */
+.calc-section { background: var(--dark); padding: 120px 0; position: relative; overflow: hidden; }
+.calc-section::before { content:''; position: absolute; inset: 0; background: radial-gradient(ellipse 70% 60% at 50% 100%, rgba(227,6,19,0.05) 0%, transparent 60%); pointer-events: none; }
+.calc-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+
+.section-label { font-family: var(--font-d); font-weight: 800; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 16px; display: block; }
+.section-h2 { font-family: var(--font-d); font-weight: 900; font-size: clamp(48px,6vw,72px); text-transform: uppercase; line-height: 0.92; letter-spacing: -0.5px; margin-bottom: 16px; }
+.section-h2 em { font-style: normal; color: var(--red); }
+
+.calc-head { text-align: center; margin-bottom: 72px; }
+.calc-head p { font-size: 17px; color: var(--muted); max-width: 500px; margin: 16px auto 0; }
+
+.calculator {
+  background: var(--panel); border: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.calculator::before { content:''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; }
+
+/* LEFT: inputs */
+.calc-left { padding: 52px 48px; border-right: 1px solid var(--border); }
+.calc-left h3 { font-family: var(--font-d); font-weight: 800; font-size: 20px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 40px; }
+
+.input-group { margin-bottom: 40px; }
+.input-label { font-family: var(--font-d); font-weight: 700; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; }
+.input-value { font-family: var(--font-d); font-weight: 900; font-size: 28px; color: var(--text); }
+.input-value em { color: var(--red); font-style: normal; }
+
+/* Custom slider */
+.slider-wrap { position: relative; padding: 8px 0; }
+.slider {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 4px; background: var(--border);
+  outline: none; border-radius: 0; cursor: pointer;
+  background: linear-gradient(90deg, var(--red) 0%, var(--red) var(--pct,25%), rgba(255,255,255,0.1) var(--pct,25%), rgba(255,255,255,0.1) 100%);
+  transition: background 0.1s;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 22px; height: 22px;
+  background: var(--red); cursor: pointer;
+  clip-path: polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);
+  transition: transform 0.2s;
+  box-shadow: 0 0 16px var(--red-glow);
+}
+.slider::-webkit-slider-thumb:hover { transform: scale(1.3); }
+.slider::-moz-range-thumb { width: 22px; height: 22px; background: var(--red); cursor: pointer; border: none; border-radius: 0; }
+.slider-ticks { display: flex; justify-content: space-between; margin-top: 10px; }
+.slider-tick { font-size: 11px; color: var(--subtle); font-family: var(--font-d); letter-spacing: 0.5px; }
+
+/* Programma selector */
+.prog-select { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 4px; }
+.prog-btn {
+  padding: 14px 8px; background: var(--mid); border: 1px solid var(--border);
+  color: var(--muted); cursor: pointer;
+  font-family: var(--font-d); font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;
+  transition: all 0.2s; text-align: center;
+}
+.prog-btn:hover { border-color: var(--subtle); color: var(--text); }
+.prog-btn.active { background: rgba(227,6,19,0.12); border-color: var(--red); color: var(--text); }
+.prog-btn .prog-price { display: block; font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 400; }
+.prog-btn.active .prog-price { color: rgba(227,6,19,0.8); }
+
+/* Interieur toggle */
+.toggle-wrap { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: var(--mid); border: 1px solid var(--border); margin-top: 8px; }
+.toggle-label { font-size: 15px; }
+.toggle-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.toggle { position: relative; width: 48px; height: 26px; flex-shrink: 0; }
+.toggle input { opacity: 0; width: 0; height: 0; }
+.toggle-track {
+  position: absolute; inset: 0; background: var(--border);
+  cursor: pointer; transition: background 0.3s;
+}
+.toggle-track::before {
+  content:''; position: absolute; width: 20px; height: 20px;
+  left: 3px; top: 3px; background: var(--muted);
+  transition: all 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+.toggle input:checked + .toggle-track { background: var(--red); }
+.toggle input:checked + .toggle-track::before { transform: translateX(22px); background: #fff; }
+
+/* RIGHT: result */
+.calc-right { padding: 52px 48px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+.calc-right::before { content:'BESPARING'; position: absolute; bottom: -20px; right: -10px; font-family: var(--font-d); font-weight: 900; font-size: 120px; letter-spacing: -2px; color: rgba(227,6,19,0.04); pointer-events: none; white-space: nowrap; }
+
+.result-header { font-family: var(--font-d); font-weight: 800; font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 32px; }
+
+.result-comparison { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 36px; }
+
+.result-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 20px; border: 1px solid var(--border); position: relative; transition: all 0.2s; }
+.result-row.current { background: var(--mid); }
+.result-row.wasclub { background: rgba(227,6,19,0.08); border-color: rgba(227,6,19,0.3); }
+.result-row-label { font-size: 14px; color: var(--muted); }
+.result-row-label strong { display: block; font-size: 16px; color: var(--text); font-weight: 600; margin-bottom: 2px; }
+.result-row-price { font-family: var(--font-d); font-weight: 900; font-size: 36px; letter-spacing: -0.5px; }
+.result-row.wasclub .result-row-price { color: var(--red); }
+.result-row-sub { font-size: 11px; color: var(--muted); margin-top: 2px; text-align: right; }
+.result-badge { position: absolute; top: -10px; right: 16px; background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 10px; }
+
+.result-saving {
+  background: var(--black); border: 1px solid var(--border); padding: 28px 24px;
+  position: relative; overflow: hidden; margin-bottom: 28px;
+}
+.result-saving::before { content:''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--red); }
+.result-saving-label { font-size: 13px; color: var(--muted); margin-bottom: 8px; font-family: var(--font-d); letter-spacing: 1px; text-transform: uppercase; }
+.result-saving-amount {
+  font-family: var(--font-d); font-weight: 900; font-size: 64px; color: var(--red);
+  line-height: 1; letter-spacing: -0.5px;
+  transition: all 0.5s cubic-bezier(.34,1.56,.64,1);
+}
+.result-saving-period { font-size: 14px; color: var(--muted); margin-top: 6px; }
+.result-saving-year { font-family: var(--font-d); font-weight: 800; font-size: 20px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+
+.result-cta { width: 100%; padding: 18px; background: var(--red); color: #fff; border: none; cursor: pointer; font-family: var(--font-d); font-weight: 800; font-size: 16px; letter-spacing: 2px; text-transform: uppercase; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); }
+.result-cta:hover { box-shadow: 0 12px 40px var(--red-glow); transform: translateY(-2px); }
+.result-cta .arrow { display: inline-block; transition: transform 0.2s; }
+.result-cta:hover .arrow { transform: translateX(6px); }
+
+.result-note { font-size: 12px; color: var(--subtle); text-align: center; margin-top: 14px; }
+
+/* ─── TIERS ─── */
+.tiers-section { background: var(--black); padding: 120px 0; }
+.tiers-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+.tiers-head { text-align: center; margin-bottom: 64px; }
+.tiers-head p { font-size: 17px; color: var(--muted); margin-top: 16px; }
+
+.tiers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); }
+.tier {
+  background: var(--panel); padding: 48px 36px;
+  position: relative; transition: all 0.3s; cursor: default;
+}
+.tier:hover { background: var(--mid); z-index: 2; transform: translateY(-4px); }
+.tier.featured { background: var(--dark); border: 1px solid rgba(227,6,19,0.25); z-index: 3; }
+.tier.featured::before { content:''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+.tier-badge { position: absolute; top: -1px; right: 24px; background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 800; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 14px; }
+.tier-name { font-family: var(--font-d); font-weight: 900; font-size: 32px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.tier-name.gold { background: linear-gradient(135deg,#c8943e 0%,#f5e2a0 45%,#c8943e 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.tier-tagline { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+.tier-price { margin-bottom: 32px; }
+.tier-price-num { font-family: var(--font-d); font-weight: 900; font-size: 64px; line-height: 1; letter-spacing: -0.5px; }
+.tier-price-num em { color: var(--red); font-style: normal; }
+.tier-price-period { font-size: 14px; color: var(--muted); margin-top: 4px; }
+.tier-price-los { font-size: 13px; color: var(--subtle); margin-top: 4px; }
+.tier-features { list-style: none; display: grid; gap: 14px; margin-bottom: 40px; }
+.tier-feature { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: rgba(255,255,255,0.75); }
+.tier-check { width: 18px; height: 18px; background: var(--red); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; clip-path: polygon(0 0,calc(100% - 4px) 0,100% 100%,4px 100%); }
+.tier-check svg { width: 9px; height: 8px; }
+.tier-check.grey { background: rgba(255,255,255,0.08); }
+.tier-btn { display: block; width: 100%; padding: 16px; background: transparent; border: 1px solid var(--subtle); color: var(--muted); font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.2s; text-align: center; clip-path: polygon(0 0,calc(100% - 8px) 0,100% 100%,8px 100%); }
+.tier-btn:hover { border-color: rgba(255,255,255,0.4); color: var(--text); }
+.tier.featured .tier-btn { background: var(--red); border-color: var(--red); color: #fff; }
+.tier.featured .tier-btn:hover { box-shadow: 0 8px 32px var(--red-glow); transform: translateY(-1px); }
+
+/* ─── HOE WERKT HET ─── */
+.how-section { background: var(--dark); padding: 120px 0; }
+.how-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; }
+.how-head { text-align: center; margin-bottom: 80px; }
+.how-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+.how-steps::before { content:''; position: absolute; top: 28px; left: 10%; right: 10%; height: 2px; background: linear-gradient(90deg, var(--red), rgba(227,6,19,0.2)); z-index: 0; }
+.how-step { text-align: center; padding: 0 24px; position: relative; z-index: 2; }
+.how-step-num { width: 56px; height: 56px; background: var(--red); clip-path: polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; font-family: var(--font-d); font-weight: 900; font-size: 22px; box-shadow: 0 0 24px var(--red-glow); }
+.how-step h3 { font-family: var(--font-d); font-weight: 800; font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+.how-step p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+/* ─── FAQ ─── */
+.faq-section { background: var(--black); padding: 120px 0; }
+.faq-inner { max-width: 800px; margin: 0 auto; padding: 0 48px; }
+.faq-head { text-align: center; margin-bottom: 64px; }
+.faq-list { display: grid; gap: 2px; }
+.faq-item { background: var(--panel); border: 1px solid var(--border); overflow: hidden; transition: border-color 0.2s; }
+.faq-item.open { border-color: rgba(227,6,19,0.3); }
+.faq-q { display: flex; justify-content: space-between; align-items: center; padding: 24px 28px; cursor: pointer; gap: 20px; }
+.faq-q-text { font-size: 16px; font-weight: 600; }
+.faq-icon { width: 28px; height: 28px; background: var(--mid); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.3s; font-size: 18px; color: var(--muted); }
+.faq-item.open .faq-icon { background: var(--red); color: #fff; transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0,1,0.5,1), padding 0.3s; padding: 0 28px; }
+.faq-item.open .faq-a { max-height: 300px; padding: 0 28px 24px; }
+.faq-a p { font-size: 15px; color: var(--muted); line-height: 1.7; border-top: 1px solid var(--border); padding-top: 20px; }
+
+/* ─── CTA STRIP ─── */
+.cta-strip { background: var(--red); padding: 80px 0; text-align: center; position: relative; overflow: hidden; }
+.cta-strip::before { content:''; position: absolute; inset: 0; background-image: radial-gradient(circle at 1px 1px,rgba(255,255,255,0.08) 1px,transparent 0); background-size: 24px 24px; }
+.cta-strip-inner { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; padding: 0 48px; }
+.cta-strip h2 { font-family: var(--font-d); font-weight: 900; font-size: clamp(48px,7vw,80px); text-transform: uppercase; line-height: 0.92; letter-spacing: -0.5px; margin-bottom: 24px; }
+.cta-strip p { font-size: 18px; opacity: 0.9; margin-bottom: 40px; }
+.cta-strip .btn-white { display: inline-flex; align-items: center; gap: 12px; background: #fff; color: var(--red); font-family: var(--font-d); font-weight: 800; font-size: 16px; letter-spacing: 2px; text-transform: uppercase; padding: 18px 40px 16px; text-decoration: none; clip-path: polygon(0 0,calc(100% - 14px) 0,100% 100%,14px 100%); transition: all 0.2s; }
+.cta-strip .btn-white:hover { box-shadow: 0 16px 48px rgba(0,0,0,0.25); transform: translateY(-2px); }
+
+/* ─── FOOTER ─── */
+.footer { background: var(--black); border-top: 1px solid var(--border); padding: 64px 0 0; }
+.footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 56px; border-bottom: 1px solid var(--border); }
+.footer-logo { font-family: var(--font-d); font-weight: 900; font-size: 32px; letter-spacing: 4px; background: var(--red); color: #fff; display: inline-block; padding: 7px 16px 5px; margin-bottom: 18px; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); }
+.footer-brand-text { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.footer h4 { font-family: var(--font-d); font-weight: 800; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 18px; }
+.footer ul { list-style: none; display: grid; gap: 10px; }
+.footer li a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer li a:hover { color: var(--text); }
+.footer-bottom { max-width: 1100px; margin: 0 auto; padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--subtle); }
+.footer-bottom a { color: var(--subtle); text-decoration: none; }
+.footer-stripe { height: 5px; background: linear-gradient(90deg,var(--red) 0%,var(--red) 40%,#222 40%,#222 70%,#555 70%,#555 100%); }
+
+/* ─── REVEAL ─── */
+/* Reveal: altijd zichtbaar, animatie als bonus */
+.reveal { opacity: 1; transform: none; }
+.reveal.animated { 
+  animation: revealUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+.reveal-d4 { transition-delay: 0.4s; }
+
+/* ═══ HAMBURGER ═══ */
+.nav-hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: transparent; border: none; cursor: pointer; padding: 8px;
+}
+.nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text); transition: all 0.3s; }
+.nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+.nav-drawer {
+  position: fixed; top: 0; right: -300px; bottom: 0; width: 280px;
+  background: var(--dark); z-index: 200; border-left: 1px solid var(--border);
+  transition: right 0.35s cubic-bezier(0.16,1,0.3,1);
+  display: flex; flex-direction: column; padding: 80px 32px 40px;
+}
+.nav-drawer.open { right: 0; }
+.nav-overlay { position: fixed; inset: 0; z-index: 199; background: rgba(0,0,0,0); pointer-events: none; transition: background 0.3s; }
+.nav-overlay.open { background: rgba(0,0,0,0.7); pointer-events: all; }
+.nav-drawer ul { list-style: none; display: grid; gap: 4px; }
+.nav-drawer ul a { display: block; padding: 13px 0; font-family: var(--font-d); font-weight: 800; font-size: 22px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+.nav-drawer ul a:hover { color: var(--red); }
+.nav-drawer-cta { margin-top: 32px; display: block; background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 14px 20px 12px; text-align: center; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); }
+
+.mobile-sticky-cta {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+  padding: 12px 20px; background: rgba(10,10,10,0.97); border-top: 1px solid var(--border); backdrop-filter: blur(12px);
+}
+.mobile-sticky-cta a { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px 20px 13px; background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); }
+
+/* ═══ TABLET ≤ 1024px ═══ */
+@media (max-width: 1024px) {
+  .nav { padding: 0 28px; }
+  .wc-hero-content { padding: 0 40px; }
+  .calc-inner, .tiers-inner, .how-inner, .faq-inner { padding: 0 40px; }
+  .zakelijk-inner { padding: 0 40px; }
+  .footer-inner { padding: 0 40px; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 32px; }
+}
+
+/* ═══ MOBILE ≤ 768px ═══ */
+@media (max-width: 768px) {
+  /* NAV */
+  .nav { padding: 0 20px; height: 56px; }
+  .nav-menu, .nav-cta { display: none; }
+  .nav-hamburger { display: flex; }
+  .mobile-sticky-cta { display: block; }
+
+  /* WC HERO */
+  .wc-hero { min-height: auto; padding: 100px 20px 36px; }
+  .wc-hero-content { padding: 0; max-width: 100%; text-align: center; }
+  .wc-hero-h1 { font-size: clamp(64px,18vw,88px); }
+  .wc-hero-sub { font-size: 16px; margin-bottom: 28px; }
+  .wc-hero-ctas { flex-direction: column; gap: 10px; }
+  .wc-hero-ctas .btn-primary,
+  .wc-hero-ctas .btn-ghost { width: 100%; justify-content: center; }
+  .wc-arch-left, .wc-arch-right { width: 280px; height: 280px; opacity: 0.1; }
+
+  /* CALC */
+  .calc-section { padding: 64px 0; }
+  .calc-inner { padding: 0 20px; }
+  .calc-head { margin-bottom: 40px; }
+  .calc-grid { grid-template-columns: 1fr; }
+  .calc-left { padding: 32px 20px; border-right: none; border-bottom: 1px solid var(--border); }
+  .calc-right { padding: 28px 20px; }
+  .prog-select { grid-template-columns: 1fr 1fr 1fr; }
+  .result-saving-amount { font-size: 52px; }
+  .section-h2 { font-size: clamp(38px,10vw,52px); }
+
+  /* TIERS */
+  .tiers-section { padding: 64px 0; }
+  .tiers-inner { padding: 0 20px; }
+  .tiers-grid { grid-template-columns: 1fr; gap: 2px; }
+  .tier { padding: 36px 24px; }
+  .tier:hover { transform: none; }
+  .tier-price-num { font-size: 52px; }
+
+  /* HOW */
+  .how-section { padding: 64px 0; }
+  .how-inner { padding: 0 20px; }
+  .how-steps { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .how-steps::before { display: none; }
+  .how-step-num { width: 48px; height: 48px; font-size: 18px; margin-bottom: 16px; }
+
+  /* FAQ */
+  .faq-section { padding: 64px 0; }
+  .faq-inner { padding: 0 20px; }
+  .faq-q-text { font-size: 15px; }
+
+  /* CTA STRIP */
+  .cta-strip { padding: 56px 20px; }
+  .cta-strip h2 { font-size: clamp(44px,12vw,64px); }
+  .cta-strip .btn-white { width: 100%; justify-content: center; }
+
+  /* FOOTER */
+  .footer { padding: 56px 0 80px; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px 20px; padding: 0 20px; padding-bottom: 44px; }
+  .footer-inner > div:first-child { grid-column: 1 / -1; }
+  .footer-bottom { padding: 20px; flex-direction: column; gap: 6px; text-align: center; font-size: 11px; }
+}
+
+@media (max-width: 390px) {
+  .wc-hero-h1 { font-size: 58px; }
+  .section-h2 { font-size: 38px; }
+  .how-steps { grid-template-columns: 1fr; }
+  .tiers-grid { grid-template-columns: 1fr; }
+}
+
+
+/* ── Prijsbord icon kleuren per niveau ── */
+.prijs-cel.proteqt .prijs-icon  { background: rgba(212,170,80,0.55);  border-color: rgba(212,170,80,0.85); }
+.prijs-cel.intensief .prijs-icon { background: rgba(180,188,196,0.5);  border-color: rgba(180,188,196,0.8); }
+.prijs-cel.normaal .prijs-icon   { background: rgba(176,120,78,0.5);  border-color: rgba(176,120,78,0.8); }
+.prijs-cel.proteqt:hover .prijs-icon  { background: rgba(212,170,80,0.85); }
+.prijs-cel.intensief:hover .prijs-icon { background: rgba(180,188,196,0.8); }
+.prijs-cel.normaal:hover .prijs-icon   { background: rgba(176,120,78,0.8); }
+
+/* ── Tier-check kleuren per niveau ── */
+.tier.normaal   .tier-check { background: linear-gradient(135deg, #a0622a, #cd8a5a); }
+.tier.intensief .tier-check { background: linear-gradient(135deg, #8a9499, #b8c4cc); }
+.tier.proteqt   .tier-check { background: linear-gradient(135deg, #b8821e, #e8c85a); }
+
+/* Tier badge kleuren subtiel aanpassen */
+.tier.normaal   { border-top: 3px solid #a0622a; }
+.tier.intensief.featured { border-top: 3px solid #b8c4cc; }
+.tier.proteqt   { border-top: 3px solid #b8821e; }
+
+/* Tier prijs kleur per niveau */
+.tier.normaal   .tier-price-num em { color: #cd8a5a; }
+.tier.intensief .tier-price-num em { color: #b8c4cc; }
+.tier.proteqt   .tier-price-num em { color: #e8c85a; }
+
+/* ═══ BOB FAMILIE SECTIE ═══ */
+.familie-section {
+  background: var(--dark); padding: 120px 0; position: relative; overflow: hidden;
+}
+.familie-section::before {
+  content:''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 100% 50%, rgba(227,6,19,0.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.familie-inner { max-width: 1100px; margin: 0 auto; padding: 0 80px; }
+
+.familie-head { text-align: center; margin-bottom: 72px; }
+.familie-head p { font-size: 17px; color: var(--muted); max-width: 560px; margin: 16px auto 0; line-height: 1.7; }
+
+/* Staffel tabel */
+.staffel {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 2px; background: var(--border); margin-bottom: 64px;
+  position: relative;
+}
+.staffel-col {
+  background: var(--panel); padding: 36px 28px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  position: relative; transition: background 0.25s;
+}
+.staffel-col:hover { background: var(--mid); }
+.staffel-col.best {
+  background: var(--mid);
+  outline: 1px solid rgba(227,6,19,0.35);
+  outline-offset: -1px;
+}
+.staffel-col.best::before {
+  content:''; position: absolute; top:0; left:0; right:0; height:3px; background: var(--red);
+}
+.staffel-badge {
+  position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+  background: var(--red); color: #fff;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 4px 12px; white-space: nowrap;
+}
+.staffel-autos {
+  display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.staffel-auto {
+  width: 28px; height: 16px;
+  background: rgba(255,255,255,0.1); border-radius: 3px;
+  position: relative; overflow: hidden;
+}
+.staffel-auto.active {
+  background: linear-gradient(135deg, rgba(227,6,19,0.7), rgba(227,6,19,0.4));
+  border: 1px solid rgba(227,6,19,0.5);
+}
+.staffel-label {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 8px;
+}
+.staffel-prijs {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 48px; line-height: 1; letter-spacing: -1px; margin-bottom: 4px;
+}
+.staffel-prijs em { color: var(--red); font-style: normal; }
+.staffel-period { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+.staffel-saving {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25);
+  padding: 5px 10px; font-size: 12px; color: #22c55e;
+  font-family: var(--font-display); font-weight: 700; letter-spacing: 0.5px;
+}
+.staffel-saving.empty { background: transparent; border-color: transparent; color: transparent; }
+.staffel-totaal {
+  margin-top: auto; padding-top: 20px;
+  border-top: 1px solid var(--border); width: 100%;
+  font-size: 13px; color: var(--muted);
+}
+.staffel-totaal strong { color: var(--text); font-size: 15px; }
+
+/* Regels sectie */
+.familie-regels {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-bottom: 56px;
+}
+.familie-regel {
+  display: flex; gap: 20px; align-items: flex-start;
+}
+.familie-regel-icon {
+  width: 44px; height: 44px; background: rgba(227,6,19,0.1);
+  border: 1px solid rgba(227,6,19,0.25); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.familie-regel h4 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 18px; text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+.familie-regel p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+/* Tier selector voor staffel */
+.staffel-tier-tabs {
+  display: flex; gap: 2px; margin-bottom: 32px; background: var(--border);
+}
+.staffel-tier-tab {
+  flex: 1; padding: 13px 16px;
+  background: var(--panel); border: none; cursor: pointer;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted); transition: all 0.2s;
+}
+.staffel-tier-tab.active { background: var(--mid); color: var(--text); }
+.staffel-tier-tab.active.gold-tab { border-bottom: 3px solid #e8c85a; color: #e8c85a; }
+.staffel-tier-tab.active.silver-tab { border-bottom: 3px solid #b8c4cc; color: #b8c4cc; }
+.staffel-tier-tab.active.bronze-tab { border-bottom: 3px solid #cd8a5a; color: #cd8a5a; }
+
+.familie-cta-row {
+  display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+}
+
+/* ═══ RESPONSIVE FAMILIE ═══ */
+@media (max-width: 1024px) {
+  .familie-inner { padding: 0 40px; }
+  .staffel { grid-template-columns: repeat(2,1fr); }
+  .staffel-col.best { outline: none; border-top: 3px solid var(--red); }
+}
+@media (max-width: 768px) {
+  .familie-section { padding: 64px 0; }
+  .familie-inner { padding: 0 20px; }
+  .staffel { grid-template-columns: 1fr 1fr; }
+  .staffel-col { padding: 24px 18px; }
+  .staffel-prijs { font-size: 36px; }
+  .familie-regels { grid-template-columns: 1fr; gap: 28px; }
+  .staffel-tier-tabs { flex-wrap: wrap; }
+  .familie-cta-row { flex-direction: column; align-items: stretch; }
+}
+@media (max-width: 480px) {
+  .staffel { grid-template-columns: 1fr; }
+}
+
+/* ═══ ONBOARDING FLOW PAGE ═══ */
+
+/* ── Meer auto's CTA brug ── */
+.meer-autos-cta {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 32px; margin-top: 32px; padding: 28px 36px;
+  background: var(--panel);
+  border: 1px solid rgba(227,6,19,0.25);
+  border-left: 4px solid var(--red);
+  position: relative; overflow: hidden;
+}
+.meer-autos-cta::before {
+  content:''; position: absolute; right: -40px; top: -40px;
+  width: 160px; height: 160px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(227,6,19,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.meer-autos-left { display: flex; align-items: center; gap: 24px; }
+.meer-autos-autos {
+  display: flex; gap: 4px; flex-shrink: 0;
+}
+.meer-autos-auto { font-size: 22px; transition: all 0.2s; }
+.meer-autos-auto.dim { opacity: 0.2; }
+.meer-autos-cta:hover .meer-autos-auto.dim { opacity: 0.6; }
+.meer-autos-titel {
+  font-family: var(--font-d); font-weight: 800;
+  font-size: 18px; text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.meer-autos-sub { font-size: 14px; color: var(--muted); line-height: 1.5; }
+.meer-autos-sub strong { color: var(--green, #22c55e); }
+.meer-autos-btn {
+  flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--red); color: #fff;
+  font-family: var(--font-d); font-weight: 800;
+  font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 13px 24px 11px; text-decoration: none;
+  clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);
+  transition: all 0.2s; white-space: nowrap;
+}
+.meer-autos-btn:hover { box-shadow: 0 8px 24px var(--red-glow); transform: translateY(-1px); }
+
+@media (max-width: 768px) {
+  .meer-autos-cta {
+    flex-direction: column; align-items: flex-start;
+    padding: 24px 20px; gap: 20px;
+  }
+  .meer-autos-btn { width: 100%; justify-content: center; }
+  .meer-autos-left { gap: 16px; }
+}
+
+
+/* ── Auto's selector ── */
+.autos-select {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 6px; margin-top: 4px;
+}
+.autos-btn {
+  padding: 12px 8px; background: var(--mid); border: 1px solid var(--border);
+  color: var(--muted); cursor: pointer; font-family: var(--font-display);
+  font-weight: 800; font-size: 18px; letter-spacing: 0; text-align: center;
+  transition: all 0.2s;
+}
+.autos-btn:hover { border-color: var(--subtle); color: var(--text); }
+.autos-btn.active { background: rgba(227,6,19,0.12); border-color: var(--red); color: var(--text); }
+.autos-hint {
+  font-size: 11px; color: var(--red); margin-top: 8px;
+  font-family: var(--font-display); letter-spacing: 0.5px;
+  opacity: 0.85;
+}
+
+/* Familie breakdown */
+#familie-breakdown-rows .bd-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 10px; background: rgba(255,255,255,0.03); border-left: 2px solid var(--border);
+}
+#familie-breakdown-rows .bd-row.proteqt-row { border-left-color: rgba(212,170,80,0.5); }
+#familie-breakdown-rows .bd-row.intensief-row { border-left-color: rgba(180,188,196,0.5); }
+
+
+/* ── Staffel interieur toggle ── */
+.staffel-int-toggle {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 20px 28px; margin-bottom: 24px;
+  display: flex; align-items: flex-start; flex-direction: column;
+}
+.staffel-col .staffel-int-sub {
+  font-size: 11px; color: var(--muted); margin-top: 4px;
+}
+@media (max-width: 768px) {
+  .staffel-int-toggle { padding: 16px 20px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav-overlay" id="nav-overlay" onclick="closeDrawer()"></div>
+<div class="nav-drawer" id="nav-drawer">
+  <ul>
+    <li><a href="BOB_Homepage_Responsive.html" onclick="closeDrawer()">Home</a></li>
+    <li><a href="#calculator" onclick="closeDrawer()">Calculator</a></li>
+    <li><a href="#tiers" onclick="closeDrawer()">Abonnementen</a></li>
+    <li><a href="#" onclick="closeDrawer()">Vestigingen</a></li>
+    <li><a href="#" onclick="closeDrawer()">Zakelijk</a></li>
+  </ul>
+  <a href="#aanmelden" class="nav-drawer-cta" onclick="closeDrawer()">Word lid →</a>
+</div>
+<nav class="nav">
+  <a href="BOB_Homepage_Responsive.html" class="nav-logo">
+    <img src="data:image/webp;base64,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" alt="BOB Autowas" style="height:36px;width:auto;display:block;">
+  </a>
+  <ul class="nav-menu">
+    <li><a href="#" class="active">Wasclub</a></li>
+    <li><a href="#">Programma's</a></li>
+    <li><a href="#">Vestigingen</a></li>
+    <li><a href="#">Zakelijk</a></li>
+  </ul>
+  <a href="#aanmelden" class="nav-cta">Word lid →</a>
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="wc-hero">
+  <div class="wc-hero-bg"></div>
+  <div class="wc-hero-grid"></div>
+  <div class="wc-arch-left">
+    <svg viewBox="0 0 500 500"><path class="arch-stroke" d="M 60 480 Q 60 60 250 60 Q 440 60 440 480"/></svg>
+  </div>
+  <div class="wc-arch-right">
+    <svg viewBox="0 0 500 500"><path class="arch-stroke" d="M 60 480 Q 60 60 250 60 Q 440 60 440 480" style="animation-delay:0.2s"/></svg>
+  </div>
+
+  <div class="wc-hero-content">
+    <div class="wc-badge">
+      <span class="wc-badge-dot"></span>
+      <span>Onbeperkt wassen · maandelijks opzegbaar</span>
+    </div>
+    <h1 class="wc-hero-h1">
+      <span class="line-white">De</span>
+      <span class="line-red">Wasclub</span>
+      <span class="line-outline">Onbeperkt</span>
+    </h1>
+    <p class="wc-hero-sub">
+      Eén vast bedrag per maand. Onbeperkt wassen bij alle 22 BOB-vestigingen.
+      <strong>Nooit meer nadenken over wanneer je de auto wast.</strong>
+      Gewoon rijden — en elke keer schoon aankomen.
+    </p>
+    <div class="wc-hero-ctas">
+      <a href="#calculator" class="btn-primary">Bereken mijn besparing →</a>
+      <a href="#tiers" class="btn-ghost">Bekijk abonnementen</a>
+    </div>
+  </div>
+
+  <div class="wc-hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item">Onbeperkt Wassen</span>
+    <span class="marquee-item">Kentekenherkenning</span>
+    <span class="marquee-item">22 Vestigingen</span>
+    <span class="marquee-item">Maandelijks Opzegbaar</span>
+    <span class="marquee-item">Feel the Shine</span>
+    <span class="marquee-item">Altijd Schoon</span>
+    <span class="marquee-item">Onbeperkt Wassen</span>
+    <span class="marquee-item">Kentekenherkenning</span>
+    <span class="marquee-item">22 Vestigingen</span>
+    <span class="marquee-item">Maandelijks Opzegbaar</span>
+    <span class="marquee-item">Feel the Shine</span>
+    <span class="marquee-item">Altijd Schoon</span>
+  </div>
+</div>
+
+<!-- CALCULATOR -->
+<section class="calc-section" id="calculator">
+  <div class="calc-inner">
+    <div class="calc-head reveal">
+      <span class="section-label">Bereken jouw voordeel</span>
+      <h2 class="section-h2">Wat levert de<br><em>Wasclub</em> jou op?</h2>
+      <p>Stel je situatie in en zie direct wat je bespaart — ook bij meerdere auto's.</p>
+    </div>
+
+    <div class="calculator reveal">
+      <div class="calc-grid">
+
+        <!-- LINKS: INVOER -->
+        <div class="calc-left">
+          <h3>Jouw situatie</h3>
+
+          <!-- Wasfrequentie -->
+          <div class="input-group">
+            <div class="input-label">
+              Hoe vaak per maand wassen?
+              <span class="input-value" id="freq-display"><em>4</em>&times;</span>
+            </div>
+            <div class="slider-wrap">
+              <input type="range" class="slider" id="freq-slider" min="1" max="12" value="4" style="--pct:27%">
+            </div>
+            <div class="slider-ticks">
+              <span class="slider-tick">1×</span>
+              <span class="slider-tick">3×</span>
+              <span class="slider-tick">6×</span>
+              <span class="slider-tick">9×</span>
+              <span class="slider-tick">12×</span>
+            </div>
+          </div>
+
+          <!-- Aantal auto's -->
+          <div class="input-group">
+            <div class="input-label">
+              Hoeveel auto's in huis?
+              <span class="input-value" id="autos-display"><em>1</em> auto</span>
+            </div>
+            <div class="autos-select" id="autos-select">
+              <button class="autos-btn active" data-autos="1">1</button>
+              <button class="autos-btn" data-autos="2">2</button>
+              <button class="autos-btn" data-autos="3">3</button>
+              <button class="autos-btn" data-autos="4">4</button>
+            </div>
+            <div class="autos-hint" id="autos-hint" style="display:none;">
+              Familietarief — alleen beschikbaar bij Proteqt en Intensief
+            </div>
+          </div>
+
+          <!-- Programma — alleen Proteqt + Intensief bij meerdere auto's -->
+          <div class="input-group">
+            <div class="input-label">Welk programma?</div>
+            <div class="prog-select" id="prog-select">
+              <button class="prog-btn" data-prog="normaal" data-price-los="13" data-price-abo="28">
+                Normaal
+                <span class="prog-price">€13 los / €28 abo</span>
+              </button>
+              <button class="prog-btn active" data-prog="intensief" data-price-los="17" data-price-abo="34">
+                Intensief
+                <span class="prog-price">€17 los / €34 abo</span>
+              </button>
+              <button class="prog-btn" data-prog="proteqt" data-price-los="21" data-price-abo="39">
+                Proteqt
+                <span class="prog-price">€21 los / €39 abo</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Interieur toggle -->
+          <div class="input-group" style="margin-bottom:0;">
+            <div class="input-label">Extra's</div>
+            <div class="toggle-wrap" id="int-toggle-wrap">
+              <div>
+                <div class="toggle-label">+ Interieurband</div>
+                <div class="toggle-sub" id="int-toggle-sub">Binnenreiniging erbij
+                  &nbsp;<span id="int-hint" style="color:var(--red);font-size:11px;display:none;">Niet beschikbaar bij Normaal</span>
+                </div>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="interieur-toggle">
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- RECHTS: RESULTAAT -->
+        <div class="calc-right">
+          <div class="result-header" id="result-header">Jouw maandelijkse kosten</div>
+
+          <div class="result-comparison">
+            <div class="result-row current">
+              <div class="result-row-label">
+                <strong>Losse wasbeurten</strong>
+                <span id="los-detail">4× Intensief à €17</span>
+              </div>
+              <div>
+                <div class="result-row-price" id="los-price">€68</div>
+                <div class="result-row-sub" id="los-sub">per maand</div>
+              </div>
+            </div>
+
+            <div class="result-row wasclub">
+              <div class="result-badge">Wasclub</div>
+              <div class="result-row-label">
+                <strong>Wasclub abonnement</strong>
+                <span id="wc-detail">Onbeperkt Intensief</span>
+              </div>
+              <div>
+                <div class="result-row-price" id="wc-price">€34</div>
+                <div class="result-row-sub" id="wc-sub">per maand</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Uitsplitsing per auto bij Familie -->
+          <div id="familie-breakdown" style="display:none; margin-bottom:20px;">
+            <div style="font-size:11px;color:var(--muted);font-family:var(--font-display);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;">Per auto</div>
+            <div id="familie-breakdown-rows" style="display:grid;gap:6px;font-size:13px;color:var(--muted);"></div>
+          </div>
+
+          <div class="result-saving">
+            <div class="result-saving-label">Jij bespaart</div>
+            <div class="result-saving-amount" id="saving-amount">€34</div>
+            <div class="result-saving-period" id="saving-period">per maand bij 4 wasbeurten</div>
+            <div class="result-saving-year" id="saving-year">→ €408 per jaar</div>
+          </div>
+
+          <button class="result-cta" onclick="window.location='#aanmelden'">
+            Start mijn Wasclub <span class="arrow">→</span>
+          </button>
+          <div class="result-note">Maandelijks opzegbaar · geen aansluitkosten · direct actief</div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIERS -->
+<section class="tiers-section" id="tiers">
+  <div class="tiers-inner">
+    <div class="tiers-head reveal">
+      <span class="section-label">Kies je abonnement</span>
+      <h2 class="section-h2">Drie niveaus,<br>één <em>slimme keuze</em></h2>
+      <p>Alle abonnementen zijn maandelijks opzegbaar en direct actief na aanmelding.</p>
+    </div>
+
+    <div class="tiers-grid reveal">
+
+      <div class="tier normaal">
+        <div class="tier-name">Normaal</div>
+        <div class="tier-tagline">Voor de basis-wasbeurter</div>
+        <div class="tier-price">
+          <div class="tier-price-num">€<em>28</em></div>
+          <div class="tier-price-period">per maand · onbeperkt</div>
+          <div class="tier-price-los">Los: €13 per wasbeurt</div>
+        </div>
+        <ul class="tier-features">
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Onbeperkt wassen met Normaal-programma
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Geldig bij alle 22 BOB-vestigingen
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Kentekenherkenning — rijden en wassen
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check grey"></span>
+            <span style="color:var(--subtle)">Geen lakbescherming</span>
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check grey"></span>
+            <span style="color:var(--subtle)">Geen velgenreiniging</span>
+          </li>
+        </ul>
+        <button class="tier-btn">Kies Normaal →</button>
+      </div>
+
+      <div class="tier featured intensief">
+        <div class="tier-badge">Populairste keuze</div>
+        <div class="tier-name">Intensief</div>
+        <div class="tier-tagline">Voor de bewuste autorijder</div>
+        <div class="tier-price">
+          <div class="tier-price-num">€<em>34</em></div>
+          <div class="tier-price-period">per maand · onbeperkt</div>
+          <div class="tier-price-los">Los: €17 per wasbeurt</div>
+        </div>
+        <ul class="tier-features">
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Onbeperkt wassen met Intensief-programma
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Geldig bij alle 22 BOB-vestigingen
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Kentekenherkenning — rijden en wassen
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Hogedrukreiniging + schuimreiniger
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check grey"></span>
+            <span style="color:var(--subtle)">Geen Proteqt-lakcoating</span>
+          </li>
+        </ul>
+        <button class="tier-btn">Kies Intensief →</button>
+      </div>
+
+      <div class="tier proteqt">
+        <div class="tier-name gold">Proteqt</div>
+        <div class="tier-tagline">Voor wie z'n auto serieus neemt</div>
+        <div class="tier-price">
+          <div class="tier-price-num">€<em>39</em></div>
+          <div class="tier-price-period">per maand · onbeperkt</div>
+          <div class="tier-price-los">Los: €21 per wasbeurt</div>
+        </div>
+        <ul class="tier-features">
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Onbeperkt wassen met Proteqt-programma
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Geldig bij alle 22 BOB-vestigingen
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Hydrofobe lakcoating — weken bescherming
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Velgenreiniging + onderspuiting
+          </li>
+          <li class="tier-feature">
+            <span class="tier-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Optioneel: + Interieurband voor €20/mnd
+          </li>
+        </ul>
+        <button class="tier-btn">Kies Proteqt →</button>
+      </div>
+
+    </div>
+
+    <!-- MEER AUTO'S CTA — direct onder tiers -->
+    <div class="meer-autos-cta reveal">
+      <div class="meer-autos-left">
+        <div class="meer-autos-autos">
+          <span class="meer-autos-auto active">🚗</span>
+          <span class="meer-autos-auto active">🚗</span>
+          <span class="meer-autos-auto dim">🚗</span>
+          <span class="meer-autos-auto dim">🚗</span>
+        </div>
+        <div>
+          <div class="meer-autos-titel">Meer dan één auto in huis?</div>
+          <div class="meer-autos-sub">Voeg extra kentekens toe en bespaar tot <strong>€60/mnd</strong> met het BOB Familie-pakket.</div>
+        </div>
+      </div>
+      <a href="#familie" class="meer-autos-btn">Bekijk Familie-pakket →</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- BOB FAMILIE SECTIE -->
+<section class="familie-section" id="familie">
+  <div class="familie-inner">
+
+    <div class="familie-head reveal">
+      <span class="section-label">BOB Familie</span>
+      <h2 class="section-h2">Meer auto's,<br><em>meer voordeel</em></h2>
+      <p>Voeg extra kentekens uit jouw huishouden toe aan één Wasclub-account. Eén rekening, alle auto's schoon — voor een lager bedrag per auto.</p>
+    </div>
+
+    <!-- Tier tabs -->
+    <div class="staffel-tier-tabs reveal" id="staffel-tabs">
+      <button class="staffel-tier-tab active gold-tab" data-prog="proteqt" onclick="switchStaffelTier(this)">Proteqt</button>
+      <button class="staffel-tier-tab silver-tab" data-prog="intensief" onclick="switchStaffelTier(this)">Intensief</button>
+    </div>
+    <div class="staffel-int-toggle reveal" id="staffel-int-wrap">
+      <div style="font-size:14px;font-weight:600;">+ Interieurband meenemen</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:3px;" id="staffel-int-hint">Prijs daalt mee met je aantal auto's</div>
+      <div onclick="toggleStaffelInt()" id="staffel-int-tog" style="width:44px;height:24px;background:rgba(255,255,255,0.1);cursor:pointer;position:relative;transition:background 0.3s;flex-shrink:0;margin-top:10px;">
+        <div id="staffel-int-knob" style="position:absolute;width:18px;height:18px;top:3px;left:3px;background:var(--muted);transition:left 0.3s cubic-bezier(.34,1.56,.64,1);"></div>
+      </div>
+    </div>
+
+    <!-- Staffel kolommen -->
+    <div class="staffel reveal" id="staffel-grid">
+
+      <div class="staffel-col">
+        <div class="staffel-autos">
+          <div class="staffel-auto active"></div>
+          <div class="staffel-auto"></div>
+          <div class="staffel-auto"></div>
+          <div class="staffel-auto"></div>
+        </div>
+        <div class="staffel-label">1 auto</div>
+        <div class="staffel-prijs">€<em class="s-prijs" data-pct="100">39</em></div>
+        <div class="staffel-period">per auto / per maand</div>
+        <div class="staffel-saving empty">—</div>
+        <div class="staffel-totaal">Totaal: <strong class="s-totaal" data-autos="1">€39/mnd</strong></div>
+      </div>
+
+      <div class="staffel-col">
+        <div class="staffel-autos">
+          <div class="staffel-auto active"></div>
+          <div class="staffel-auto active"></div>
+          <div class="staffel-auto"></div>
+          <div class="staffel-auto"></div>
+        </div>
+        <div class="staffel-label">2 auto's</div>
+        <div class="staffel-prijs">€<em class="s-prijs" data-pct="74">29</em></div>
+        <div class="staffel-period">per auto / per maand</div>
+        <div class="staffel-saving">✓ &nbsp;€10/mnd besparing</div>
+        <div class="staffel-totaal">Totaal: <strong class="s-totaal" data-autos="2">€58/mnd</strong></div>
+      </div>
+
+      <div class="staffel-col best">
+        <div class="staffel-badge">Populairste keuze</div>
+        <div class="staffel-autos">
+          <div class="staffel-auto active"></div>
+          <div class="staffel-auto active"></div>
+          <div class="staffel-auto active"></div>
+          <div class="staffel-auto"></div>
+        </div>
+        <div class="staffel-label">3 auto's</div>
+        <div class="staffel-prijs">€<em class="s-prijs" data-pct="67">26</em></div>
+        <div class="staffel-period">per auto / per maand</div>
+        <div class="staffel-saving">✓ &nbsp;€39/mnd besparing</div>
+        <div class="staffel-totaal">Totaal: <strong class="s-totaal" data-autos="3">€78/mnd</strong></div>
+      </div>
+
+      <div class="staffel-col">
+        <div class="staffel-autos">
+          <div class="staffel-auto active"></div>
+          <div class="staffel-auto active"></div>
+          <div class="staffel-auto active"></div>
+          <div class="staffel-auto active"></div>
+        </div>
+        <div class="staffel-label">4 auto's</div>
+        <div class="staffel-prijs">€<em class="s-prijs" data-pct="62">24</em></div>
+        <div class="staffel-period">per auto / per maand</div>
+        <div class="staffel-saving">✓ &nbsp;€60/mnd besparing</div>
+        <div class="staffel-totaal">Totaal: <strong class="s-totaal" data-autos="4">€96/mnd</strong></div>
+      </div>
+
+    </div>
+
+    <!-- Spelregels -->
+    <div class="familie-regels reveal">
+      <div class="familie-regel">
+        <div class="familie-regel-icon">🏠</div>
+        <div>
+          <h4>Eén huishouden</h4>
+          <p>Alle kentekens staan op hetzelfde adres of op naam van dezelfde persoon/partner. Zakelijke auto's op uw eigen BV tellen ook mee.</p>
+        </div>
+      </div>
+      <div class="familie-regel">
+        <div class="familie-regel-icon">💳</div>
+        <div>
+          <h4>Eén rekening</h4>
+          <p>Alle auto's onder één account, één IBAN, één maandelijkse incasso. U bent de hoofdhouder en verantwoordelijk voor het hele abonnement.</p>
+        </div>
+      </div>
+      <div class="familie-regel">
+        <div class="familie-regel-icon">📋</div>
+        <div>
+          <h4>Kentekenbewijs vereist</h4>
+          <p>Bij toevoeging van een extra auto uploadt u het kentekenbewijs (deel 1). Eenmalig, duurt twee minuten, daarna direct actief.</p>
+        </div>
+      </div>
+      <div class="familie-regel">
+        <div class="familie-regel-icon">🚗</div>
+        <div>
+          <h4>Max. 4 auto's</h4>
+          <p>Meer dan 4 auto's? Dan is BOB Zakelijk interessanter — met vloot-tarieven, centrale facturatie en een vaste accountmanager.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA rij -->
+    <div class="familie-cta-row reveal">
+      <a href="BOB_Familie_Onboarding.html" class="btn-primary" style="flex:0 0 auto;">Start BOB Familie →</a>
+      <p style="font-size:14px;color:var(--muted);margin:0;">Al Wasclub-lid? Log in en ga naar <em style="color:var(--text);">Mijn account → Extra auto toevoegen</em></p>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- HOE WERKT HET -->
+<section class="how-section">
+  <div class="how-inner">
+    <div class="how-head reveal">
+      <span class="section-label">Zo eenvoudig</span>
+      <h2 class="section-h2">In 4 stappen<br><em>lid worden</em></h2>
+    </div>
+    <div class="how-steps reveal">
+      <div class="how-step">
+        <div class="how-step-num">1</div>
+        <h3>Kies je pakket</h3>
+        <p>Intensief of Proteqt, met of zonder Interieurband. Bij meerdere auto's kies je het BOB Familie-pakket.</p>
+      </div>
+      <div class="how-step reveal-d1">
+        <div class="how-step-num">2</div>
+        <h3>Vul je kenteken in</h3>
+        <p>Je kenteken is je sleutel. Geen pasje, geen app nodig. Gewoon oprijden.</p>
+      </div>
+      <div class="how-step reveal-d2">
+        <div class="how-step-num">3</div>
+        <h3>Rij de wasstraat in</h3>
+        <p>Het systeem herkent je kenteken automatisch. Slagboom omhoog, direct wassen.</p>
+      </div>
+      <div class="how-step reveal-d3">
+        <div class="how-step-num">4</div>
+        <h3>Elke dag schoon</h3>
+        <p>Was zo vaak als je wilt. Bij alle 22 BOB-vestigingen. Maandelijks opzegbaar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="faq-inner">
+    <div class="faq-head reveal">
+      <span class="section-label">Vragen</span>
+      <h2 class="section-h2">Alles over<br>de <em>Wasclub</em></h2>
+    </div>
+    <div class="faq-list reveal">
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">Hoe vaak mag ik wassen met de Wasclub?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><p>Onbeperkt. Elke dag als je wilt, bij elke BOB-vestiging in Nederland. Er zit geen maximum op het aantal wasbeurten per maand. De enige beperking is dat je niet twee keer op dezelfde dag bij dezelfde vestiging mag wassen — dat is technisch ook gewoon niet nodig.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">Hoe werkt de kentekenherkenning?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><p>Bij aanmelding koppel je je kenteken aan je abonnement. Bij elke vestiging staat een ANPR-camera. Rij de slagboom op, het systeem herkent je kenteken binnen een seconde, de slagboom gaat omhoog. Geen pasje, geen app, geen code — gewoon rijden.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">Kan ik mijn abonnement pauzeren?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><p>Ja. Als je op vakantie gaat of je auto tijdelijk verkoopt, kun je je abonnement pauzeren voor 1 tot 3 maanden. Je betaalt dan niets en je abonnement staat klaar zodra je de pauze beëindigt.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">Hoe werkt de kentekenherkenning?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><p>Bij aanmelding koppel je je kenteken aan je abonnement. Bij elke vestiging staat een ANPR-camera (automatische kentekenherkenning). Rij de slagboom op, het systeem herkent je kenteken binnen een seconde, de slagboom gaat omhoog. Geen pasje, geen app, geen code. Gewoon rijden.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">Kan ik mijn abonnement pauze zetten?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><p>Ja. Als je op vakantie gaat of je auto tijdelijk verkoopt, kun je je abonnement pauzeren voor 1 tot 3 maanden. Je betaalt dan niets en je abonnement staat klaar zodra je de pauze beëindigt. Dit kun je regelen via je klantprofiel of door contact op te nemen met onze klantenservice.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">Wanneer gaat mijn abonnement in?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><p>Direct na aanmelding en betaling van de eerste maand is je abonnement actief. Je kenteken staat binnen 15 minuten in ons systeem. Je kunt dus dezelfde dag nog wassen.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">Wanneer kan ik opzeggen?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><p>Maandelijks, op elk moment. Zeg je op vóór de verlenging, dan stopt je abonnement aan het einde van de lopende maand. Er zijn geen opzegkosten en geen minimum looptijd. We hopen natuurlijk dat je blij blijft — maar dat dwingen we niet af.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">Kan ik meerdere auto's op één abonnement zetten?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><p>Meerdere auto's uit hetzelfde huishouden kunnen worden gekoppeld aan één Wasclub-account via het BOB Familie-pakket. Je betaalt dan één rekening en de prijs per auto daalt naarmate je er meer toevoegt. Elk kenteken moet wel op hetzelfde adres staan of op naam van dezelfde persoon of partner. Meer dan 4 auto's? Dan is BOB Zakelijk de betere keuze.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">Wat is het verschil tussen Proteqt en Intensief?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><p>Intensief (€34/mnd) is onze meest complete was — hogedruk, actief schuim en naglans — voor de rijder die zijn auto altijd schoon wil. Proteqt (€39/mnd) voegt daar een hydrofobe lakcoating aan toe die je auto weken beschermt tegen regen, vuil en strooizout, plus velgenreiniging en onderspuiting. Proteqt-leden betalen ook minder voor de interieurband-add-on: €18/mnd in plaats van €20.</p></div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q">
+          <span class="faq-q-text">Hoe werkt de interieurband precies?</span>
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-a"><p>De interieurband is een aparte baan naast de wasstraat waar je auto van binnen wordt gereinigd — stofzuigen, dashboard afnemen, ramen — in circa 9 minuten. Je kiest de interieurband als maandelijkse add-on bij Intensief (+€20/mnd) of Proteqt (+€18/mnd). Bij het BOB Familie-pakket daalt de interieurprijs per auto mee met het aantal auto's.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="cta-strip" id="aanmelden">
+  <div class="cta-strip-inner">
+    <h2>Klaar voor<br>elke dag schoon?</h2>
+    <p>Word lid van de Wasclub en was onbeperkt voor één vast bedrag per maand. Maandelijks opzegbaar, direct actief.</p>
+    <a href="#" class="btn-white">Start mijn Wasclub vandaag →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <img src="data:image/webp;base64,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" alt="BOB Autowas" style="height:40px;width:auto;display:block;margin-bottom:16px;">
+      <p class="footer-brand-text">Feel the Shine — al 25 jaar de meest vertrouwde autowasketen van Nederland. Onbeperkt wassen, altijd een schone auto.</p>
+    </div>
+    <div>
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="#">Wasstraat</a></li>
+        <li><a href="#">Proteqt</a></li>
+        <li><a href="#">Interieurband</a></li>
+        <li><a href="#">Stofzuigplein</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Voordeel</h4>
+      <ul>
+        <li><a href="#">De Wasclub</a></li>
+        <li><a href="#">Waspas</a></li>
+        <li><a href="#">BOB Zakelijk</a></li>
+        <li><a href="#">Acties</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>BOB</h4>
+      <ul>
+        <li><a href="#">Vestigingen</a></li>
+        <li><a href="#">Over ons</a></li>
+        <li><a href="#">Werken bij BOB</a></li>
+        <li><a href="#">FAQ & Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 BOB Autowas · Feel the Shine</div>
+    <div><a href="#">Privacy</a> · <a href="#">Cookies</a> · <a href="#">info@bobautowas.nl</a></div>
+  </div>
+</footer>
+<div class="footer-stripe"></div>
+
+<script>
+// ════════════════════════════════════════════════
+// CALCULATOR
+// ════════════════════════════════════════════════
+(function(){
+  const freqSlider  = document.getElementById('freq-slider');
+  const freqDisplay = document.getElementById('freq-display');
+  const intToggle   = document.getElementById('interieur-toggle');
+  const progBtns    = document.querySelectorAll('.prog-btn');
+  const autosBtns   = document.querySelectorAll('.autos-btn');
+  const losPrice    = document.getElementById('los-price');
+  const losDetail   = document.getElementById('los-detail');
+  const wcPrice     = document.getElementById('wc-price');
+  const wcDetail    = document.getElementById('wc-detail');
+  const savingAmt   = document.getElementById('saving-amount');
+  const savingPeriod = document.getElementById('saving-period');
+  const savingYear  = document.getElementById('saving-year');
+
+  let freq       = 4;
+  let priceLos   = 17;
+  let priceAbo   = 34;
+  let progName   = 'Intensief';
+  let progKey    = 'intensief';
+  let interieur  = false;
+  let aantalAutos = 1;
+
+  const WAS_ABO = {
+    proteqt:   {1:39, 2:29, 3:26, 4:24},
+    intensief: {1:34, 2:25, 3:22, 4:21}
+  };
+  const INT_ABO = {
+    proteqt:   {1:18, 2:16, 3:13, 4:10},
+    intensief: {1:20, 2:18, 3:15, 4:12}
+  };
+  const INT_LOS = 20;
+
+  function animateNum(el, newVal, prefix) {
+    if (!el) return;
+    prefix = prefix || '€';
+    var cur = parseInt(el.textContent.replace(/\D/g,'')) || 0;
+    var diff = newVal - cur;
+    var steps = 18; var step = 0;
+    var timer = setInterval(function() {
+      step++;
+      el.textContent = prefix + Math.round(cur + diff * (step/steps));
+      if (step >= steps) { el.textContent = prefix + newVal; clearInterval(timer); }
+    }, 16);
+  }
+
+  function getWasAboPA() {
+    if (progKey === 'normaal') return priceAbo;
+    return WAS_ABO[progKey][aantalAutos];
+  }
+  function getIntAboPA() {
+    if (progKey === 'normaal' || !interieur) return 0;
+    return INT_ABO[progKey][aantalAutos];
+  }
+
+  function calc() {
+    var n       = aantalAutos;
+    var wasAboPA = getWasAboPA();
+    var intAboPA = getIntAboPA();
+    var aboPA   = wasAboPA + intAboPA;
+    var aboTot  = aboPA * n;
+    var losTot  = (priceLos + (interieur ? INT_LOS : 0)) * freq * n;
+    var saving  = losTot - aboTot;
+
+    // Slider fill
+    var pct = ((freq - 1) / 11) * 100;
+    freqSlider.style.setProperty('--pct', pct + '%');
+    if (freqDisplay) freqDisplay.innerHTML = '<em>' + freq + '</em>&times;';
+
+    // Los rij
+    var losLabel = n > 1
+      ? n + " auto’s × " + freq + "× " + progName + (interieur ? ' + int.' : '')
+      : freq + "× " + progName + " à €" + priceLos + (interieur ? ' + €' + INT_LOS + ' int.' : '');
+    if (losPrice) animateNum(losPrice, losTot);
+    if (losDetail) losDetail.textContent = losLabel;
+    var losSub = document.getElementById('los-sub');
+    if (losSub) losSub.textContent = n > 1 ? 'voor ' + n + " auto’s per maand" : 'per maand';
+
+    // Wasclub rij
+    var wcLabel = n > 1
+      ? n + " auto’s — €" + aboPA + '/auto/mnd'
+      : 'Onbeperkt ' + progName + (interieur ? ' + Interieur' : '');
+    if (wcPrice) animateNum(wcPrice, aboTot);
+    if (wcDetail) wcDetail.textContent = wcLabel;
+    var wcSub = document.getElementById('wc-sub');
+    if (wcSub) wcSub.textContent = n > 1 ? 'voor ' + n + " auto’s per maand" : 'per maand';
+
+    // Familie breakdown
+    var bd = document.getElementById('familie-breakdown');
+    var bdRows = document.getElementById('familie-breakdown-rows');
+    if (bd && bdRows) {
+      if (n > 1) {
+        bd.style.display = 'block';
+        var rows = '<div class="bd-row ' + progKey + '-row"><span>Was per auto (' + progName + ')</span><span>€' + wasAboPA + '/mnd</span></div>';
+        if (interieur) {
+          rows += '<div class="bd-row ' + progKey + '-row"><span>Interieur per auto</span><span>€' + intAboPA + '/mnd</span></div>';
+          rows += '<div class="bd-row"><span><strong>Totaal per auto</strong></span><span><strong>€' + aboPA + '/mnd</strong></span></div>';
+        }
+        bdRows.innerHTML = rows;
+      } else {
+        bd.style.display = 'none';
+      }
+    }
+
+    // Result header
+    var rh = document.getElementById('result-header');
+    if (rh) rh.textContent = n > 1 ? 'Kosten voor ' + n + " auto’s per maand" : 'Jouw maandelijkse kosten';
+
+    // Saving
+    var disp = Math.max(saving, 0);
+    if (savingAmt) {
+      animateNum(savingAmt, disp);
+      savingAmt.style.color = saving > 0 ? 'var(--red)' : 'rgba(255,255,255,0.25)';
+    }
+    if (savingPeriod) {
+      savingPeriod.textContent = saving > 0
+        ? (n > 1 ? 'per maand voor ' + n + " auto’s bij " + freq + "× wassen" : 'per maand bij ' + freq + ' wasbeurt' + (freq===1?'':'en'))
+        : (saving === 0 ? 'Break-even — je wint gemak' : 'Wasclub €' + Math.abs(saving) + ' duurder bij dit gebruik');
+    }
+    if (savingYear) savingYear.textContent = saving > 0 ? '→ €' + (saving * 12) + ' per jaar' : '';
+
+    // Interieur sub-label
+    var intSubEl = document.getElementById('int-toggle-sub');
+    if (intSubEl && progKey !== 'normaal') {
+      var intPrijsPA = INT_ABO[progKey][n];
+      var suffix = n > 1 ? ' p/auto — €' + (intPrijsPA * n) + ' totaal' : '';
+      intSubEl.innerHTML = 'Binnenreiniging erbij — +€' + intPrijsPA + '/mnd' + suffix +
+        ' &nbsp;<span id="int-hint" style="color:var(--red);font-size:11px;display:none;">Niet beschikbaar bij Normaal</span>';
+    }
+  }
+
+  // Frequentie slider
+  if (freqSlider) {
+    freqSlider.addEventListener('input', function() { freq = parseInt(freqSlider.value); calc(); });
+  }
+
+  // Aantal auto's knoppen
+  autosBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      autosBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      aantalAutos = parseInt(btn.dataset.autos);
+      var hint = document.getElementById('autos-hint');
+      var normaalBtn = document.querySelector('[data-prog="normaal"]');
+      if (aantalAutos > 1) {
+        if (hint) hint.style.display = 'block';
+        if (progKey === 'normaal') {
+          progBtns.forEach(function(b) { b.classList.remove('active'); });
+          var intB = document.querySelector('[data-prog="intensief"]');
+          if (intB) intB.classList.add('active');
+          priceLos = 17; priceAbo = 34; progName = 'Intensief'; progKey = 'intensief';
+        }
+        if (normaalBtn) { normaalBtn.disabled = true; normaalBtn.style.opacity = '0.35'; }
+      } else {
+        if (hint) hint.style.display = 'none';
+        if (normaalBtn) { normaalBtn.disabled = false; normaalBtn.style.opacity = '1'; }
+      }
+      var autosDisp = document.getElementById('autos-display');
+      if (autosDisp) autosDisp.innerHTML = '<em>' + aantalAutos + '</em> auto' + (aantalAutos > 1 ? "'s" : '');
+      calc();
+    });
+  });
+
+  // Programma knoppen
+  progBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (btn.disabled) return;
+      progBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      priceLos = parseInt(btn.dataset.priceLos);
+      priceAbo = parseInt(btn.dataset.priceAbo);
+      progKey  = btn.dataset.prog;
+      progName = progKey.charAt(0).toUpperCase() + progKey.slice(1);
+      var isNormaal = progKey === 'normaal';
+      var intRow = document.querySelector('.toggle-wrap');
+      var hint = document.getElementById('int-hint');
+      if (isNormaal) {
+        if (intToggle) { intToggle.checked = false; interieur = false; }
+        if (intRow) { intRow.style.opacity = '0.35'; intRow.style.pointerEvents = 'none'; }
+        if (hint) hint.style.display = 'inline';
+      } else {
+        if (intRow) { intRow.style.opacity = '1'; intRow.style.pointerEvents = ''; }
+        if (hint) hint.style.display = 'none';
+      }
+      calc();
+    });
+  });
+
+  // Interieur toggle
+  if (intToggle) {
+    intToggle.addEventListener('change', function() { interieur = intToggle.checked; calc(); });
+  }
+
+  // Init
+  calc();
+
+})();
+
+// ════════════════════════════════════════════════
+// BOB FAMILIE STAFFEL
+// ════════════════════════════════════════════════
+var STAFFEL_WAS = {
+  proteqt:   [39, 29, 26, 24],
+  intensief: [34, 25, 22, 21]
+};
+var STAFFEL_INT = {
+  proteqt:   [18, 16, 13, 10],
+  intensief: [20, 18, 15, 12]
+};
+var staffelProg = 'proteqt';
+var staffelInt  = false;
+
+function renderStaffel() {
+  var wasArr = STAFFEL_WAS[staffelProg];
+  var intArr = STAFFEL_INT[staffelProg];
+  var cols = document.querySelectorAll('.staffel-col');
+  cols.forEach(function(col, i) {
+    var prijsEl  = col.querySelector('.s-prijs');
+    var totaalEl = col.querySelector('.s-totaal');
+    var savingEl = col.querySelector('.staffel-saving');
+    if (!prijsEl || !totaalEl) return;
+    var n = i + 1;
+    var pa = wasArr[i] + (staffelInt ? intArr[i] : 0);
+    var tot = pa * n;
+    prijsEl.textContent = pa;
+    totaalEl.textContent = '€' + tot + '/mnd';
+    if (savingEl) {
+      var losTot = (wasArr[0] + (staffelInt ? intArr[0] : 0)) * n;
+      var besp = losTot - tot;
+      if (i === 0) {
+        savingEl.className = 'staffel-saving empty';
+        savingEl.textContent = '—';
+      } else {
+        savingEl.className = 'staffel-saving';
+        savingEl.textContent = '✓  €' + besp + '/mnd besparing';
+      }
+    }
+  });
+  var hint = document.getElementById('staffel-int-hint');
+  if (hint) {
+    hint.textContent = staffelInt
+      ? 'Interieur: €' + STAFFEL_INT[staffelProg].join(' → €') + ' p/auto/mnd'
+      : "Prijs daalt mee met je aantal auto’s";
+  }
+}
+
+function switchStaffelTier(btn) {
+  document.querySelectorAll('.staffel-tier-tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  staffelProg = btn.dataset.prog;
+  renderStaffel();
+}
+
+function toggleStaffelInt() {
+  staffelInt = !staffelInt;
+  var tog  = document.getElementById('staffel-int-tog');
+  var knob = document.getElementById('staffel-int-knob');
+  if (tog)  tog.style.background  = staffelInt ? 'var(--red)' : 'rgba(255,255,255,0.1)';
+  if (knob) { knob.style.left = staffelInt ? '23px' : '3px'; knob.style.background = staffelInt ? '#fff' : 'var(--muted)'; }
+  renderStaffel();
+}
+
+// Onboarding: programma selectie
+function selectObProg(card) {
+  document.querySelectorAll('.ob-prog-card').forEach(function(c) { c.classList.remove('active'); });
+  card.classList.add('active');
+}
+
+function toggleObInterieur() {
+  var tog  = document.getElementById('ob-int-toggle');
+  var knob = document.getElementById('ob-int-knob');
+  var isOn = tog && tog.dataset.on === '1';
+  if (tog)  { tog.dataset.on = isOn ? '0' : '1'; tog.style.background = isOn ? 'rgba(255,255,255,0.1)' : 'var(--red)'; }
+  if (knob) { knob.style.left = isOn ? '3px' : '23px'; knob.style.background = isOn ? 'var(--muted)' : '#fff'; }
+}
+
+// ════════════════════════════════════════════════
+// FAQ ACCORDION
+// ════════════════════════════════════════════════
+document.querySelectorAll('.faq-item').forEach(function(item) {
+  var q = item.querySelector('.faq-q');
+  if (!q) return;
+  q.addEventListener('click', function() {
+    var open = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('open'); });
+    if (!open) item.classList.add('open');
+  });
+});
+
+// ════════════════════════════════════════════════
+// PRIJSBORD TOGGLE (homepage teaser op wasclub pagina)
+// ════════════════════════════════════════════════
+document.querySelectorAll('.prijs-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.prijs-tab').forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    var mode = tab.dataset.mode;
+    document.querySelectorAll('.prijs-num').forEach(function(n) {
+      var val = mode === 'los' ? n.dataset.los : n.dataset.abo;
+      n.style.transform = 'scale(0.85)'; n.style.opacity = '0';
+      setTimeout(function() {
+        n.textContent = '€' + val;
+        n.style.transform = 'scale(1)'; n.style.opacity = '1';
+        n.style.transition = 'all 0.35s cubic-bezier(.34,1.56,.64,1)';
+      }, 180);
+    });
+    document.querySelectorAll('.prijs-tag').forEach(function(t) {
+      t.textContent = mode === 'los' ? 'PER WASBEURT' : 'WASCLUB · P/MND';
+    });
+  });
+  if (tab.classList.contains('active')) {
+    var mode = tab.dataset.mode;
+    document.querySelectorAll('.prijs-num').forEach(function(n) {
+      n.textContent = '€' + (mode === 'los' ? n.dataset.los : n.dataset.abo);
+    });
+  }
+});
+
+// ════════════════════════════════════════════════
+// MOBILE DRAWER
+// ════════════════════════════════════════════════
+function toggleDrawer() {
+  var d = document.getElementById('nav-drawer');
+  var o = document.getElementById('nav-overlay');
+  var h = document.getElementById('nav-hamburger');
+  if (!d) return;
+  var open = d.classList.toggle('open');
+  if (o) o.classList.toggle('open', open);
+  if (h) h.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeDrawer() {
+  var d = document.getElementById('nav-drawer');
+  var o = document.getElementById('nav-overlay');
+  var h = document.getElementById('nav-hamburger');
+  if (d) d.classList.remove('open');
+  if (o) o.classList.remove('open');
+  if (h) h.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ════════════════════════════════════════════════
+// SCROLL REVEAL
+// ════════════════════════════════════════════════
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible', 'animated');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -60px 0px' });
+  els.forEach(function(el) { io.observe(el); });
+})();
+
+// ════════════════════════════════════════════════
+// NAV SCROLL
+// ════════════════════════════════════════════════
+(function(){
+  var nav = document.querySelector('.nav');
+  if (!nav) return;
+  window.addEventListener('scroll', function() {
+    nav.style.background = window.scrollY > 80 ? 'rgba(10,10,10,0.98)' : 'rgba(10,10,10,0.92)';
+  });
+})();
+</script>
+</body>
+</html>

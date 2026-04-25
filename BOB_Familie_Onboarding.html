@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOB Familie — Extra auto toevoegen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E30613;
+  --red-glow: rgba(227,6,19,0.22);
+  --black: #0a0a0a;
+  --dark: #111111;
+  --mid: #1c1c1c;
+  --panel: #161616;
+  --border: rgba(255,255,255,0.08);
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.55);
+  --subtle: rgba(255,255,255,0.14);
+  --green: #22c55e;
+  --font-d: 'Inter Tight', sans-serif;
+  --font-b: 'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--text); font-family: var(--font-b); line-height: 1.6; }
+
+/* ─── NAV ─── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 20px;
+  padding: 0 48px; height: 64px;
+  background: rgba(10,10,10,0.97); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-back {
+  display: flex; align-items: center; gap: 8px;
+  color: var(--muted); text-decoration: none; font-size: 14px;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--text); }
+.nav-back svg { width: 16px; height: 16px; }
+.nav-divider { width: 1px; height: 20px; background: var(--border); }
+.nav-logo { display: flex; align-items: center; }
+.nav-logo img { height: 28px; width: auto; }
+.nav-title { font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-left: auto; }
+
+/* ─── FLOW LAYOUT ─── */
+.flow-wrap { max-width: 900px; margin: 0 auto; padding: 64px 48px 120px; }
+
+/* Progress bar */
+.progress-bar {
+  display: flex; align-items: center; gap: 0; margin-bottom: 64px;
+}
+.progress-step {
+  display: flex; align-items: center; gap: 12px; flex: 1;
+  position: relative;
+}
+.progress-step:not(:last-child)::after {
+  content:''; position: absolute; left: 36px; top: 18px;
+  width: calc(100% - 36px); height: 2px;
+  background: var(--border); z-index: 0;
+}
+.progress-step.done::after { background: var(--green); }
+.progress-step.active::after { background: linear-gradient(90deg, var(--red), var(--border)); }
+.step-bubble {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-d); font-weight: 800; font-size: 14px;
+  border: 2px solid var(--border); background: var(--panel);
+  color: var(--muted); position: relative; z-index: 1;
+  transition: all 0.3s;
+}
+.progress-step.done .step-bubble { background: var(--green); border-color: var(--green); color: #fff; }
+.progress-step.active .step-bubble { background: var(--red); border-color: var(--red); color: #fff; box-shadow: 0 0 16px var(--red-glow); }
+.step-label { font-size: 12px; color: var(--muted); font-family: var(--font-d); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; }
+.progress-step.active .step-label { color: var(--text); }
+.progress-step.done .step-label { color: var(--green); }
+
+/* Step panels */
+.step-panel { display: none; animation: stepIn 0.4s cubic-bezier(0.16,1,0.3,1); }
+.step-panel.active { display: block; }
+@keyframes stepIn { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+.step-header { margin-bottom: 40px; }
+.step-header h2 { font-family: var(--font-d); font-weight: 900; font-size: 40px; text-transform: uppercase; line-height: 0.95; letter-spacing: -0.5px; margin-bottom: 12px; }
+.step-header h2 em { font-style: normal; color: var(--red); }
+.step-header p { font-size: 16px; color: var(--muted); max-width: 520px; line-height: 1.65; }
+
+/* Cards / panels */
+.card {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 32px; margin-bottom: 16px; position: relative;
+  transition: border-color 0.2s;
+}
+.card:hover { border-color: rgba(255,255,255,0.15); }
+.card.selected { border-color: var(--red); background: rgba(227,6,19,0.05); }
+.card.selected::before { content:''; position: absolute; top:0; left:0; bottom:0; width:3px; background: var(--red); }
+
+/* ─── STAP 1: Bestaand lid of nieuw? ─── */
+.account-options { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.account-card {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 32px; cursor: pointer; transition: all 0.25s;
+  text-align: center; position: relative;
+}
+.account-card:hover { border-color: rgba(255,255,255,0.2); background: var(--mid); }
+.account-card.selected { border-color: var(--red); background: rgba(227,6,19,0.07); }
+.account-card.selected::before { content:''; position: absolute; top:0; left:0; right:0; height:3px; background: var(--red); }
+.account-card-icon { font-size: 36px; margin-bottom: 16px; }
+.account-card h3 { font-family: var(--font-d); font-weight: 800; font-size: 20px; text-transform: uppercase; margin-bottom: 8px; }
+.account-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+/* ─── STAP 2: Auto's configureren ─── */
+.auto-slots { display: grid; gap: 12px; margin-bottom: 32px; }
+.auto-slot {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 24px 28px; display: grid;
+  grid-template-columns: 40px 1fr 1fr auto;
+  gap: 20px; align-items: center;
+  position: relative; transition: all 0.25s;
+}
+.auto-slot.hoofdauto { border-color: rgba(227,6,19,0.3); }
+.auto-slot.hoofdauto::before { content:''; position: absolute; left:0; top:0; bottom:0; width:3px; background: var(--red); }
+.auto-slot.extra { border-style: dashed; opacity: 0.6; }
+.auto-slot.extra.filled { border-style: solid; opacity: 1; border-color: rgba(34,197,94,0.3); }
+.auto-slot.extra.filled::before { content:''; position: absolute; left:0; top:0; bottom:0; width:3px; background: var(--green); }
+
+.auto-num {
+  width: 36px; height: 36px; background: var(--red); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-d); font-weight: 900; font-size: 16px; flex-shrink: 0;
+}
+.auto-slot.extra .auto-num { background: var(--mid); color: var(--muted); }
+.auto-slot.extra.filled .auto-num { background: var(--green); color: #fff; }
+
+.auto-kenteken {
+  background: var(--mid); border: 1px solid var(--border); color: var(--text);
+  font-family: var(--font-d); font-weight: 800; font-size: 18px;
+  letter-spacing: 2px; text-transform: uppercase; padding: 10px 16px;
+  width: 100%; transition: border-color 0.2s; outline: none;
+}
+.auto-kenteken:focus { border-color: var(--red); }
+.auto-kenteken::placeholder { color: var(--subtle); font-size: 14px; }
+.auto-kenteken.valid { border-color: var(--green); }
+
+.auto-merk {
+  background: var(--mid); border: 1px solid var(--border); color: var(--text);
+  font-family: var(--font-b); font-size: 14px;
+  padding: 10px 16px; width: 100%; outline: none;
+  transition: border-color 0.2s;
+}
+.auto-merk:focus { border-color: var(--red); }
+
+.auto-remove {
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+  width: 32px; height: 32px; cursor: pointer; font-size: 16px; flex-shrink: 0;
+  transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+}
+.auto-remove:hover { border-color: var(--red); color: var(--red); }
+
+.auto-add-btn {
+  display: flex; align-items: center; gap: 12px;
+  background: transparent; border: 1px dashed var(--subtle); color: var(--muted);
+  padding: 18px 24px; cursor: pointer; width: 100%;
+  font-family: var(--font-d); font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;
+  transition: all 0.2s;
+}
+.auto-add-btn:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+.auto-add-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.auto-add-icon {
+  width: 28px; height: 28px; background: var(--mid); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+}
+
+/* Prijsoverzicht live */
+.prijs-overzicht {
+  background: var(--dark); border: 1px solid var(--border);
+  padding: 28px; position: sticky; bottom: 20px;
+  margin-top: 32px;
+}
+.prijs-overzicht::before { content:''; position: absolute; top:0; left:0; right:0; height:2px; background: var(--red); }
+.prijs-rijen { display: grid; gap: 10px; margin-bottom: 20px; }
+.prijs-rij { display: flex; justify-content: space-between; align-items: center; font-size: 14px; }
+.prijs-rij.totaal { padding-top: 14px; border-top: 1px solid var(--border); font-size: 16px; font-weight: 600; }
+.prijs-rij.besparing { color: var(--green); }
+.prijs-bedrag { font-family: var(--font-d); font-weight: 800; font-size: 16px; }
+.prijs-bedrag.totaal { font-size: 28px; color: var(--red); }
+
+/* ─── STAP 3: Kentekens verifiëren ─── */
+.verificatie-grid { display: grid; gap: 16px; }
+.verificatie-item {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 24px 28px; display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 20px; align-items: center;
+}
+.verificatie-item.verified { border-color: rgba(34,197,94,0.3); }
+.verificatie-item.verified::before { content:''; position: absolute; left:0; top:0; bottom:0; width:3px; background: var(--green); }
+.verificatie-item { position: relative; }
+.verificatie-kenteken { font-family: var(--font-d); font-weight: 900; font-size: 22px; letter-spacing: 2px; }
+.verificatie-status {
+  display: flex; align-items: center; gap: 8px; font-size: 13px;
+  font-family: var(--font-d); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+}
+.verificatie-status.ok { color: var(--green); }
+.verificatie-status.wait { color: rgba(255,255,255,0.4); }
+.verificatie-upload {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--mid); border: 1px solid var(--border); color: var(--muted);
+  padding: 10px 16px; cursor: pointer; font-size: 13px;
+  font-family: var(--font-d); font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+  transition: all 0.2s; white-space: nowrap;
+}
+.verificatie-upload:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+.verificatie-upload.done { border-color: rgba(34,197,94,0.4); color: var(--green); background: rgba(34,197,94,0.07); }
+
+.info-banner {
+  display: flex; gap: 16px; align-items: flex-start;
+  background: rgba(227,6,19,0.06); border: 1px solid rgba(227,6,19,0.2);
+  padding: 20px 24px; margin-bottom: 32px;
+}
+.info-banner-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+.info-banner p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+.info-banner strong { color: var(--text); }
+
+/* ─── STAP 4: Bevestiging ─── */
+.bevestiging-overzicht {
+  background: var(--panel); border: 1px solid var(--border); padding: 40px;
+  position: relative; margin-bottom: 32px;
+}
+.bevestiging-overzicht::before { content:''; position: absolute; top:0; left:0; right:0; height:3px; background: var(--red); }
+.bevestiging-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 16px 0; border-bottom: 1px solid var(--border); font-size: 15px;
+}
+.bevestiging-row:last-child { border-bottom: none; }
+.bevestiging-row label { color: var(--muted); font-size: 13px; font-family: var(--font-d); letter-spacing: 0.5px; text-transform: uppercase; }
+.bevestiging-row strong { font-family: var(--font-d); font-weight: 800; font-size: 18px; }
+.bevestiging-kentekens { display: flex; gap: 10px; flex-wrap: wrap; }
+.kentekenplaatje {
+  background: #f5d000; color: #000; font-family: var(--font-d); font-weight: 900;
+  font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 6px 12px; border-radius: 3px; border-left: 4px solid #003DA5;
+}
+.success-state { text-align: center; padding: 80px 40px; }
+.success-icon { font-size: 64px; margin-bottom: 24px; animation: popIn 0.5s cubic-bezier(.34,1.56,.64,1); }
+@keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+.success-state h2 { font-family: var(--font-d); font-weight: 900; font-size: 40px; text-transform: uppercase; margin-bottom: 16px; letter-spacing: -0.5px; }
+.success-state p { font-size: 16px; color: var(--muted); max-width: 440px; margin: 0 auto 36px; line-height: 1.65; }
+
+/* ─── FORM ELEMENTS ─── */
+.form-group { margin-bottom: 24px; }
+.form-label { font-family: var(--font-d); font-weight: 700; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block; }
+.form-input {
+  width: 100%; background: var(--mid); border: 1px solid var(--border);
+  color: var(--text); font-family: var(--font-b); font-size: 15px;
+  padding: 13px 16px; outline: none; transition: border-color 0.2s;
+}
+.form-input:focus { border-color: var(--red); }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-hint { font-size: 12px; color: var(--subtle); margin-top: 8px; }
+.form-hint a { color: var(--muted); }
+
+/* ─── BUTTONS ─── */
+.btn-row { display: flex; gap: 14px; align-items: center; margin-top: 36px; }
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--red); color: #fff;
+  font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 15px 28px 13px; border: none; cursor: pointer;
+  clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);
+  transition: all 0.2s;
+}
+.btn-primary:hover { box-shadow: 0 12px 32px var(--red-glow); transform: translateY(-1px); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent; color: var(--muted); border: 1px solid var(--subtle);
+  font-family: var(--font-d); font-weight: 700; font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 14px 24px 12px; cursor: pointer;
+  clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);
+  transition: all 0.2s;
+}
+.btn-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.4); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; }
+  .flow-wrap { padding: 40px 20px 100px; }
+  .progress-bar { gap: 0; }
+  .step-label { display: none; }
+  .progress-step::after { left: 36px; }
+  .step-header h2 { font-size: 32px; }
+  .account-options { grid-template-columns: 1fr; }
+  .auto-slot { grid-template-columns: 36px 1fr; grid-template-rows: auto auto; }
+  .auto-merk { grid-column: 2; }
+  .auto-remove { position: absolute; top: 16px; right: 16px; }
+  .verificatie-item { grid-template-columns: 1fr; gap: 12px; }
+  .form-grid-2 { grid-template-columns: 1fr; }
+  .btn-row { flex-direction: column; align-items: stretch; }
+  .bevestiging-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+}
+
+/* ── Onboarding programma selector ── */
+.ob-prog-card {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 24px; cursor: pointer; transition: all 0.25s; position: relative;
+}
+.ob-prog-card:hover { border-color: rgba(255,255,255,0.2); }
+.ob-prog-card.active { border-color: var(--red); background: rgba(227,6,19,0.07); }
+.ob-prog-card.active::before { content:''; position:absolute;top:0;left:0;right:0;height:3px;background:var(--red); }
+.ob-prog-name { font-family:'Inter Tight',sans-serif; font-weight:900; font-size:22px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:6px; }
+.ob-gold { background: linear-gradient(135deg,#c8943e,#f5e2a0,#c8943e); -webkit-background-clip:text; background-clip:text; color:transparent; }
+.ob-prog-prijs { font-family:'Inter Tight',sans-serif; font-weight:900; font-size:36px; letter-spacing:-1px; line-height:1; margin-bottom:2px; }
+.ob-prog-prijs span { font-size:16px; font-weight:600; color:var(--muted); }
+.ob-prog-sub { font-size:12px; color:var(--muted); margin-bottom:14px; }
+.ob-prog-features { display:grid; gap:4px; font-size:12px; color:rgba(255,255,255,0.65); }
+
+/* Live prijs badge in auto-slot */
+.auto-slot-prijs {
+  position:absolute; top:12px; right:48px;
+  font-family:'Inter Tight',sans-serif; font-weight:800; font-size:13px; color:var(--red);
+  background: rgba(227,6,19,0.1); border: 1px solid rgba(227,6,19,0.25);
+  padding: 3px 8px;
+}
+
+@media(max-width:768px){
+  #ob-prog-select { grid-template-columns:1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="BOB_Wasclub_Responsive.html#familie" class="nav-back">
+    <svg viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    Terug
+  </a>
+  <div class="nav-divider"></div>
+  <div class="nav-logo">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 40'%3E%3Crect width='60' height='40' fill='%23555'/%3E%3Crect x='60' y='0' width='60' height='40' rx='6' fill='%23E30613'/%3E%3Ctext x='90' y='28' font-family='Arial Black' font-size='22' font-weight='900' fill='white' text-anchor='middle'%3EBOB%3C/text%3E%3C/svg%3E" alt="BOB Autowas" style="height:28px;">
+  </div>
+  <div class="nav-title">BOB Familie — Extra auto toevoegen</div>
+</nav>
+
+<div class="flow-wrap">
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-bar" id="progress-bar">
+    <div class="progress-step active" data-step="1">
+      <div class="step-bubble">1</div>
+      <span class="step-label">Account</span>
+    </div>
+    <div class="progress-step" data-step="2">
+      <div class="step-bubble">2</div>
+      <span class="step-label">Auto's</span>
+    </div>
+    <div class="progress-step" data-step="3">
+      <div class="step-bubble">3</div>
+      <span class="step-label">Verificatie</span>
+    </div>
+    <div class="progress-step" data-step="4">
+      <div class="step-bubble">4</div>
+      <span class="step-label">Bevestiging</span>
+    </div>
+  </div>
+
+  <!-- ══ STAP 1: Account ══ -->
+  <div class="step-panel active" id="step-1">
+    <div class="step-header">
+      <h2>Ben je al <em>Wasclub</em>-lid?</h2>
+      <p>Als je al een abonnement hebt, kun je extra kentekens toevoegen aan je bestaande account. Nieuw? Start dan meteen met het Familie-pakket.</p>
+    </div>
+
+    <div class="account-options">
+      <div class="account-card" onclick="selectAccount('bestaand', this)">
+        <div class="account-card-icon">🔑</div>
+        <h3>Ja, ik ben al lid</h3>
+        <p>Ik heb al een Wasclub-abonnement en wil een of meer auto's toevoegen aan mijn account.</p>
+      </div>
+      <div class="account-card" onclick="selectAccount('nieuw', this)">
+        <div class="account-card-icon">✨</div>
+        <h3>Nieuw bij BOB</h3>
+        <p>Ik heb nog geen abonnement en wil meteen starten met een Familie-pakket voor meerdere auto's.</p>
+      </div>
+    </div>
+
+    <div id="bestaand-form" style="display:none; margin-top:28px;">
+      <div class="card">
+        <div class="form-grid-2">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">E-mailadres</label>
+            <input type="email" class="form-input" placeholder="jouw@email.nl">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Huidig kenteken (hoofdauto)</label>
+            <input type="text" class="form-input" placeholder="AB-123-C" style="font-family:'Inter Tight',sans-serif;letter-spacing:2px;text-transform:uppercase;">
+          </div>
+        </div>
+        <p class="form-hint" style="margin-top:16px;">We verificeren uw lidmaatschap en tonen daarna uw huidige abonnementsgegevens.</p>
+      </div>
+    </div>
+
+    <div id="nieuw-form" style="display:none; margin-top:28px;">
+      <div class="card">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Voornaam</label>
+            <input type="text" class="form-input" placeholder="Jan">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Achternaam</label>
+            <input type="text" class="form-input" placeholder="de Vries">
+          </div>
+          <div class="form-group">
+            <label class="form-label">E-mailadres</label>
+            <input type="email" class="form-input" placeholder="jan@familie.nl">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Telefoonnummer</label>
+            <input type="tel" class="form-input" placeholder="06-12345678">
+          </div>
+          <div class="form-group" style="grid-column:1/-1">
+            <label class="form-label">Adres (voor kentekenkoppeling)</label>
+            <input type="text" class="form-input" placeholder="Straatnaam 12, 1234 AB Plaatsnaam">
+            <p class="form-hint">Uw adres wordt gebruikt om te verifiëren dat de kentekens tot uw huishouden behoren.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row" id="stap1-btns" style="display:none;">
+      <button class="btn-primary" onclick="goToStep(2)">Doorgaan naar auto's →</button>
+    </div>
+  </div>
+
+  <!-- ══ STAP 2: Auto's configureren ══ -->
+  <div class="step-panel" id="step-2">
+    <div class="step-header">
+      <h2>Stel je<br><em>pakket in</em></h2>
+      <p>Kies je programma, voeg kentekens toe en zie direct wat je betaalt. De prijs per auto daalt automatisch naarmate je er meer toevoegt.</p>
+    </div>
+
+    <!-- PROGRAMMA KEUZE -->
+    <div style="margin-bottom:28px;">
+      <div style="font-family:'Inter Tight',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:14px;">Kies je Wasclub-programma</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="ob-prog-select">
+        <div class="ob-prog-card active" data-prog="intensief" data-was1="34" onclick="selectObProg(this)">
+          <div class="ob-prog-name" style="color:#b8c4cc;">Intensief</div>
+          <div class="ob-prog-prijs">€34<span>/mnd</span></div>
+          <div class="ob-prog-sub">bij 1 auto</div>
+          <div class="ob-prog-features">
+            <span>✓ Hogedruk + schuim</span>
+            <span>✓ Alle 22 vestigingen</span>
+          </div>
+        </div>
+        <div class="ob-prog-card" data-prog="proteqt" data-was1="39" onclick="selectObProg(this)">
+          <div class="ob-prog-name ob-gold">Proteqt</div>
+          <div class="ob-prog-prijs">€39<span>/mnd</span></div>
+          <div class="ob-prog-sub">bij 1 auto</div>
+          <div class="ob-prog-features">
+            <span>✓ Lakcoating + velgen</span>
+            <span>✓ Goedkopere interieur</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTERIEUR TOGGLE -->
+    <div id="ob-interieur-wrap" style="background:var(--panel);border:1px solid var(--border);padding:20px 24px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;gap:20px;">
+      <div>
+        <div style="font-weight:600;font-size:15px;margin-bottom:4px;">+ Interieurband toevoegen</div>
+        <div style="font-size:13px;color:var(--muted);" id="ob-int-label">+€20/auto/mnd bij Intensief — wordt goedkoper bij meerdere auto's</div>
+      </div>
+      <div onclick="toggleObInterieur()" id="ob-int-toggle" style="width:44px;height:24px;background:rgba(255,255,255,0.1);cursor:pointer;position:relative;transition:background 0.3s;flex-shrink:0;">
+        <div id="ob-int-knob" style="position:absolute;width:18px;height:18px;top:3px;left:3px;background:var(--muted);transition:left 0.3s cubic-bezier(.34,1.56,.64,1);"></div>
+      </div>
+    </div>
+
+    <div class="info-banner">
+      <div class="info-banner-icon">ℹ️</div>
+      <p>Alle kentekens moeten op <strong>hetzelfde adres</strong> staan als uw account, of op naam van <strong>u of uw partner</strong>. Zakelijke auto's op naam van uw eigen BV zijn ook toegestaan. In de volgende stap uploadt u het kentekenbewijs ter verificatie.</p>
+    </div>
+
+    <div class="auto-slots" id="auto-slots">
+      <!-- Hoofdauto (fixed) -->
+      <div class="auto-slot hoofdauto">
+        <div class="auto-num">1</div>
+        <div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Inter Tight',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Hoofdauto (huidig abonnement)</div>
+          <input type="text" class="auto-kenteken valid" value="AB-123-C" readonly style="opacity:0.7;cursor:default;">
+        </div>
+        <input type="text" class="auto-merk" value="Volkswagen Golf" readonly style="opacity:0.7;cursor:default;">
+        <div style="width:32px;"></div>
+      </div>
+    </div>
+
+    <button class="auto-add-btn" id="add-auto-btn" onclick="addAutoSlot()">
+      <div class="auto-add-icon">+</div>
+      Extra auto toevoegen
+    </button>
+
+    <!-- Live prijsoverzicht -->
+    <div class="prijs-overzicht" id="prijs-overzicht">
+      <div style="font-family:'Inter Tight',sans-serif;font-weight:800;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">Jouw Familie-pakket</div>
+      <div class="prijs-rijen" id="prijs-rijen">
+        <div class="prijs-rij">
+          <span>1 auto — Proteqt</span>
+          <span class="prijs-bedrag">€39/mnd</span>
+        </div>
+      </div>
+      <div class="prijs-rij totaal">
+        <span>Totaal per maand</span>
+        <span class="prijs-bedrag totaal" id="totaal-bedrag">€39/mnd</span>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goToStep(1)">← Terug</button>
+      <button class="btn-primary" onclick="goToStep(3)">Doorgaan naar verificatie →</button>
+    </div>
+  </div>
+
+  <!-- ══ STAP 3: Verificatie ══ -->
+  <div class="step-panel" id="step-3">
+    <div class="step-header">
+      <h2>Kentekens<br><em>verifiëren</em></h2>
+      <p>Upload het kentekenbewijs (deel 1) voor elk extra kenteken. Dit duurt twee minuten en is eenmalig. De hoofdauto is al geverifieerd via uw bestaande account.</p>
+    </div>
+
+    <div class="info-banner">
+      <div class="info-banner-icon">📋</div>
+      <p>We accepteren een <strong>foto of scan</strong> van het kentekenbewijs deel 1 (het groene kaartje). Controleer of het adres of de naam overeenkomt met uw accountgegevens. Een zakelijke auto op naam van uw eigen BV is ook acceptabel — upload dan tevens een KvK-uittreksel.</p>
+    </div>
+
+    <div class="verificatie-grid" id="verificatie-grid">
+      <!-- Hoofdauto: al geverifieerd -->
+      <div class="verificatie-item verified">
+        <div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Inter Tight',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Hoofdauto</div>
+          <div class="verificatie-kenteken">AB-123-C</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;">Volkswagen Golf</div>
+        </div>
+        <div class="verificatie-status ok">
+          <span>✓</span> Geverifieerd via bestaand account
+        </div>
+        <div></div>
+      </div>
+
+      <!-- Extra auto's: te uploaden -->
+      <div class="verificatie-item" id="verif-2" style="display:none;">
+        <div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Inter Tight',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Auto 2</div>
+          <div class="verificatie-kenteken" id="verif-kent-2">—</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;" id="verif-merk-2">—</div>
+        </div>
+        <div class="verificatie-status wait" id="verif-status-2">
+          <span>○</span> Wacht op kentekenbewijs
+        </div>
+        <button class="verificatie-upload" onclick="simulateUpload(2)">
+          📎 Upload kentekenbewijs
+        </button>
+      </div>
+
+      <div class="verificatie-item" id="verif-3" style="display:none;">
+        <div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Inter Tight',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Auto 3</div>
+          <div class="verificatie-kenteken" id="verif-kent-3">—</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;" id="verif-merk-3">—</div>
+        </div>
+        <div class="verificatie-status wait" id="verif-status-3">
+          <span>○</span> Wacht op kentekenbewijs
+        </div>
+        <button class="verificatie-upload" onclick="simulateUpload(3)">
+          📎 Upload kentekenbewijs
+        </button>
+      </div>
+
+      <div class="verificatie-item" id="verif-4" style="display:none;">
+        <div>
+          <div style="font-size:11px;color:var(--muted);font-family:'Inter Tight',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Auto 4</div>
+          <div class="verificatie-kenteken" id="verif-kent-4">—</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:4px;" id="verif-merk-4">—</div>
+        </div>
+        <div class="verificatie-status wait" id="verif-status-4">
+          <span>○</span> Wacht op kentekenbewijs
+        </div>
+        <button class="verificatie-upload" onclick="simulateUpload(4)">
+          📎 Upload kentekenbewijs
+        </button>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn-secondary" onclick="goToStep(2)">← Terug</button>
+      <button class="btn-primary" id="verif-next-btn" onclick="goToStep(4)">Doorgaan naar bevestiging →</button>
+    </div>
+  </div>
+
+  <!-- ══ STAP 4: Bevestiging ══ -->
+  <div class="step-panel" id="step-4">
+    <div id="bevestiging-content">
+      <div class="step-header">
+        <h2>Controleer en<br><em>bevestig</em></h2>
+        <p>Controleer uw gegevens. Na bevestiging worden de extra kentekens direct toegevoegd aan uw account en zijn ze bij de volgende wasbeurt actief.</p>
+      </div>
+
+      <div class="bevestiging-overzicht">
+        <div class="bevestiging-row">
+          <label>Accounthouder</label>
+          <strong>Jan de Vries</strong>
+        </div>
+        <div class="bevestiging-row">
+          <label>Abonnement</label>
+          <strong id="bevestiging-abo">Wasclub Intensief — BOB Familie</strong>
+        </div>
+        <div class="bevestiging-row">
+          <label>Kentekens</label>
+          <div class="bevestiging-kentekens" id="bevestiging-kentekens">
+            <div class="kentekenplaatje">AB-123-C</div>
+          </div>
+        </div>
+        <div class="bevestiging-row">
+          <label>Maandbedrag</label>
+          <strong id="bevestiging-bedrag" style="font-size:28px;color:var(--red);">€39/mnd</strong>
+        </div>
+        <div class="bevestiging-row">
+          <label>Besparing t.o.v. losse abonnementen</label>
+          <strong id="bevestiging-besparing" style="color:var(--green);">—</strong>
+        </div>
+        <div class="bevestiging-row">
+          <label>Incassodatum</label>
+          <strong>Elke 1e van de maand — zelfde IBAN als huidig abonnement</strong>
+        </div>
+        <div class="bevestiging-row">
+          <label>Actief vanaf</label>
+          <strong>Direct na bevestiging</strong>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:16px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;">
+          <input type="checkbox" id="akkoord-check" style="margin-top:3px;accent-color:var(--red);width:18px;height:18px;flex-shrink:0;" onchange="checkAkkoord()">
+          <label for="akkoord-check" style="font-size:14px;color:var(--muted);line-height:1.65;cursor:pointer;">
+            Ik bevestig dat alle toegevoegde kentekens tot <strong style="color:var(--text);">mijn huishouden</strong> behoren (zelfde woonadres, partner, of eigen BV). Ik begrijp dat bij onjuiste opgave het account per direct kan worden beëindigd zonder restitutie. Ik ga akkoord met de <a href="#" style="color:var(--red);">Wasclub Familievoorwaarden</a>.
+          </label>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-secondary" onclick="goToStep(3)">← Terug</button>
+        <button class="btn-primary" id="bevestig-btn" disabled onclick="bevestig()" style="opacity:0.4;">
+          ✓ Bevestig en activeer →
+        </button>
+      </div>
+    </div>
+
+    <div id="success-content" style="display:none;">
+      <div class="success-state">
+        <div class="success-icon">🎉</div>
+        <h2>Familie-pakket<br><em style="color:var(--red);">Actief!</em></h2>
+        <p>Alle kentekens zijn toegevoegd en direct actief. Rij de volgende keer gewoon de wasstraat in — het systeem herkent elk kenteken automatisch.</p>
+        <div style="display:flex;flex-direction:column;gap:12px;max-width:340px;margin:0 auto;">
+          <a href="BOB_Wasclub_Responsive.html" class="btn-primary" style="justify-content:center;">← Terug naar Wasclub</a>
+          <button class="btn-secondary" onclick="window.print()" style="justify-content:center;">🖨 Sla bevestiging op</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── STATE ────────────────────────────────────────────────────────
+const state = {
+  accountType: null,
+  autos: [{ num: 1, kenteken: 'AB-123-C', merk: 'Volkswagen Golf', hoofd: true }],
+  tier: { naam: 'Intensief', key: 'intensief', prijs: 34 },
+  interieur: false,
+  maxAutos: 4,
+  uploads: { 1: true }
+};
+
+const WAS_ABO = {
+  proteqt:   {1:39, 2:29, 3:26, 4:24},
+  intensief: {1:34, 2:25, 3:22, 4:21}
+};
+const INT_ABO = {
+  proteqt:   {1:18, 2:16, 3:13, 4:10},
+  intensief: {1:20, 2:18, 3:15, 4:12}
+};
+
+// ── STAP NAVIGATIE ───────────────────────────────────────────────
+function goToStep(num) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step-' + num).classList.add('active');
+
+  document.querySelectorAll('.progress-step').forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i + 1 < num) s.classList.add('done');
+    if (i + 1 === num) s.classList.add('active');
+  });
+
+  // Update verification grid bij naar stap 3
+  if (num === 3) updateVerificatieGrid();
+  // Update bevestiging bij naar stap 4
+  if (num === 4) updateBevestiging();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── STAP 1: Account type ─────────────────────────────────────────
+function selectAccount(type, el) {
+  state.accountType = type;
+  document.querySelectorAll('.account-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('bestaand-form').style.display = type === 'bestaand' ? 'block' : 'none';
+  document.getElementById('nieuw-form').style.display = type === 'nieuw' ? 'block' : 'none';
+  document.getElementById('stap1-btns').style.display = 'flex';
+}
+
+// ── STAP 2: Auto's ───────────────────────────────────────────────
+let slotCount = 1;
+
+function addAutoSlot() {
+  if (slotCount >= state.maxAutos) return;
+  slotCount++;
+  const num = slotCount;
+
+  const slot = document.createElement('div');
+  slot.className = 'auto-slot extra';
+  slot.id = 'slot-' + num;
+  slot.innerHTML = `
+    <div class="auto-num">${num}</div>
+    <input type="text" class="auto-kenteken" placeholder="Kenteken (bijv. CD-456-E)"
+      oninput="onKentekenInput(this, ${num})"
+      style="font-family:'Inter Tight',sans-serif;letter-spacing:2px;text-transform:uppercase;">
+    <input type="text" class="auto-merk" placeholder="Merk en model" oninput="onMerkInput(this, ${num})">
+    <button class="auto-remove" onclick="removeSlot(${num})">✕</button>
+  `;
+  document.getElementById('auto-slots').appendChild(slot);
+
+  // Voeg toe aan state
+  state.autos.push({ num, kenteken: '', merk: '', hoofd: false });
+
+  if (slotCount >= state.maxAutos) {
+    document.getElementById('add-auto-btn').disabled = true;
+    document.getElementById('add-auto-btn').textContent = 'Maximum van 4 auto\'s bereikt';
+  }
+
+  updatePrijsOverzicht();
+}
+
+function removeSlot(num) {
+  const slot = document.getElementById('slot-' + num);
+  if (slot) slot.remove();
+  state.autos = state.autos.filter(a => a.num !== num);
+  slotCount = Math.max(1, slotCount - 1);
+  document.getElementById('add-auto-btn').disabled = false;
+  document.getElementById('add-auto-btn').innerHTML = '<div class="auto-add-icon">+</div> Extra auto toevoegen';
+  // Renumber
+  renumberSlots();
+  updatePrijsOverzicht();
+}
+
+function renumberSlots() {
+  const slots = document.querySelectorAll('.auto-slot.extra');
+  slots.forEach((s, i) => {
+    const newNum = i + 2;
+    s.querySelector('.auto-num').textContent = newNum;
+  });
+}
+
+function onKentekenInput(el, num) {
+  const val = el.value.toUpperCase().replace(/[^A-Z0-9-]/g, '');
+  el.value = val;
+  const auto = state.autos.find(a => a.num === num);
+  if (auto) auto.kenteken = val;
+  if (val.length >= 6) {
+    el.classList.add('valid');
+    document.getElementById('slot-' + num).classList.add('filled');
+  } else {
+    el.classList.remove('valid');
+    document.getElementById('slot-' + num).classList.remove('filled');
+  }
+  updatePrijsOverzicht();
+}
+
+function onMerkInput(el, num) {
+  const auto = state.autos.find(a => a.num === num);
+  if (auto) auto.merk = el.value;
+}
+
+function updatePrijsOverzicht() {
+  const n = state.autos.length;
+  const key = state.tier.key;
+  const wasPA = WAS_ABO[key][Math.min(n,4)];
+  const intPA = state.interieur ? INT_ABO[key][Math.min(n,4)] : 0;
+  const aboPA = wasPA + intPA;
+  const totaal = aboPA * n;
+
+  const rijen = document.getElementById('prijs-rijen');
+  rijen.innerHTML = '';
+
+  state.autos.forEach((auto) => {
+    const label = auto.hoofd
+      ? `Auto 1 (huidig) — ${state.tier.naam}${state.interieur?' + Int.':''}`
+      : `Auto ${auto.num} — ${state.tier.naam}${state.interieur?' + Int.':''}`;
+    rijen.innerHTML += `<div class="prijs-rij"><span>${label}</span><span class="prijs-bedrag">€${aboPA}/mnd</span></div>`;
+  });
+
+  // Besparing vs losse abonnementen
+  const losTotaal = state.tier.prijs * n + (state.interieur ? INT_ABO[key][1] * n : 0);
+  const besparing = losTotaal - totaal;
+  if (besparing > 0) {
+    rijen.innerHTML += `<div class="prijs-rij besparing"><span>✓ Familievoordeel</span><span class="prijs-bedrag" style="color:var(--green);">−€${besparing}/mnd</span></div>`;
+    if (state.interieur) {
+      rijen.innerHTML += `<div class="prijs-rij" style="font-size:12px;color:var(--muted);"><span>&nbsp;&nbsp;w.v. interieur: €${INT_ABO[key][1]} → €${intPA}/auto</span><span></span></div>`;
+    }
+  }
+
+  document.getElementById('totaal-bedrag').textContent = '€' + totaal + '/mnd';
+  updateObIntLabel();
+}
+
+// ── STAP 3: Verificatie ──────────────────────────────────────────
+function updateVerificatieGrid() {
+  state.autos.forEach(auto => {
+    if (auto.hoofd) return;
+    const item = document.getElementById('verif-' + auto.num);
+    if (!item) return;
+    item.style.display = 'grid';
+    document.getElementById('verif-kent-' + auto.num).textContent = auto.kenteken || '—';
+    document.getElementById('verif-merk-' + auto.num).textContent = auto.merk || '—';
+  });
+}
+
+function simulateUpload(num) {
+  const btn = event.target;
+  btn.textContent = '⏳ Uploaden...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.className = 'verificatie-upload done';
+    btn.textContent = '✓ Geüpload';
+    state.uploads[num] = true;
+    const statusEl = document.getElementById('verif-status-' + num);
+    statusEl.className = 'verificatie-status ok';
+    statusEl.innerHTML = '<span>✓</span> Geverifieerd';
+    document.getElementById('verif-' + num).classList.add('verified');
+  }, 1200);
+}
+
+// ── STAP 4: Bevestiging ──────────────────────────────────────────
+function updateBevestiging() {
+  const n = state.autos.length;
+  const prijs = Math.round(state.tier.prijs * staffel[Math.min(n - 1, 3)]);
+  const totaal = prijs * n;
+  const besparing = (state.tier.prijs * n) - totaal;
+
+  const kentekens = document.getElementById('bevestiging-kentekens');
+  kentekens.innerHTML = state.autos.map(a =>
+    `<div class="kentekenplaatje">${a.kenteken || '—'}</div>`
+  ).join('');
+
+  const key2 = state.tier.key;
+  const intPA2 = state.interieur ? INT_ABO[key2][Math.min(n,4)] : 0;
+  const aboLbl = `Wasclub ${state.tier.naam}${state.interieur ? ' + Interieur' : ''} — BOB Familie`;
+  document.getElementById('bevestiging-abo').textContent = aboLbl;
+  document.getElementById('bevestiging-bedrag').textContent = '€' + totaal + '/mnd';
+  const losTot2 = state.tier.prijs * n + (state.interieur ? INT_ABO[key2][1] * n : 0);
+  const besp2 = losTot2 - totaal;
+  document.getElementById('bevestiging-besparing').textContent =
+    besp2 > 0 ? '−€' + besp2 + '/mnd t.o.v. losse abonnementen' : '—';
+}
+
+function checkAkkoord() {
+  const btn = document.getElementById('bevestig-btn');
+  const checked = document.getElementById('akkoord-check').checked;
+  btn.disabled = !checked;
+  btn.style.opacity = checked ? '1' : '0.4';
+}
+
+function bevestig() {
+  document.getElementById('bevestiging-content').style.display = 'none';
+  document.getElementById('success-content').style.display = 'block';
+
+  // Update progress: alles done
+  document.querySelectorAll('.progress-step').forEach(s => {
+    s.classList.remove('active');
+    s.classList.add('done');
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── ONBOARDING: Programma selectie ──────────────────────────────
+function selectObProg(card) {
+  document.querySelectorAll('.ob-prog-card').forEach(c => c.classList.remove('active'));
+  card.classList.add('active');
+  state.tier.key  = card.dataset.prog;
+  state.tier.naam = card.dataset.prog.charAt(0).toUpperCase() + card.dataset.prog.slice(1);
+  state.tier.prijs = parseInt(card.dataset.was1);
+  updateObIntLabel();
+  updatePrijsOverzicht();
+  updateBevestiging();
+}
+
+function toggleObInterieur() {
+  state.interieur = !state.interieur;
+  const tog = document.getElementById('ob-int-toggle');
+  const knob = document.getElementById('ob-int-knob');
+  tog.style.background = state.interieur ? 'var(--red)' : 'rgba(255,255,255,0.1)';
+  knob.style.left = state.interieur ? '23px' : '3px';
+  knob.style.background = state.interieur ? '#fff' : 'var(--muted)';
+  updateObIntLabel();
+  updatePrijsOverzicht();
+  updateBevestiging();
+}
+
+function updateObIntLabel() {
+  const n = state.autos.length;
+  const key = state.tier.key;
+  const intPrijs = INT_ABO[key][Math.min(n, 4)];
+  const totInt = intPrijs * n;
+  document.getElementById('ob-int-label').textContent =
+    n > 1
+      ? `+€${intPrijs}/auto/mnd — €${totInt} totaal voor ${n} auto's`
+      : `+€${intPrijs}/mnd bij ${state.tier.naam}`;
+}
+
+</script>
+</body>
+</html>
