@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wasprogramma's — BOB Autowas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E30613;
+  --red-glow: rgba(227,6,19,0.22);
+  --black: #0a0a0a;
+  --dark: #111111;
+  --mid: #1c1c1c;
+  --panel: #161616;
+  --border: rgba(255,255,255,0.08);
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.55);
+  --subtle: rgba(255,255,255,0.14);
+  --gold: #e8c85a;
+  --silver: #b8c4cc;
+  --bronze: #cd8a5a;
+  --fd: 'Inter Tight', sans-serif;
+  --fb: 'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--text); font-family: var(--fb); line-height: 1.6; }
+
+/* ─── NAV ─── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 72px;
+  background: rgba(10,10,10,0.97); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-logo img { height: 36px; width: auto; display: block; }
+.nav-menu { display: flex; gap: 36px; list-style: none; }
+.nav-menu a {
+  font-family: var(--fd); font-weight: 700; font-size: 15px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  transition: color 0.2s; position: relative; padding-bottom: 2px;
+}
+.nav-menu a::after {
+  content: ''; position: absolute; left: 0; bottom: -2px;
+  width: 0; height: 2px; background: var(--red); transition: width 0.3s;
+}
+.nav-menu a:hover { color: var(--text); }
+.nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+.nav-menu a.active { color: var(--text); }
+.nav-cta {
+  background: var(--red); color: #fff;
+  font-family: var(--fd); font-weight: 800; font-size: 14px;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 11px 24px 9px; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+  transition: all 0.2s;
+}
+.nav-cta:hover { box-shadow: 0 8px 32px var(--red-glow); transform: translateY(-1px); }
+.nav-hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: transparent; border: none; cursor: pointer; padding: 8px;
+}
+.nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text); transition: all 0.3s; }
+.nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+.nav-drawer {
+  position: fixed; top: 0; right: -300px; bottom: 0; width: 280px;
+  background: var(--dark); z-index: 200; border-left: 1px solid var(--border);
+  transition: right 0.35s cubic-bezier(0.16,1,0.3,1);
+  display: flex; flex-direction: column; padding: 80px 32px 40px;
+}
+.nav-drawer.open { right: 0; }
+.nav-overlay {
+  position: fixed; inset: 0; z-index: 199;
+  background: rgba(0,0,0,0); pointer-events: none; transition: background 0.3s;
+}
+.nav-overlay.open { background: rgba(0,0,0,0.7); pointer-events: all; }
+.nav-drawer ul { list-style: none; display: grid; gap: 4px; }
+.nav-drawer ul a {
+  display: block; padding: 13px 0;
+  font-family: var(--fd); font-weight: 800; font-size: 22px;
+  letter-spacing: 1px; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  border-bottom: 1px solid var(--border); transition: color 0.2s;
+}
+.nav-drawer ul a:hover, .nav-drawer ul a.active { color: var(--red); }
+.nav-drawer-cta {
+  margin-top: 32px; display: block; background: var(--red); color: #fff;
+  font-family: var(--fd); font-weight: 800; font-size: 14px;
+  letter-spacing: 2px; text-transform: uppercase; padding: 14px 20px 12px;
+  text-align: center; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+}
+
+/* ─── HERO ─── */
+.hero {
+  background: var(--dark); padding: 80px 0 64px;
+  position: relative; overflow: hidden; text-align: center;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: linear-gradient(rgba(227,6,19,0.04) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(227,6,19,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black, transparent 80%);
+}
+.hero-inner { max-width: 800px; margin: 0 auto; padding: 0 48px; position: relative; z-index: 2; }
+.hero-label {
+  font-family: var(--fd); font-weight: 800; font-size: 11px;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--red);
+  margin-bottom: 20px; display: block;
+}
+.hero h1 {
+  font-family: var(--fd); font-weight: 900;
+  font-size: clamp(52px, 8vw, 88px);
+  text-transform: uppercase; line-height: 0.9; letter-spacing: -2px;
+  margin-bottom: 20px;
+}
+.hero h1 em { font-style: normal; color: var(--red); }
+.hero-sub {
+  font-size: 18px; color: var(--muted); max-width: 520px;
+  margin: 0 auto 40px; line-height: 1.65;
+}
+.hero-sub strong { color: var(--text); }
+.hero-ctas { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+/* ─── BUTTONS ─── */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--red); color: #fff;
+  font-family: var(--fd); font-weight: 800; font-size: 14px;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 15px 28px 13px; text-decoration: none; border: none; cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+  transition: all 0.2s;
+}
+.btn-primary:hover { box-shadow: 0 12px 32px var(--red-glow); transform: translateY(-1px); }
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent; color: var(--muted);
+  font-family: var(--fd); font-weight: 700; font-size: 14px;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 14px 28px 12px; text-decoration: none;
+  border: 1px solid var(--subtle);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+  transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: rgba(255,255,255,0.4); color: var(--text); }
+
+/* ─── VERGELIJKINGS CTA BALK ─── */
+.cta-balk {
+  background: var(--panel); border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 20px 48px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  position: sticky; top: 72px; z-index: 90;
+  backdrop-filter: blur(12px);
+}
+.cta-balk-left { font-size: 15px; color: var(--muted); }
+.cta-balk-left strong { color: var(--text); }
+.cta-balk-btns { display: flex; gap: 12px; flex-shrink: 0; }
+.cta-balk .btn-primary { padding: 11px 20px 9px; font-size: 12px; }
+.cta-balk .btn-ghost { padding: 10px 18px 8px; font-size: 12px; }
+
+/* ─── PROGRAMMA CARDS ─── */
+.programmas { padding: 80px 0; }
+.programmas-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+
+.prog-card {
+  display: grid; grid-template-columns: 380px 1fr;
+  gap: 0; margin-bottom: 3px; background: var(--panel);
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+  transition: border-color 0.3s;
+}
+.prog-card:hover { border-color: rgba(255,255,255,0.15); }
+.prog-card.proteqt { border-color: rgba(232,200,90,0.2); }
+.prog-card.intensief { border-color: rgba(184,196,204,0.15); }
+.prog-card.normaal { border-color: rgba(205,138,90,0.15); }
+
+/* Top accent lijn per programma */
+.prog-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.prog-card.proteqt::before { background: linear-gradient(90deg, #c8943e, #f5e2a0, #c8943e); }
+.prog-card.intensief::before { background: var(--silver); }
+.prog-card.normaal::before { background: var(--bronze); }
+
+/* Links: naam + prijs + kenmerken */
+.prog-left {
+  padding: 48px; border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; justify-content: space-between;
+  position: relative; overflow: hidden;
+}
+.prog-left::after {
+  content: attr(data-num);
+  position: absolute; right: -10px; top: -20px;
+  font-family: var(--fd); font-weight: 900; font-size: 160px;
+  line-height: 1; opacity: 0.03; pointer-events: none; letter-spacing: -4px;
+  color: #fff;
+}
+
+.prog-naam {
+  font-family: var(--fd); font-weight: 900;
+  font-size: 48px; text-transform: uppercase; letter-spacing: -1px;
+  line-height: 1; margin-bottom: 16px;
+}
+.prog-naam.gold {
+  background: linear-gradient(135deg, #c8943e 0%, #f5e2a0 45%, #c8943e 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.prog-naam.silver { color: var(--silver); }
+.prog-naam.bronze { color: var(--bronze); }
+
+.prog-tagline { font-size: 15px; color: var(--muted); margin-bottom: 32px; line-height: 1.5; }
+
+/* Prijs blok */
+.prog-prijs-wrap { margin-bottom: 36px; }
+.prog-prijs-los {
+  display: inline-flex; flex-direction: column; align-items: stretch;
+  margin-bottom: 12px;
+}
+.prog-prijs-num {
+  background: #fff; color: #000;
+  font-family: var(--fd); font-weight: 900;
+  font-size: 52px; line-height: 1; padding: 12px 18px 10px; letter-spacing: -1px;
+}
+.prog-prijs-tag {
+  background: var(--red); color: #fff; text-align: center;
+  padding: 7px; font-family: var(--fd); font-weight: 800;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+}
+
+.prog-wasclub-prijs {
+  display: flex; align-items: center; gap: 10px; font-size: 14px;
+}
+.prog-wasclub-badge {
+  background: rgba(227,6,19,0.15); border: 1px solid rgba(227,6,19,0.3);
+  color: var(--red); font-family: var(--fd); font-weight: 800;
+  font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 4px 10px;
+}
+.prog-wasclub-bedrag {
+  font-family: var(--fd); font-weight: 900; font-size: 22px;
+  color: var(--red); letter-spacing: -0.5px;
+}
+.prog-wasclub-period { font-size: 12px; color: var(--muted); }
+
+/* Interieur add-on */
+.prog-interieur {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px; background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+}
+.prog-interieur-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+.prog-interieur-text { font-size: 13px; color: var(--muted); }
+.prog-interieur-text strong { color: var(--text); display: block; margin-bottom: 2px; }
+
+/* Rechts: features grid */
+.prog-right { padding: 48px; display: flex; flex-direction: column; gap: 32px; }
+
+.prog-features-title {
+  font-family: var(--fd); font-weight: 800; font-size: 11px;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.prog-features { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.prog-feature {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 14px 16px; background: rgba(255,255,255,0.025);
+  border: 1px solid var(--border); font-size: 14px;
+  color: rgba(255,255,255,0.8); line-height: 1.4;
+  transition: background 0.2s;
+}
+.prog-card:hover .prog-feature { background: rgba(255,255,255,0.04); }
+.prog-feature.included .prog-feature-check { background: var(--red); }
+.prog-feature.not-included { opacity: 0.4; }
+.prog-feature.not-included .prog-feature-check { background: rgba(255,255,255,0.1); }
+.prog-feature-check {
+  width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px;
+  display: flex; align-items: center; justify-content: center;
+  clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 100%, 4px 100%);
+}
+.prog-feature-check svg { width: 9px; height: 8px; }
+
+/* Per programma accent kleur voor icons */
+.prog-card.proteqt .prog-feature.included .prog-feature-check { background: linear-gradient(135deg, #c8943e, #f5e2a0); }
+.prog-card.intensief .prog-feature.included .prog-feature-check { background: var(--silver); }
+.prog-card.normaal .prog-feature.included .prog-feature-check { background: var(--bronze); }
+/* Maar de vinkjes in zilver/brons moeten donker zijn */
+.prog-card.intensief .prog-feature.included .prog-feature-check svg path,
+.prog-card.proteqt .prog-feature.included .prog-feature-check svg path { stroke: #000; }
+.prog-card.normaal .prog-feature.included .prog-feature-check svg path { stroke: #000; }
+
+/* Aanbevolen badge */
+.prog-badge {
+  position: absolute; top: -1px; right: 32px;
+  background: linear-gradient(135deg, #c8943e, #f5e2a0);
+  color: #000; font-family: var(--fd); font-weight: 800;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 6px 14px;
+}
+
+/* CTA onderaan elke card */
+.prog-card-cta { display: flex; gap: 12px; align-items: center; }
+.prog-card-link {
+  font-family: var(--fd); font-weight: 700; font-size: 13px;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--muted);
+  text-decoration: none; transition: color 0.2s;
+}
+.prog-card-link:hover { color: var(--text); }
+
+/* ─── VERGELIJKING TABEL ─── */
+.vergelijking { background: var(--dark); padding: 80px 0; }
+.verg-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+.verg-head { text-align: center; margin-bottom: 56px; }
+.section-label {
+  font-family: var(--fd); font-weight: 800; font-size: 11px;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--red);
+  margin-bottom: 14px; display: block;
+}
+.section-h2 {
+  font-family: var(--fd); font-weight: 900;
+  font-size: clamp(40px, 5vw, 60px); text-transform: uppercase;
+  line-height: 0.92; letter-spacing: -1px;
+}
+.section-h2 em { font-style: normal; color: var(--red); }
+
+.verg-table { width: 100%; border-collapse: collapse; }
+.verg-table thead tr { background: var(--panel); }
+.verg-table th {
+  padding: 18px 24px; font-family: var(--fd); font-weight: 800;
+  font-size: 13px; letter-spacing: 1.5px; text-transform: uppercase;
+  border-bottom: 1px solid var(--border); text-align: left;
+}
+.verg-table th:not(:first-child) { text-align: center; }
+.verg-table th.gold-h { color: var(--gold); }
+.verg-table th.silver-h { color: var(--silver); }
+.verg-table th.bronze-h { color: var(--bronze); }
+.verg-table th .th-prijs { font-size: 10px; color: var(--muted); font-weight: 500; letter-spacing: 0.5px; text-transform: none; display: block; margin-top: 2px; font-family: var(--fb); }
+
+.verg-table tbody tr {
+  border-bottom: 1px solid var(--border); transition: background 0.15s;
+}
+.verg-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+.verg-table tbody tr.cat-row { background: rgba(255,255,255,0.03); }
+.verg-table td {
+  padding: 14px 24px; font-size: 14px; color: var(--muted);
+}
+.verg-table td:not(:first-child) { text-align: center; }
+.verg-table td.feat-name { color: var(--text); font-weight: 500; }
+.verg-table td.cat-name {
+  font-family: var(--fd); font-weight: 700; font-size: 11px;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+  padding: 10px 24px;
+}
+.verg-check { color: var(--red); font-size: 18px; }
+.verg-check.gold { color: var(--gold); }
+.verg-check.silver { color: var(--silver); }
+.verg-check.bronze { color: var(--bronze); }
+.verg-cross { color: rgba(255,255,255,0.2); font-size: 16px; }
+.verg-table .prijs-row td { padding: 20px 24px; }
+.verg-table .prijs-row .big-prijs {
+  font-family: var(--fd); font-weight: 900; font-size: 28px;
+  letter-spacing: -0.5px; display: block;
+}
+.verg-table .prijs-row .big-prijs.gold { color: var(--gold); }
+.verg-table .prijs-row .big-prijs.silver { color: var(--silver); }
+.verg-table .prijs-row .big-prijs.bronze { color: var(--bronze); }
+.verg-table .prijs-row .abo-prijs { font-size: 12px; color: var(--muted); margin-top: 3px; display: block; }
+
+/* ─── INTERIEURBAND SECTIE ─── */
+.interieur-section { background: var(--black); padding: 80px 0; }
+.interieur-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 48px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
+}
+.interieur-copy h2 { margin-bottom: 20px; }
+.interieur-copy p { font-size: 16px; color: var(--muted); line-height: 1.7; margin-bottom: 28px; }
+.interieur-stappen { display: grid; gap: 16px; margin-bottom: 36px; }
+.int-stap {
+  display: flex; align-items: flex-start; gap: 16px;
+  padding: 16px 20px; background: var(--panel); border: 1px solid var(--border);
+}
+.int-stap-num {
+  width: 32px; height: 32px; background: var(--red); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--fd); font-weight: 900; font-size: 15px;
+  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+}
+.int-stap h4 { font-family: var(--fd); font-weight: 800; font-size: 16px; text-transform: uppercase; margin-bottom: 4px; }
+.int-stap p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+.interieur-prijzen {
+  background: var(--panel); border: 1px solid var(--border); overflow: hidden;
+  position: relative;
+}
+.interieur-prijzen::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--red); }
+.int-prijs-header {
+  padding: 20px 24px; border-bottom: 1px solid var(--border);
+  font-family: var(--fd); font-weight: 800; font-size: 13px;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+}
+.int-prijs-row {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border);
+}
+.int-prijs-row:last-child { border-bottom: none; }
+.int-prijs-col {
+  padding: 20px 24px; border-right: 1px solid var(--border);
+}
+.int-prijs-col:last-child { border-right: none; }
+.int-prijs-prog {
+  font-family: var(--fd); font-weight: 800; font-size: 16px;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px;
+}
+.int-prijs-prog.gold { color: var(--gold); }
+.int-prijs-prog.silver { color: var(--silver); }
+.int-prijs-prog.bronze { color: var(--bronze); }
+.int-prijs-num {
+  background: #fff; color: #000; font-family: var(--fd);
+  font-weight: 900; font-size: 32px; padding: 8px 14px 6px; line-height: 1;
+  display: inline-block; margin-bottom: 4px;
+}
+.int-prijs-label { font-size: 11px; color: var(--muted); }
+.int-abo-rij {
+  display: flex; align-items: center; gap: 8px; margin-top: 10px;
+}
+.int-abo-badge {
+  background: rgba(227,6,19,0.12); border: 1px solid rgba(227,6,19,0.25);
+  color: var(--red); font-family: var(--fd); font-weight: 800;
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 8px;
+}
+.int-abo-prijs { font-family: var(--fd); font-weight: 900; font-size: 18px; color: var(--red); }
+
+/* ─── CTA STRIP ─── */
+.cta-strip {
+  background: var(--red); padding: 80px 0; text-align: center;
+  position: relative; overflow: hidden;
+}
+.cta-strip::before {
+  content: ''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.07) 1px, transparent 0);
+  background-size: 22px 22px;
+}
+.cta-strip-inner { max-width: 700px; margin: 0 auto; padding: 0 48px; position: relative; z-index: 2; }
+.cta-strip h2 {
+  font-family: var(--fd); font-weight: 900;
+  font-size: clamp(44px, 7vw, 72px); text-transform: uppercase;
+  line-height: 0.92; letter-spacing: -1px; margin-bottom: 20px;
+}
+.cta-strip p { font-size: 17px; opacity: 0.9; margin-bottom: 36px; line-height: 1.6; }
+.cta-strip-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn-white {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: #fff; color: var(--red);
+  font-family: var(--fd); font-weight: 800; font-size: 14px;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 15px 28px 13px; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+  transition: all 0.2s;
+}
+.btn-white:hover { box-shadow: 0 12px 32px rgba(0,0,0,0.25); transform: translateY(-1px); }
+.btn-outline-white {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: transparent; color: #fff;
+  font-family: var(--fd); font-weight: 700; font-size: 14px;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 14px 28px 12px; text-decoration: none;
+  border: 1.5px solid rgba(255,255,255,0.5);
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+  transition: all 0.2s;
+}
+.btn-outline-white:hover { border-color: #fff; background: rgba(255,255,255,0.1); }
+
+/* ─── FOOTER ─── */
+.footer { background: var(--black); border-top: 1px solid var(--border); padding: 64px 0 0; }
+.footer-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 48px;
+  display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px;
+  padding-bottom: 48px; border-bottom: 1px solid var(--border);
+}
+.footer-logo { height: 36px; width: auto; display: block; margin-bottom: 16px; }
+.footer-brand { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.footer h4 {
+  font-family: var(--fd); font-weight: 800; font-size: 11px;
+  letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.3); margin-bottom: 16px;
+}
+.footer ul { list-style: none; display: grid; gap: 10px; }
+.footer li a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer li a:hover { color: var(--text); }
+.footer-bottom {
+  max-width: 1280px; margin: 0 auto; padding: 20px 48px;
+  display: flex; justify-content: space-between; font-size: 12px; color: rgba(255,255,255,0.2);
+}
+.footer-bottom a { color: rgba(255,255,255,0.2); text-decoration: none; }
+.footer-stripe { height: 5px; background: linear-gradient(90deg, var(--red) 0%, var(--red) 40%, #222 40%, #222 70%, #555 70%, #555 100%); }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .prog-card { grid-template-columns: 1fr; }
+  .prog-left { border-right: none; border-bottom: 1px solid var(--border); }
+  .prog-left::after { display: none; }
+  .prog-features { grid-template-columns: 1fr 1fr; }
+  .interieur-inner { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 900px) {
+  .nav { padding: 0 24px; height: 60px; }
+  .nav-menu, .nav-cta { display: none; }
+  .nav-hamburger { display: flex; }
+  .hero-inner, .programmas-inner, .verg-inner, .interieur-inner, .cta-strip-inner, .footer-inner { padding: 0 24px; }
+  .cta-balk { padding: 16px 24px; gap: 12px; }
+  .cta-balk-left { display: none; }
+  .hero { padding: 56px 0 48px; }
+  .programmas { padding: 48px 0; }
+  .vergelijking { padding: 56px 0; }
+  .interieur-section { padding: 56px 0; }
+  .cta-strip { padding: 56px 0; }
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .footer-inner > div:first-child { grid-column: 1 / -1; }
+  .footer-bottom { flex-direction: column; gap: 6px; text-align: center; }
+  .verg-table { font-size: 13px; }
+  .verg-table th, .verg-table td { padding: 12px 14px; }
+  .prog-left { padding: 32px 24px; }
+  .prog-right { padding: 32px 24px; }
+  .prog-naam { font-size: 40px; }
+  .prog-prijs-num { font-size: 44px; }
+  .prog-features { grid-template-columns: 1fr; }
+  .int-prijs-row { grid-template-columns: 1fr; }
+  .int-prijs-col { border-right: none; border-bottom: 1px solid var(--border); }
+  .int-prijs-col:last-child { border-bottom: none; }
+  .hero-ctas { flex-direction: column; align-items: center; }
+  .cta-strip-btns { flex-direction: column; align-items: center; }
+}
+@media (max-width: 600px) {
+  .prog-badge { right: 16px; font-size: 9px; }
+  .verg-table { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV OVERLAY + DRAWER -->
+<div class="nav-overlay" id="nav-overlay" onclick="closeDrawer()"></div>
+<div class="nav-drawer" id="nav-drawer">
+  <ul>
+    <li><a href="index.html" onclick="closeDrawer()">Home</a></li>
+    <li><a href="BOB_Wasclub_Responsive.html" onclick="closeDrawer()">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html" class="active" onclick="closeDrawer()">Wasprogramma's</a></li>
+    <li><a href="index.html#vestigingen" onclick="closeDrawer()">Vestigingen</a></li>
+    <li><a href="BOB_Zakelijk_Aanvraag.html" onclick="closeDrawer()">Zakelijk</a></li>
+  </ul>
+  <a href="BOB_Wasclub_Responsive.html" class="nav-drawer-cta" onclick="closeDrawer()">Word lid →</a>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <img src="data:image/webp;base64,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" alt="BOB Autowas">
+  </a>
+  <ul class="nav-menu">
+    <li><a href="BOB_Wasclub_Responsive.html">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html" class="active">Wasprogramma's</a></li>
+    <li><a href="index.html#vestigingen">Vestigingen</a></li>
+    <li><a href="BOB_Zakelijk_Aanvraag.html">Zakelijk</a></li>
+  </ul>
+  <a href="BOB_Wasclub_Responsive.html" class="nav-cta">Word lid →</a>
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-label">De BOB Wasprogramma's</span>
+    <h1>Kies het programma<br>dat bij jou <em>past</em></h1>
+    <p class="hero-sub">
+      Van een snelle grondige was tot volledige lakbescherming met interieurband.
+      <strong>Drie programma's, één keuze.</strong> En als vaste klant betaal je minder.
+    </p>
+    <div class="hero-ctas">
+      <a href="BOB_Wasclub_Responsive.html" class="btn-primary">Word Wasclub-lid →</a>
+      <a href="BOB_Wasclub_Responsive.html#calculator" class="btn-ghost">Bereken mijn besparing</a>
+    </div>
+  </div>
+</section>
+
+<!-- STICKY CTA BALK -->
+<div class="cta-balk">
+  <div class="cta-balk-left">
+    <strong>Wasclub-leden</strong> betalen tot 35% minder — onbeperkt wassen voor één maandbedrag
+  </div>
+  <div class="cta-balk-btns">
+    <a href="BOB_Wasclub_Responsive.html" class="btn-primary">Word lid →</a>
+    <a href="BOB_Wasclub_Responsive.html#calculator" class="btn-ghost">Bereken besparing</a>
+  </div>
+</div>
+
+<!-- PROGRAMMA CARDS -->
+<section class="programmas">
+  <div class="programmas-inner">
+
+    <!-- PROTEQT -->
+    <div class="prog-card proteqt">
+      <div class="prog-badge">Beste keuze</div>
+      <div class="prog-left" data-num="1">
+        <div>
+          <div class="prog-naam gold">Proteqt</div>
+          <p class="prog-tagline">Voor wie z'n auto serieus neemt.<br>Maximale bescherming, vlekkeloos resultaat.</p>
+
+          <div class="prog-prijs-wrap">
+            <div class="prog-prijs-los">
+              <div class="prog-prijs-num">€21</div>
+              <div class="prog-prijs-tag">Per wasbeurt</div>
+            </div>
+            <div class="prog-wasclub-prijs">
+              <span class="prog-wasclub-badge">Wasclub</span>
+              <span class="prog-wasclub-bedrag">€39</span>
+              <span class="prog-wasclub-period">/mnd — onbeperkt</span>
+            </div>
+          </div>
+
+          <div class="prog-interieur">
+            <div class="prog-interieur-icon">🪑</div>
+            <div class="prog-interieur-text">
+              <strong>+ Interieurband beschikbaar</strong>
+              €41 los · €59/mnd Wasclub (of €18 add-on bij Wasclub Proteqt)
+            </div>
+          </div>
+        </div>
+
+        <div class="prog-card-cta" style="margin-top:28px;">
+          <a href="BOB_Wasclub_Responsive.html" class="btn-primary" style="font-size:12px;padding:11px 20px 9px;">Word lid — Proteqt →</a>
+          <a href="BOB_Wasclub_Responsive.html#calculator" class="prog-card-link">Bereken voordeel</a>
+        </div>
+      </div>
+
+      <div class="prog-right">
+        <div>
+          <div class="prog-features-title">Wat zit erin</div>
+          <div class="prog-features">
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Hogedrukreiniging boven & onder
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Actief schuim voorwas
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Zachte textielborstels
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Shampoo & conditioner
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Velgenreiniging
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Onderspuiting
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span><strong>Proteqt lakcoating</strong><br>Hydrofobe bescherming weken</span>
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Waxlaag & hoogglans
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Vlekvrij drogen (waterontharder)
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Gratis stofzuigplein na de was
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INTENSIEF -->
+    <div class="prog-card intensief">
+      <div class="prog-left" data-num="2">
+        <div>
+          <div class="prog-naam silver">Intensief</div>
+          <p class="prog-tagline">Voor de bewuste autorijder die altijd<br>schoon aan wil komen.</p>
+
+          <div class="prog-prijs-wrap">
+            <div class="prog-prijs-los">
+              <div class="prog-prijs-num">€17</div>
+              <div class="prog-prijs-tag">Per wasbeurt</div>
+            </div>
+            <div class="prog-wasclub-prijs">
+              <span class="prog-wasclub-badge">Wasclub</span>
+              <span class="prog-wasclub-bedrag">€34</span>
+              <span class="prog-wasclub-period">/mnd — onbeperkt</span>
+            </div>
+          </div>
+
+          <div class="prog-interieur">
+            <div class="prog-interieur-icon">🪑</div>
+            <div class="prog-interieur-text">
+              <strong>+ Interieurband beschikbaar</strong>
+              €37 los · €54/mnd Wasclub (of €20 add-on bij Wasclub Intensief)
+            </div>
+          </div>
+        </div>
+
+        <div class="prog-card-cta" style="margin-top:28px;">
+          <a href="BOB_Wasclub_Responsive.html" class="btn-primary" style="font-size:12px;padding:11px 20px 9px;background:var(--silver);color:#000;">Word lid — Intensief →</a>
+          <a href="BOB_Wasclub_Responsive.html#calculator" class="prog-card-link">Bereken voordeel</a>
+        </div>
+      </div>
+
+      <div class="prog-right">
+        <div>
+          <div class="prog-features-title">Wat zit erin</div>
+          <div class="prog-features">
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Hogedrukreiniging boven & onder
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Actief schuim voorwas
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Zachte textielborstels
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Shampoo & conditioner
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Waxlaag & naglans
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Vlekvrij drogen (waterontharder)
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Gratis stofzuigplein na de was
+            </div>
+            <div class="prog-feature not-included">
+              <span class="prog-feature-check"></span>
+              Geen Proteqt lakcoating
+            </div>
+            <div class="prog-feature not-included">
+              <span class="prog-feature-check"></span>
+              Geen velgenreiniging
+            </div>
+            <div class="prog-feature not-included">
+              <span class="prog-feature-check"></span>
+              Geen onderspuiting
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NORMAAL -->
+    <div class="prog-card normaal">
+      <div class="prog-left" data-num="3">
+        <div>
+          <div class="prog-naam bronze">Normaal</div>
+          <p class="prog-tagline">Altijd schoon. Snel, eerlijk<br>en krasloos gegarandeerd.</p>
+
+          <div class="prog-prijs-wrap">
+            <div class="prog-prijs-los">
+              <div class="prog-prijs-num">€13</div>
+              <div class="prog-prijs-tag">Per wasbeurt</div>
+            </div>
+            <div class="prog-wasclub-prijs">
+              <span class="prog-wasclub-badge">Wasclub</span>
+              <span class="prog-wasclub-bedrag">€28</span>
+              <span class="prog-wasclub-period">/mnd — onbeperkt</span>
+            </div>
+          </div>
+
+          <div class="prog-interieur" style="opacity:0.45;">
+            <div class="prog-interieur-icon">🚫</div>
+            <div class="prog-interieur-text">
+              <strong>Interieurband niet beschikbaar</strong>
+              Kies Intensief of Proteqt voor de interieurband optie
+            </div>
+          </div>
+        </div>
+
+        <div class="prog-card-cta" style="margin-top:28px;">
+          <a href="BOB_Wasclub_Responsive.html" class="btn-primary" style="font-size:12px;padding:11px 20px 9px;background:var(--bronze);color:#000;">Word lid — Normaal →</a>
+          <a href="BOB_Wasclub_Responsive.html#calculator" class="prog-card-link">Bereken voordeel</a>
+        </div>
+      </div>
+
+      <div class="prog-right">
+        <div>
+          <div class="prog-features-title">Wat zit erin</div>
+          <div class="prog-features">
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Hogedrukreiniging
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Schuimreiniger
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Zachte textielborstels
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Spoeling & drogen
+            </div>
+            <div class="prog-feature included">
+              <span class="prog-feature-check"><svg viewBox="0 0 9 8" fill="none"><path d="M1 4L3.5 6.5L8 1" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              Gratis stofzuigplein na de was
+            </div>
+            <div class="prog-feature not-included">
+              <span class="prog-feature-check"></span>
+              Geen shampoo/conditioner
+            </div>
+            <div class="prog-feature not-included">
+              <span class="prog-feature-check"></span>
+              Geen waxlaag
+            </div>
+            <div class="prog-feature not-included">
+              <span class="prog-feature-check"></span>
+              Geen Proteqt lakcoating
+            </div>
+            <div class="prog-feature not-included">
+              <span class="prog-feature-check"></span>
+              Geen velgenreiniging
+            </div>
+            <div class="prog-feature not-included">
+              <span class="prog-feature-check"></span>
+              Geen interieurband optie
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VERGELIJKINGSTABEL -->
+<section class="vergelijking" id="vergelijking">
+  <div class="verg-inner">
+    <div class="verg-head">
+      <span class="section-label">Overzicht</span>
+      <h2 class="section-h2">Programma's<br><em>naast elkaar</em></h2>
+    </div>
+
+    <table class="verg-table">
+      <thead>
+        <tr>
+          <th style="width:40%;">Onderdeel</th>
+          <th class="gold-h">
+            Proteqt
+            <span class="th-prijs">€21 los · €39/mnd Wasclub</span>
+          </th>
+          <th class="silver-h">
+            Intensief
+            <span class="th-prijs">€17 los · €34/mnd Wasclub</span>
+          </th>
+          <th class="bronze-h">
+            Normaal
+            <span class="th-prijs">€13 los · €28/mnd Wasclub</span>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="cat-row"><td class="cat-name" colspan="4">Reiniging</td></tr>
+        <tr><td class="feat-name">Hogedrukreiniging</td><td><span class="verg-check gold">✓</span></td><td><span class="verg-check silver">✓</span></td><td><span class="verg-check bronze">✓</span></td></tr>
+        <tr><td class="feat-name">Actief schuim voorwas</td><td><span class="verg-check gold">✓</span></td><td><span class="verg-check silver">✓</span></td><td><span class="verg-cross">—</span></td></tr>
+        <tr><td class="feat-name">Zachte textielborstels</td><td><span class="verg-check gold">✓</span></td><td><span class="verg-check silver">✓</span></td><td><span class="verg-check bronze">✓</span></td></tr>
+        <tr><td class="feat-name">Shampoo & conditioner</td><td><span class="verg-check gold">✓</span></td><td><span class="verg-check silver">✓</span></td><td><span class="verg-cross">—</span></td></tr>
+        <tr><td class="feat-name">Onderspuiting</td><td><span class="verg-check gold">✓</span></td><td><span class="verg-cross">—</span></td><td><span class="verg-cross">—</span></td></tr>
+        <tr><td class="feat-name">Velgenreiniging</td><td><span class="verg-check gold">✓</span></td><td><span class="verg-cross">—</span></td><td><span class="verg-cross">—</span></td></tr>
+
+        <tr class="cat-row"><td class="cat-name" colspan="4">Bescherming & afwerking</td></tr>
+        <tr><td class="feat-name">Waxlaag & naglans</td><td><span class="verg-check gold">✓</span></td><td><span class="verg-check silver">✓</span></td><td><span class="verg-cross">—</span></td></tr>
+        <tr><td class="feat-name"><strong>Proteqt lakcoating</strong> (hydrofobe bescherming)</td><td><span class="verg-check gold">✓</span></td><td><span class="verg-cross">—</span></td><td><span class="verg-cross">—</span></td></tr>
+        <tr><td class="feat-name">Vlekvrij drogen (waterontharder)</td><td><span class="verg-check gold">✓</span></td><td><span class="verg-check silver">✓</span></td><td><span class="verg-cross">—</span></td></tr>
+
+        <tr class="cat-row"><td class="cat-name" colspan="4">Extra's</td></tr>
+        <tr><td class="feat-name">Gratis stofzuigplein</td><td><span class="verg-check gold">✓</span></td><td><span class="verg-check silver">✓</span></td><td><span class="verg-check bronze">✓</span></td></tr>
+        <tr><td class="feat-name">Interieurband optie (add-on)</td><td><span class="verg-check gold">✓ +€18/mnd</span></td><td><span class="verg-check silver">✓ +€20/mnd</span></td><td><span class="verg-cross">—</span></td></tr>
+
+        <tr class="cat-row"><td class="cat-name" colspan="4">Prijs</td></tr>
+        <tr class="prijs-row">
+          <td class="feat-name">Losse wasbeurt</td>
+          <td><span class="big-prijs gold">€21</span><span class="abo-prijs">per wasbeurt</span></td>
+          <td><span class="big-prijs silver">€17</span><span class="abo-prijs">per wasbeurt</span></td>
+          <td><span class="big-prijs bronze">€13</span><span class="abo-prijs">per wasbeurt</span></td>
+        </tr>
+        <tr class="prijs-row">
+          <td class="feat-name">Wasclub abonnement</td>
+          <td><span class="big-prijs gold">€39</span><span class="abo-prijs">/mnd · onbeperkt</span></td>
+          <td><span class="big-prijs silver">€34</span><span class="abo-prijs">/mnd · onbeperkt</span></td>
+          <td><span class="big-prijs bronze">€28</span><span class="abo-prijs">/mnd · onbeperkt</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- INTERIEURBAND -->
+<section class="interieur-section" id="interieur">
+  <div class="interieur-inner">
+    <div class="interieur-copy">
+      <span class="section-label">De Interieurband</span>
+      <h2 class="section-h2">Buiten én<br>binnen <em>schoon</em></h2>
+      <p>Na de wasstraat rij je door naar de interieurband. In circa 9 minuten wordt de binnenkant van je auto grondig schoongemaakt. Beschikbaar als add-on bij Intensief en Proteqt.</p>
+      <div class="interieur-stappen">
+        <div class="int-stap">
+          <div class="int-stap-num">1</div>
+          <div><h4>Stofzuigen</h4><p>Vloermatten, stoelen en dashboard worden grondig uitgestofzuigd.</p></div>
+        </div>
+        <div class="int-stap">
+          <div class="int-stap-num">2</div>
+          <div><h4>Dashboard & portieren</h4><p>Alle harde vlakken worden afgenomen en behandeld met beschermingsmiddel.</p></div>
+        </div>
+        <div class="int-stap">
+          <div class="int-stap-num">3</div>
+          <div><h4>Ruiten van binnen</h4><p>Alle ruiten worden streepvrij gereinigd voor optimaal zicht.</p></div>
+        </div>
+        <div class="int-stap">
+          <div class="int-stap-num">4</div>
+          <div><h4>Klaar in 9 minuten</h4><p>Je auto rolt er aan beide kanten schoon uit. Binnen en buiten showroomklaar.</p></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;">
+        <a href="BOB_Wasclub_Responsive.html" class="btn-primary">Interieur + Wasclub →</a>
+        <a href="BOB_Wasclub_Responsive.html#calculator" class="btn-ghost">Bereken de besparing</a>
+      </div>
+    </div>
+
+    <div>
+      <div class="interieur-prijzen">
+        <div class="int-prijs-header">Interieurband — prijzen</div>
+        <div class="int-prijs-row">
+          <div class="int-prijs-col">
+            <div class="int-prijs-prog gold">Proteqt + Interieur</div>
+            <div class="int-prijs-num">€41</div>
+            <div class="int-prijs-label">per losse wasbeurt</div>
+            <div class="int-abo-rij">
+              <span class="int-abo-badge">Wasclub</span>
+              <span class="int-abo-prijs">€59/mnd</span>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px;">Of Wasclub Proteqt + €18 add-on</div>
+          </div>
+          <div class="int-prijs-col">
+            <div class="int-prijs-prog silver">Intensief + Interieur</div>
+            <div class="int-prijs-num">€37</div>
+            <div class="int-prijs-label">per losse wasbeurt</div>
+            <div class="int-abo-rij">
+              <span class="int-abo-badge">Wasclub</span>
+              <span class="int-abo-prijs">€54/mnd</span>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:6px;">Of Wasclub Intensief + €20 add-on</div>
+          </div>
+        </div>
+        <div style="padding:16px 24px;font-size:13px;color:var(--muted);line-height:1.6;border-top:1px solid var(--border);">
+          ⚡ Beschikbaar op vestigingen: Amsterdam Sloterdijk, Rotterdam IJsselmonde, Schiedam, Zoetermeer en Utrecht.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="cta-strip">
+  <div class="cta-strip-inner">
+    <h2>Klaar voor<br>elke dag schoon?</h2>
+    <p>
+      Kies je programma, word Wasclub-lid en was onbeperkt voor één vast maandbedrag.
+      Of bereken eerst wat je bespaart ten opzichte van losse wasbeurten.
+    </p>
+    <div class="cta-strip-btns">
+      <a href="BOB_Wasclub_Responsive.html" class="btn-white">Word Wasclub-lid →</a>
+      <a href="BOB_Wasclub_Responsive.html#calculator" class="btn-outline-white">Bereken mijn besparing</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <img src="data:image/webp;base64,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" alt="BOB Autowas" class="footer-logo">
+      <p class="footer-brand">Feel the Shine — al 25 jaar de meest vertrouwde autowasketen van Nederland.</p>
+    </div>
+    <div>
+      <h4>Wasprogramma's</h4>
+      <ul>
+        <li><a href="#proteqt">Proteqt</a></li>
+        <li><a href="#intensief">Intensief</a></li>
+        <li><a href="#normaal">Normaal</a></li>
+        <li><a href="#interieur">Interieurband</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Voordeel</h4>
+      <ul>
+        <li><a href="BOB_Wasclub_Responsive.html">De Wasclub</a></li>
+        <li><a href="BOB_Wasclub_Responsive.html#familie">BOB Familie</a></li>
+        <li><a href="BOB_Zakelijk_Aanvraag.html">BOB Zakelijk</a></li>
+        <li><a href="BOB_Wasclub_Responsive.html#calculator">Besparingscalculator</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>BOB</h4>
+      <ul>
+        <li><a href="index.html#vestigingen">Vestigingen</a></li>
+        <li><a href="index.html">Homepage</a></li>
+        <li><a href="#">Werken bij BOB</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 BOB Autowas · Feel the Shine</div>
+    <div><a href="#">Privacy</a> · <a href="#">Cookies</a> · <a href="#">info@bobautowas.nl</a></div>
+  </div>
+</footer>
+<div class="footer-stripe" style="height:5px;background:linear-gradient(90deg,var(--red) 0%,var(--red) 40%,#222 40%,#222 70%,#555 70%,#555 100%);"></div>
+
+<script>
+function toggleDrawer() {
+  var d = document.getElementById('nav-drawer');
+  var o = document.getElementById('nav-overlay');
+  var h = document.getElementById('nav-hamburger');
+  var open = d.classList.toggle('open');
+  if (o) o.classList.toggle('open', open);
+  if (h) h.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeDrawer() {
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('nav-overlay').classList.remove('open');
+  document.getElementById('nav-hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Nav scroll
+(function(){
+  var nav = document.querySelector('.nav');
+  if (!nav) return;
+  window.addEventListener('scroll', function() {
+    nav.style.background = window.scrollY > 80 ? 'rgba(10,10,10,0.99)' : 'rgba(10,10,10,0.97)';
+  });
+})();
+</script>
+</body>
+</html>
