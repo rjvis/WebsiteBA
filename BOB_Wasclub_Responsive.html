@@ -85,7 +85,7 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 .wc-badge span { font-family: var(--font-d); font-weight: 700; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: rgba(227,6,19,0.9); }
 
 .wc-hero-h1 {
-  font-family: var(--font-d); font-weight: 900; font-size: clamp(80px,12vw,130px);
+  font-family: var(--font-d); font-weight: 900; font-size: clamp(56px,16vw,130px);
   line-height: 0.88; text-transform: uppercase; letter-spacing: -1.5px; margin-bottom: 28px;
   opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
 }
@@ -385,6 +385,7 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
 /* ═══ MOBILE ≤ 768px ═══ */
 @media (max-width: 768px) {
+  .wc-hero-h1 { font-size: clamp(44px,13vw,68px); letter-spacing: -0.5px; }
   /* NAV */
   .nav { padding: 0 20px; height: 56px; }
   .nav-menu, .nav-cta { display: none; }
