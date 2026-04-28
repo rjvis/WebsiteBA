@@ -944,13 +944,57 @@ body {
 .prijs-cel.intensief:hover .prijs-icon { background: rgba(180,188,196,0.8); }
 .prijs-cel.normaal:hover .prijs-icon   { background: rgba(176,120,78,0.8); }
 
-.hero-video { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
-.hero-video video { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: auto; object-fit: cover; }
-.hero-video::after { content: ''; position: absolute; inset: 0; background: rgba(10,10,10,0.55); z-index: 2; }
-.hero-bg { z-index: 0 !important; opacity: 0; }
-.hero-grid, .hero-noise, .hero-scanline { z-index: 2; }
-.hero-arch, .hero-content { z-index: 3; }
-.hero-content { padding: 50px 20px 32px; }
+}
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 32px; padding: 0 24px; }
+  .hero-video-wrap { order: -1; }
+  .hero-arch { display: none; }
+}
+@media (max-width: 600px) {
+  .hero-inner { padding: 0 20px; }
+}
+
+
+/* ── Hero video achtergrond ── */
+.hero-video-bg {
+  position: absolute; inset: 0; z-index: 0;
+  overflow: hidden; pointer-events: none;
+}
+/* YouTube iframe als achtergrond */
+#hero-yt-player {
+  position: absolute;
+  /* Centreer en overscan zodat er geen randen zichtbaar zijn */
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  /* Minimale grootte om 16:9 volledig te bedekken */
+  width: 177.78vh;  /* 16/9 * 100vh */
+  height: 100vh;
+  min-width: 100%;
+  min-height: 56.25vw; /* 9/16 * 100vw */
+}
+#hero-yt-player iframe {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%; border: none;
+  pointer-events: none;
+}
+/* Donkere overlay over de video zodat tekst leesbaar blijft */
+.hero-video-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(10,10,10,0.75) 0%,
+    rgba(10,10,10,0.55) 50%,
+    rgba(26,2,4,0.65) 100%
+  );
+  z-index: 1;
+}
+/* Op mobiel: video achtergrond verbergen (autoplay werkt niet) */
+@media (max-width: 768px) {
+  .hero-video-bg { display: none; }
+}
+/* Zorg dat hero-content boven de video staat */
+.hero-arch, .hero-content { position: relative; z-index: 2; }
+.hero-grid, .hero-noise, .hero-scanline { z-index: 1; }
 
 </style>
 </head>
@@ -965,7 +1009,7 @@ body {
   <ul>
     <li><a href="BOB_Wasclub_Responsive.html" onclick="closeDrawer()">Wasclub</a></li>
     <li><a href="BOB_Wasprogrammas.html" onclick="closeDrawer()">Wasprogramma's</a></li>
-    <li><a href="#vestigingen" onclick="closeDrawer()">Vestigingen</a></li>
+    <li><a href="BOB_Vestigingen.html" onclick="closeDrawer()">Vestigingen</a></li>
     <li><a href="#zakelijk" onclick="closeDrawer()">Zakelijk</a></li>
     <li><a href="#" onclick="closeDrawer()">Werken bij</a></li>
   </ul>
@@ -978,7 +1022,7 @@ body {
   <ul class="nav-menu">
     <li><a href="BOB_Wasclub_Responsive.html">Wasclub</a></li>
     <li><a href="BOB_Wasprogrammas.html">Wasprogramma's</a></li>
-    <li><a href="#vestigingen">Vestigingen</a></li>
+    <li><a href="BOB_Vestigingen.html">Vestigingen</a></li>
     <li><a href="#zakelijk">Zakelijk</a></li>
   </ul>
   <a href="#wasclub" class="nav-cta">Word lid →</a>
@@ -990,17 +1034,17 @@ body {
 
 <!-- HERO -->
 <section class="hero">
-
-  <div class="hero-video">
-    <video autoplay muted loop playsinline preload="auto">
-      <source src="Media/hero.mp4" type="video/mp4">
-    </video>
-  </div>
-
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-noise"></div>
   <div class="hero-scanline"></div>
+
+  <!-- VIDEO ACHTERGROND (desktop) -->
+  <div class="hero-video-bg" id="hero-video-bg">
+    <div id="hero-yt-player"></div>
+    <!-- Fallback: donkere overlay als video niet afspeelt -->
+    <div class="hero-video-overlay"></div>
+  </div>
 
   <div class="hero-arch">
     <svg viewBox="0 0 700 700" preserveAspectRatio="none">
@@ -1028,11 +1072,11 @@ body {
     </p>
     <div class="hero-ctas">
       <a href="BOB_Wasclub_Responsive.html#calculator" class="btn-primary">Bereken mijn voordeel →</a>
-      <a href="#vestigingen" class="btn-ghost">Vind een vestiging</a>
+      <a href="BOB_Vestigingen.html" class="btn-ghost">Vind een vestiging</a>
     </div>
     <div style="opacity:0;animation:fadeUp 0.8s 0.75s forwards;">
       <a href="BOB_Wasclub_Responsive.html#calculator" style="display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-top:14px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">
-        <span style="display:inline-block;width:20px;height:1px;background:currentColor;transition:width 0.3s;"></span>
+        <span style="display:inline-block;width:20px;height:1px;background:currentColor;"></span>
         Direct naar de besparings­calculator
       </a>
     </div>
@@ -1042,7 +1086,7 @@ body {
         <div class="stat-label">Vestigingen NL</div>
       </div>
       <div class="hero-stat">
-        <div class="stat-num"><em>&gt;2,5</em>M</div>
+        <div class="stat-num"><em>1,8</em>M</div>
         <div class="stat-label">Wassingen per jaar</div>
       </div>
       <div class="hero-stat">
@@ -1051,6 +1095,7 @@ body {
       </div>
     </div>
   </div>
+
 </section>
 
 <!-- MARQUEE -->
@@ -1490,6 +1535,57 @@ body {
     nav.style.background = window.scrollY > 80 ? 'rgba(10,10,10,0.97)' : 'rgba(10,10,10,0.85)';
   });
 })();
+
+
+
+// ── HERO VIDEO ACHTERGROND ───────────────────────────────────────
+// Vul hier je YouTube video-ID in (het deel na ?v= in de URL)
+// Bijv: var YT_VIDEO_ID = 'dQw4w9WgXcQ';
+var YT_VIDEO_ID = '';
+
+// Autoplay werkt alleen op desktop (mobiel blokkeert dit)
+var isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)
+            || window.innerWidth < 769;
+
+function initYTBackground() {
+  if (!YT_VIDEO_ID || isMobile) return;
+
+  // Laad YouTube IFrame API als die er nog niet is
+  if (!window.YT || !window.YT.Player) {
+    var tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+    window.onYouTubeIframeAPIReady = createPlayer;
+  } else {
+    createPlayer();
+  }
+}
+
+function createPlayer() {
+  new YT.Player('hero-yt-player', {
+    videoId: YT_VIDEO_ID,
+    playerVars: {
+      autoplay: 1,
+      mute: 1,           // vereist voor autoplay
+      loop: 1,
+      playlist: YT_VIDEO_ID,
+      controls: 0,
+      showinfo: 0,
+      rel: 0,
+      modestbranding: 1,
+      iv_load_policy: 3,
+      disablekb: 1,
+      fs: 0,
+      playsinline: 1
+    },
+    events: {
+      onReady: function(e) { e.target.playVideo(); }
+    }
+  });
+}
+
+initYTBackground();
+
 </script>
 
 <!-- Mobile sticky CTA -->

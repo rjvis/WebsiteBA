@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vestigingen — BOB Autowas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E30613; --red-glow: rgba(227,6,19,0.2);
+  --black: #0a0a0a; --dark: #111; --mid: #1c1c1c; --panel: #161616;
+  --border: rgba(255,255,255,0.08); --text: #fff;
+  --muted: rgba(255,255,255,0.55); --subtle: rgba(255,255,255,0.12);
+  --green: #22c55e; --amber: #f59e0b;
+  --fd: 'Inter Tight', sans-serif; --fb: 'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--text); font-family: var(--fb); }
+
+/* NAV */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 68px;
+  background: rgba(10,10,10,0.97); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo img { height: 34px; width: auto; display: block; }
+.nav-menu { display: flex; gap: 32px; list-style: none; }
+.nav-menu a { font-family: var(--fd); font-weight: 700; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .2s; }
+.nav-menu a:hover, .nav-menu a.active { color: var(--text); }
+.nav-menu a.active::after { content: ''; display: block; width: 100%; height: 2px; background: var(--red); margin-top: 2px; }
+.nav-cta { background: var(--red); color: #fff; font-family: var(--fd); font-weight: 800; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; padding: 10px 22px 8px; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); transition: all .2s; }
+.nav-cta:hover { box-shadow: 0 8px 24px var(--red-glow); }
+.nav-hamburger { display: none; flex-direction: column; gap: 5px; background: transparent; border: none; cursor: pointer; padding: 8px; }
+.nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text); transition: all .3s; }
+.nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+.nav-overlay { position: fixed; inset: 0; z-index: 98; background: transparent; pointer-events: none; transition: background .3s; }
+.nav-overlay.open { background: rgba(0,0,0,0.7); pointer-events: all; }
+.nav-drawer { position: fixed; top: 0; right: -300px; bottom: 0; width: 280px; background: var(--dark); z-index: 99; border-left: 1px solid var(--border); transition: right .35s cubic-bezier(.16,1,.3,1); padding: 80px 32px 40px; display: flex; flex-direction: column; }
+.nav-drawer.open { right: 0; }
+.nav-drawer ul { list-style: none; display: grid; gap: 4px; }
+.nav-drawer ul a { display: block; padding: 13px 0; font-family: var(--fd); font-weight: 800; font-size: 21px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); transition: color .2s; }
+.nav-drawer ul a:hover, .nav-drawer ul a.active { color: var(--red); }
+.nav-drawer-cta { margin-top: 28px; display: block; background: var(--red); color: #fff; font-family: var(--fd); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 14px 20px 12px; text-align: center; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); }
+
+/* HERO */
+.hero { background: var(--dark); padding: 56px 0 40px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(227,6,19,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(227,6,19,.03) 1px,transparent 1px); background-size: 44px 44px; mask-image: radial-gradient(ellipse 70% 90% at 50% 50%,black,transparent 80%); }
+.hero-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; position: relative; z-index: 2; }
+.hero-label { font-family: var(--fd); font-weight: 800; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 16px; display: block; }
+.hero h1 { font-family: var(--fd); font-weight: 900; font-size: clamp(44px,6vw,72px); text-transform: uppercase; line-height: .92; letter-spacing: -1px; margin-bottom: 16px; }
+.hero h1 em { font-style: normal; color: var(--red); }
+.hero-sub { font-size: 16px; color: var(--muted); max-width: 560px; line-height: 1.65; margin-bottom: 28px; }
+.hero-stats { display: flex; gap: 32px; flex-wrap: wrap; }
+.h-stat { display: flex; align-items: center; gap: 10px; }
+.h-stat-dot { width: 8px; height: 8px; background: var(--red); flex-shrink: 0; }
+.h-stat-text { font-family: var(--fd); font-weight: 700; font-size: 13px; letter-spacing: .5px; color: var(--muted); }
+.h-stat-text strong { color: var(--text); }
+
+/* FILTER BAR */
+.filter-bar { background: var(--panel); border-bottom: 1px solid var(--border); padding: 14px 0; position: sticky; top: 68px; z-index: 90; }
+.filter-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.filter-label { font-family: var(--fd); font-weight: 700; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); flex-shrink: 0; }
+.filter-btn { font-family: var(--fd); font-weight: 700; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; padding: 7px 14px; background: transparent; border: 1px solid var(--border); color: var(--muted); cursor: pointer; transition: all .2s; }
+.filter-btn:hover { border-color: rgba(255,255,255,.2); color: var(--text); }
+.filter-btn.active { background: rgba(227,6,19,.1); border-color: rgba(227,6,19,.4); color: var(--text); }
+.filter-search { margin-left: auto; position: relative; }
+.filter-search input { background: var(--mid); border: 1px solid var(--border); color: var(--text); font-family: var(--fb); font-size: 13px; padding: 7px 14px 7px 32px; outline: none; width: 200px; transition: border-color .2s; }
+.filter-search input:focus { border-color: rgba(227,6,19,.4); }
+.filter-search input::placeholder { color: var(--subtle); }
+.filter-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 13px; pointer-events: none; }
+
+/* VESTIGINGEN GRID */
+.vest-section { padding: 48px 0 80px; }
+.vest-inner { max-width: 1280px; margin: 0 auto; padding: 0 48px; }
+.regio-label { font-family: var(--fd); font-weight: 800; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 16px; margin-top: 40px; display: flex; align-items: center; gap: 12px; }
+.regio-label::after { content: ''; flex: 1; height: 1px; background: rgba(227,6,19,.2); }
+.regio-label:first-child { margin-top: 0; }
+
+.vest-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+
+/* VESTIGING CARD */
+.vest-card {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 24px; display: flex; flex-direction: column; gap: 16px;
+  transition: border-color .2s, background .2s; position: relative;
+  overflow: hidden;
+}
+.vest-card:hover { border-color: rgba(255,255,255,.15); background: var(--mid); }
+.vest-card.has-interieur { border-left: 3px solid rgba(227,6,19,.4); }
+.vest-card-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.vest-naam { font-family: var(--fd); font-weight: 900; font-size: 18px; text-transform: uppercase; letter-spacing: .5px; line-height: 1.1; }
+.vest-badges { display: flex; gap: 5px; flex-wrap: wrap; flex-shrink: 0; }
+.badge { font-family: var(--fd); font-weight: 800; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 3px 7px; white-space: nowrap; }
+.badge-int { background: rgba(227,6,19,.15); border: 1px solid rgba(227,6,19,.35); color: var(--red); }
+.badge-box { background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.3); color: var(--green); }
+
+.vest-adres { font-size: 13px; color: var(--muted); line-height: 1.4; }
+
+/* Openingstijden tabel */
+.vest-tijden { border: 1px solid var(--border); overflow: hidden; }
+.tijden-header { display: grid; grid-template-columns: 1fr 1fr; }
+.tijden-col { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+.tijden-col:first-child { border-right: 1px solid var(--border); }
+.tijden-dag { font-family: var(--fd); font-weight: 700; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.tijden-uren { font-family: var(--fd); font-weight: 800; font-size: 15px; color: var(--text); }
+
+/* Diensten pills */
+.vest-diensten { display: flex; gap: 6px; flex-wrap: wrap; }
+.dienst-pill { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); background: rgba(255,255,255,.04); border: 1px solid var(--border); padding: 4px 9px; }
+.dienst-pill svg { width: 10px; height: 10px; flex-shrink: 0; }
+
+/* Hoogte & routelink */
+.vest-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 4px; }
+.vest-hoogte { font-size: 11px; color: var(--subtle); }
+.vest-hoogte span { color: var(--muted); font-weight: 600; }
+.vest-route { font-family: var(--fd); font-weight: 700; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--red); text-decoration: none; display: flex; align-items: center; gap: 5px; transition: color .2s; }
+.vest-route:hover { color: #ff2233; }
+
+/* Hidden class voor filter */
+.vest-card.hidden { display: none; }
+.no-results { display: none; padding: 48px; text-align: center; color: var(--muted); font-size: 15px; }
+.no-results.show { display: block; }
+
+/* CURAÇAO SECTIE */
+.curacao-section { background: var(--dark); border-top: 1px solid var(--border); padding: 48px 0; }
+
+/* STICKY BOTTOM CTA MOBIEL */
+.mobile-cta { display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 80; padding: 12px 20px; background: rgba(10,10,10,.97); border-top: 1px solid var(--border); backdrop-filter: blur(12px); }
+.mobile-cta a { display: flex; align-items: center; justify-content: center; width: 100%; padding: 14px; background: var(--red); color: #fff; font-family: var(--fd); font-weight: 800; font-size: 13px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); }
+
+/* RESPONSIVE */
+@media (max-width: 1100px) {
+  .vest-grid { grid-template-columns: repeat(2,1fr); }
+  .nav { padding: 0 28px; }
+  .hero-inner, .filter-inner, .vest-inner { padding: 0 28px; }
+}
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; height: 56px; }
+  .nav-menu, .nav-cta { display: none; }
+  .nav-hamburger { display: flex; }
+  .filter-bar { top: 56px; }
+  .hero-inner, .filter-inner, .vest-inner { padding: 0 20px; }
+  .hero { padding: 40px 0 28px; }
+  .vest-section { padding: 32px 0 100px; }
+  .vest-grid { grid-template-columns: 1fr; }
+  .filter-search { margin-left: 0; width: 100%; }
+  .filter-search input { width: 100%; }
+  .filter-inner { gap: 8px; }
+  .mobile-cta { display: block; }
+  .hero-stats { gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<div class="nav-overlay" id="nav-overlay" onclick="closeDrawer()"></div>
+<div class="nav-drawer" id="nav-drawer">
+  <ul>
+    <li><a href="BOB_Homepage_Responsive.html" onclick="closeDrawer()">Home</a></li>
+    <li><a href="BOB_Wasclub_Responsive.html" onclick="closeDrawer()">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html" onclick="closeDrawer()">Wasprogramma's</a></li>
+    <li><a href="BOB_Vestigingen.html" class="active" onclick="closeDrawer()">Vestigingen</a></li>
+    <li><a href="BOB_Zakelijk_Aanvraag.html" onclick="closeDrawer()">Zakelijk</a></li>
+  </ul>
+  <a href="BOB_Wasclub_Responsive.html" class="nav-drawer-cta" onclick="closeDrawer()">Word lid →</a>
+</div>
+
+<nav class="nav">
+  <a href="BOB_Homepage_Responsive.html"><img src="data:image/webp;base64,UklGRiIaAABXRUJQVlA4TBYaAAAvTUWJEM/BKpLsRK/iI/5tRAnnm5mOz4OSSJKck/P0/cv55xHFGUWRJDVnAv8icETxv0gOayBtm/g3u+0GTjZpQ9ak/eMUnxRJlmQJFhUBFmEBETAe4TEOY3GGYOgoHQT1CwQdBOV7QEqOrpUshWviDEjL7f+Mexz/6Xs5+PZ/TuEUDr5TOIWfh3OCUsNR3LaNI+2/9tW0d0RMAMM1gxFqNo4ABglvpJAu8fAXBBmrRdva28atfhSCIIjyuWTsuMw4vTc7ue3938wZrzU/CqX5kcuI/k+At9t287a2bQ2g+CaKIvD//27UIQKe0ylzZX2I6P8E/Pux5H/wSPv58+c3L1++fnP7v17Obj716fMXL9/czqPuff7i1duZ1N8+f/nmbib18bMXb6ZSH3/26nYqBeDZ57dTKQDPPr+dSgF4/upuKgU8uXk7lQLw7NVcCnjy8m4qBeDmdi4F3NzOpYCb27kUcHM3l8KTl3dTKeDp67kU8Px2LgW8vJtL4embuRTw4m4uhadv5lLAy8kUnt3OpfDk9VwKeDmZwmd3cyk8ezuXwpO3cyng1WQKryZTuJlM4WYyhZvJFG4mU7iZTOFmMoWXkym8mkzh9WTqydu5FJ7czaXwbDKFm8kUXk2mnrydS+HZ3VwKLyZTeD2ZenI3l8Jnkym8mUw9vZtL4eVkCreTqeeTKbyZTD2dTOHVZOrpZAqvJlNPJ1N4NZl6OpnC68nU88kUbidTN5OpJ3dzKby6HPzM+89pwfOhev896/fsvub987QAt5OpzydTzyZTuG3cv95z/DCV+bxxf/3O8f1U5vlkCneTqdeTqZvJ1NPJFG4nU68mUy8mU88mU5hNvZlMvZpMvZhMPZ9MPZlMYTb15v+aevl/Td1Mpp7/X1NPJ1M4/Xf67/TfPOvff3H810ypqWf6/vyZ9Z/svuH96xTmGniWYL5Nc6Z79l7yQZutdT7EPEdaVy+JglrnY5kZRW+Zwmu3pRlR8pbqVUvI4q/Erg7P7hRVb9bUhRJ7mmRFpN4qa53fYhqQ3SlqpF5T+yL1Vlnr/BazQPpEY/2exyGtipqqt3IwPtEsfs8y6W+V9XEASjDUYBePyd+qxUeh9LfLlruWvaJG63BYfqply1KJiMyWe5UdtVz5clw+NluWSkRkQulQdtR65cuRISIbxBKRWnNnsqMeKl8ODZHyRSoRkcsdKZ56qcOxISKXxRKRK70Iijpq48Eh8kUskdq6kCx1di0Hh1QQS0Qmtc9Tf9V+cIhsFktEW+OSoS4v5eCQChe3r75s41fXMFpKyzz1WsWDQ+TKhe2Ld2384ipGJjUrW+r4enTIFLFEKjVqV9R1kw8OqSSWSKUmeeq9igeHVBJLpFJ7ykIDuB0cUkkskUqtyYaG0B0cUkkskSptSYoG0ZRjQ6aIJTJN2RUNoynHhuyF4dsv6/1xGL6s96urA60NCTSSKh0b8peFL9/V++0wvKv3i+sDxWYEGkuVjg0luaRLIwKNpkrHxsglWtsQaDxVOjTk5RLlFgQaUZUOjSpyyTUg0JiqcmTIySXK1SU1KGTKkaEsl1xtSdGwmkPj5BLluoqmgXVHRhW55OsyNLTbgaFNLumqHA3ufmDM4P3xG8s/HmnRXlGg0VX5uFAau59+YPnTYy1XT1LDQ6Ycl1Uu6WqKobam/Mj/LLQeFyOXKNXiqJG59TnVvuLuF9MI2g8LZQlhLGvTjq2SnRqoXEh4wOiXFqjSAWNZm3YECRHBP8XdL6a2pY6iqtNrAsPdqdrIdiCCf4rBL6Y2J1Pujd7UpOpYqG7lEtjuS2W0jci9cTU1GdECIG+6Gso17FS1DgWs86qqUnlcAGSvqyHpAmA3tewVFFWTDuBfvKqIlqEBEHQtUb4AQdXhK3BUr9pQZ3EV0T44wKbq2CQMiq1i4RepXldQbTL16DI6yKYKL2IAV4PlZ6pREVX7asgPD+BqsEIGoQLFLlCtS0HlSddCeXzg5BIcP+JWVC0b6i9LLW6A4PiRmIHlV5h5qlNFNNFXQnGAipFLWbGLvIqqQyU0MlRiBwhJLsG3zVOVJqGZoQ6KAwTHLsmZolpWVBWmoKGhDjtCmV2UM1hb5qlGldHUUAXFAYKTS7lhRdWgEhobqrAjtMsl6HZ5qjGiuWsNFAcISi6tzSqqhg0NXmpwI+Tk0t6sQBU6tLjoCigP0CaXcrN0Bbo0CamGdYCiXEKrIlWY0GhfgRqgIph0o1wFHs02/CiMD5hB1FhehU0h/hrtThXYAdJCDGy3CmLD4PlRHh/LSsklzUfzc2h50fzWY2HlkmWTiL3KTUPgp4+Fk0uezcrPo/GGHcVD4eVSYKPZqdK6yM8Nj2IVZY1ilbgkYu/RfMtODQ+xLrKGOCtwXdmp0r7AjvbByaw0RE1itbDR7FZ0ULNbByeycrImsApcErHPPQjs9OB4Vruscawyl43dgh4WxY3S2CysiqzRnAy4WnZ7F+DYbWOjOC0YupY+lknEeeNSiLtGHxM7OzQ7cQ6yxrEqXHZ2aydguNHQOE4KoqYoTg5cV3a5Fxu7ODCZOK+yxhPnxMZwM+hlZucHxrHKoiYrThZcC3H33YDhZsclEWcHUbMQ58hmZ5f6sXGjcbGssqjZiPMCtp6bRj8Tuzgqnjg7SJpIrDMfy811BJrbNiiBOKsiaZJi5cGXuO89cdyWMQnEesMFoeX9+Lbe7y9jQRFnA76JXenJzk0PSSDWFtelA3lMVuKdGO3cDHpauNGAFEesVZYz0RDvDYw9t7Ur0NzicERNvHdImbQQcwfOltveF8dtG4xoifkKGVOCJe6msNLccl82butIlGCIu8XF7AJ7JNK2EH9TwJqYK/Q1crPDkLaF+JsiKrZY4eadpSpVAevIzXYG3FRztlih94ulKk2BqOipTuC9c/O9McyoOT01BULJFDD33EJvFm5x2EyBUDIF3FdusTf+IC0FQsmBv+WG3u7c/KCt6LZ0UAEVGmaqO/EIqQChZBJqJOa2O+C2jJjJEEor6uS2jI4dMI+uSwaTUGfi5vtjmZnhsgkySW2oNR4MGiwV0Hux4At6EfuzHhjlC2TSklHxNjz+uKwFAygUyGy5Hn804kDREopUIqIldAL9DQeGiJYgloiUz4ckHhsi7YtUIiKXry9E5LJYInKZnb0CELkilkj50rQ0PtuYkfJiiUjHluUOJW5+0Ih0FEtEazkSOEpEaxFLpNM1hkwSS0ThGkMqyCVy1xiiVS7RUq4x5OQSmXIMysGipVy2/ovG/ueqRqYcgni0yJTrz7fv2vnFdYFMaQ+Nzz5+5I7ct++a+UiFHIflaMQDQE4u0crAXyFok0u0X2UoyiWVW5P74w+ZKmKJTGvi8ORjQHaofv254j8vNL/+XPGfx8H5Kq21ujryDxWHZ+WGxjhfpbVWV0fbSH3zdcU/X2i++brin49DRL0lbk7XRLktW39s3yLqzXFzuiaV5crf5rDUY9viR0ePw9/msFRDi3ABUIKuhPaHATfXH2JuBwNA2XQlFMULgGjq0E2xFxcAQddhJQwQVA0UHkYzU92J3PyQAJuqgXYRg7LUoB/GMqPu7McA2dZgZQywVUDhQRy32BvPbR8VYK2AopBBqMA+iOcWerNwi+OCUMEiZRD4UX6IwG3tjeGGgUHgR1nKIPBbHyJys70h5mpo4Pl5MQPHTj8EuFFnIjc7NljYaTlTNDfaH0JxS33x3NbBKYobJTGDyG59CMst9GXhtg0OArtVzsBy0w/hubm+KG5xdGC5GUETudFyCNx0VxJxL8MTuVGWM7DcTofEjXJPNm4awwPDLQiawK04QHHberJwWwYocHOCBopZ8rDclp4Q922ACjcjaRwzEgfPjUo/dnZxgLAwI0kTuE2HyG7vh2OHEdq4RUGTuXWHws71Q3GzQ5S4BUEDxaw6wHBTpRc7cfdDBG5e0lhm2WPlRqEXjl0cI8vMSpqVWfKI7GwnCnFXGKNFLnlm5AF2lPsQ2C2D5JmRpNkbsrBb+6DZhdlD5DY9Nnaq9CAS+zxIUcJldhR6YNkZHJMosmDY6Q5kYr/NRDZ2FNrn+KWZSOanm5eJvcZMBIYdhdYt/La5yMZPlbZF4p+HaZdLoSmFH/m2GX4Gw+Tlkm8KFn6UW7YR/zCBcG3ZK7ANy4qfKuNk5ZJpCzQ/2tq1EH+HcdJyiRrjK1C5VRtVmMYpE/ciZ3Z26l0qINOopCqwGKfADnJmbQ1cBbQ2qRiqMAyUk0uaW/JLNVBokaMKNcapKG5WzuzEPfvB1qBSezaqMQxUILFk2dUAsQZSqTWBalRloDQ7L2Yise8BYGsgU9oyqEqPcdqJfRAzlt+MEKsgU1pycxWqDJTmF6XMRvwlAmwVZEo7BlOVHuPkiT+ETCL+GixjHaRSKwLVqco4ReJvhEzRFTgesHWQim3wVGnAMGVVwSpjiqEKA5NcCdHWgLJQpRrDVAxVuIuYYqjGzASuFlpKbUlTrXGYkqYai4SJimrU4FpULaT2ujxVazFKu6IaDeRL8VTnygZbNURLricaqjcPUlmpzk2+BE2VJj4w9ZDypY7sqGKPMQqaKs3SJWiqVYNxqohIhwqyo5o1hihoqtVAtKRVUb2eE9aaiJQvvLKjuuMAJaeo3k2u5OA0VZ1ZFV0VEbmdTQmWKl8xOCk4RVUXgZLi7lerqHYH3qk2Ir3uDEpYqHpdhiXF3TtL1TtIhs5HZvDVfbz4+ABlXw21MKF9nc9iyYK9acHHZvEhxk8qMW7eamqkx8GxGKWmXkp6fGmI/LJqxKdqaxW11uLoRLFkUeHenBarcnQWiKVYA9bxiTg6WSw51GlHZ8PRWSGVVKmkmLFxODq6iKUdtSY1MgaHZ4dUWlBvGhhTDo/DQevg4w9VKkIYFpVxdHS57hzRC0JE1WFQVMLhSZBKGyoPQ6ISDk+AVHKo3g2ISjg8K6SSRQPdcKiEw+NwybrYXghMaQHCYKiEw2MglUxBG8NQqITDY4pUMgWtDAOhEw6PKRBKpqCdUY2CKTg8rkAoOTQ16TFwBYfHobtiwqOxxY6ARxMHJ0AoqR3tXbundhweFSGUbEaLd9U3k3B4bIFQ8mh0Nj1b0cxxURv6LCBMQrt9t9SOw2MzZJLa0PRk+rQUHB0V0G3p4Apa7zukdjR1TNYCmeQyOphsb9aCo+Myei4ZXEYng+qJTWjteLiMvosF5TL6WbzqhQ5o72CoNaP3QkFvBX3NrgtqQ4uHQoeC/ksE5SI6nF3zlC84NMolDKE4UG5Hr7NTLdNbQaMHQbkdoygLzBrR9eJ1q0xAu0fA+ISBlANm3QsGMNgGKZfQ8t7ZdS8YSxFg1y1iHPOq22JCQdv7pey6RQzoYz5l7epDLBjP6FQrzJbR/P4oa1e/x4JRfUxUYlcxumnV9dkto4cldhUD/Jjo4pi3RdWj3V5wmRdMH6fNpXh2DRmX+4P227etfPzyscyz5iDariHhwn/Qvn3Xygf79suqHw88y7x6yzntMXbxPkZcBS9bX76r+rGB+Z5mwZVRYv23efpvHN/V++3pv9N//zDw53uWE6X3v7A8/Xf67/Tf6b/Tf6f/Tv+d/jv9d/rvnx/uOee8f3cyf67/8yCzl8xk5Fz6Jb+sdfV8kDXles6/J4uMNVonHKMTzJsyfWjkcbWDNqd2BVmEm8si4/BhgmeUSsb1OVdNtDmf629JtdD6lazG5MptRdCMkstpKS4X4RXkJmv9kFWZXMv8n5MPv7E8KJPM+RcyMwXMM8BAtDwOC4lHRUWDZhPdn7Aq+ef4yKSbQ5JtNH8bq1DQstzEcDrcZD49GI0gk+z5AzpTyFWITHqZfxkn03vOOWd+R9y9tKDDodkOh4uwBMkvaEaTTO9zzjm9I1NESH5D8zchmexczikKZZ6FTURZnAaitS/ZaO2rqGrMSW9zMDnIXPpciueobCJTBMgkmED+99pu8GB/M1m5Xrrxrmwhvn3EcG6b9PLcx+gKkkECNGMdZExD9P2sFjICJIM6AM1fw81k5C66WTobiG8XLahsq2/Stosga8yL4GKQQ3XCfOrm+zDQKj4GwSUM0m/hZjIWUUepBuLbZSCSXfyUAN27KqpBEqjaAV2BFmG+dX81UJYeCVTVDmj8DhYT5kudL0bEt4cYxqZBz+0AbRejO8YguFQYpEDNMNWzGpzwGASXqjBIvwI5CPOt7jcjOsRBCyqbCrgHSJtugkljJlBVtQMacRKq6psRFdmRQFFV7YDGb6AR5lsD3oyoeVyI9wg9HyqArj0NtRiD4FJVYZDCLMKX0zIE0TEIzh/CIP0CJmG+NeTNiKaDMqBrywCnagF1T0IrRgJFf3ZAI8o0iJMW5K5hX31R9UVDEsj62ACN7y8bhga9DIdHRXXLAUT1ArzlJnhoyE5wPiyU4qn3hew17FAORic4nxZi+fYG4aJhC6LhcCHesei5qKryE107GjpDCIOszxVQD7e8BCnBIQyywgqof3vZsOIsRoeDMqC5oYPxo4KyI6EVohOcYCGWaN1L5/0XkW/r/e261QlOtBDLd3cTrhq4I7odKmob0hPrzxuQvLsJFo0oDLLiCqjHEAPdXl/n4LT7yiMMshoroP7dNcOKtAzN4ULp3U3P9UETGO8aGiE6wWlYiCWEHgY+/7p0gtOyEMtXl1DR0AUlB2VA96sG5lMH+V1CEkEYZLUWQD3GMBDl60+LMDjUnAH1b24RHrEGotuhov6Kn5I+L0DrzU2wasRGcJomYgmh2UKU2vy7UgkO20S0vrhhWLGWYThMdLy56LkDPcD5pqErwiJ4qD0DajHkMP3M/Vp/URbBpC8zql9cR6zBE2oOmgCtFxUsNMDx5gCsESsaLyaiFULlePOYa5/rb0lF481EtL63jHK0jLJHQ6dN+OlQLICWbRGsERbBpG8zqjFU2o7nXPtcf0QWwaSvM6q/gBath7jRYRv0PAxaQLOd6I5Q0Xh1IVoxVO+y65Fzn/8ZXGLHoaLxbiBa31//GPbQBEhMBYjlAsl2gKQBF8Gk7xOqUVRXS/se87lkx00w6caEytdGn0cuDQ3LoueqZn6i27IItggZjQ0D0Qqjqnc7PIjIhCI4Mho7BqL5rfE/242K5QSXrYJqOdEKMAkm3ZlQjqSqcvXM+4iUL1JjEky6NaH8reXPO1w0ARLD8cRqvwFbDnBowIzGloFoxnpcs9e8iUjvQiOjvmcgmt9eiVZR9mlooEXP7YWmJ7rQIngGmARZ9yaUP+B5zbPlDUROZEyCLHs0ofylVZSjZVR8blRRA/ebBio60QqQUd90Ipqf8ryudrwhJzEyCji/s44oGuHuowdglJ6Svl2ABRygqP+kuPmzfsqoNlrlxUWBj+9sGmas23A5nYCup0nP5ys9nmg8LYIjQApE8+NUVc5koSguUiQaX5kYWqxmEKeF6lMF690JytNA4jcocvonUJVmMdJiUOj0lWlGKVZCh3ofID3xU9H3AkgeCqjqn0LR+EdQHZ9ASVikWDR8rm9lILoiTcKn2wno/nHR89igBZw/hODlNyh2cpgdzgjqP8HLikHBk880zBC2H2LIkbJB3BZqP8oTy44Bjh8DsPqnYDT2dYI9RFH3LbIioa6uHdFwuQ0jhL5vbZ5WRFeci3BV/wMkVRV6rrqVn2ipagHV7yTIop7CKO27UA2B5T4rKjpBFh9hxOKhhhIh0f1b+5YhSRRJhhXgBHSrDnDtqeBUFYK3mzDq6tsRndsmSjG8yBBGXZ07ou6SEa0A6yek9mlDVKJUwk0DLnSq5qekeydIqgMkde8EWZyEEcsuRTRDOJHRCbJ4CSMWj9NQ/Yq6T6MDwoh6jJMwSwTN4NBFz22Tpie6tYDmJoy6endEfVtBOYS5zwkKYdTVvSPqHstA022l+30PdBpoRBhkvDTkALROsHY10ITgcusEWdyEEcuugegMkOn+ICg6QRY/YcTioNXAt1OgT8xd0Gag5tfI2DSmoDM9Hbp7gTTAod7CqKt/R9R3aUI0/OwnFDkhjLoG7Ii6xzIQ3y6DPnFFH7QaKC8fyWQsGrWARM/nNj2eiMHp1gmyBFgGll3DQKdXpfsd5EQjyBJhGXg5aDcQnw6dPlGXXshhID49TibjIWEGwLLvBHh5LcJdI1ZEfZcWA+XlIZXuV/m68A3v7y5ti3DXkBVR9dDDQHSMTSORNaEXKtVAlE7ZIyORtYiGlTdF98ubot4VsYRYBlq75DAQ1bltJDIGXBe+5v0Nuw/vGf95kaiIJcYy0PKQw0KU2nx190TmgH6oNgsR1SFvZFQmc9XI5cVw0PJieC3CXWNWQ92lcliIUpvv5KpM1oBr2m+/MH5/iViEuwathuqhcph+5tav+dh7ZnoZ0BW92EREqfRzPp69JHrJl4YeNlbP8UK8KmIJsgy0dqkcpp9H7ed87r0c9DJAUFTEEmUZaHmo1DeeOqEzKuWFa1kaW2zVRdhU1XkR7hq1Guo21f7GVScIikW4a9hqqC6qVwqyFnRHdeYYeWr4YrpdtJour4JYwiwDrX165yDKFzwW+et3ju+HLyOWOMtA00d1pAAuo87qVGf2y1M/8LIk9b0srM6TcNe41VAcVGcJoHzBSD6CmoS7Bq6G7KV6VXZJa0atDVBdLXmktvQz2dCdNBmqV0YsgaaBpofqOg8XrhcG8xHU1bFEurtR3FR19ryHy3lrxf7+WJGqrrOkHamcSz92dLy8ro6Xk3R8aeSz48tHVdeoxxbOfer3+QjqX3PNs/eMWz/n0q9R5ugtw9bHFP2F37P3mmHvY4p+p3Lgf0VP/53+O/13+u/03+m/03+n/07/nf77J4eOnif78J7xnzOkIzhduHie/jv9d/rv9N/pv9N/p/9O/53+O/13+u/03+m/03+n/07/nf47/Xf67/Tf6b/Tf6f/Tv/9wwc=" alt="BOB Autowas"></a>
+  <ul class="nav-menu">
+    <li><a href="BOB_Wasclub_Responsive.html">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html">Wasprogramma's</a></li>
+    <li><a href="BOB_Vestigingen.html" class="active">Vestigingen</a></li>
+    <li><a href="BOB_Zakelijk_Aanvraag.html">Zakelijk</a></li>
+  </ul>
+  <a href="BOB_Wasclub_Responsive.html" class="nav-cta">Word lid →</a>
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <span class="hero-label">Onze vestigingen</span>
+    <h1>22 locaties<br>door heel <em>Nederland</em></h1>
+    <p class="hero-sub">Altijd een BOB Autowas in de buurt. Bekijk openingstijden, check of er een interieurband of wasboxen beschikbaar zijn en plan je route.</p>
+    <div class="hero-stats">
+      <div class="h-stat"><div class="h-stat-dot"></div><div class="h-stat-text"><strong>8</strong> vestigingen met interieurband</div></div>
+      <div class="h-stat"><div class="h-stat-dot"></div><div class="h-stat-text"><strong>3</strong> vestigingen met wasboxen</div></div>
+      <div class="h-stat"><div class="h-stat-dot"></div><div class="h-stat-text">Ma–za <strong>08:00–20:00</strong> · Zo <strong>10:00–20:00</strong></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER -->
+<div class="filter-bar">
+  <div class="filter-inner">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" data-filter="all" onclick="setFilter(this,'all')">Alle vestigingen</button>
+    <button class="filter-btn" data-filter="interieur" onclick="setFilter(this,'interieur')">🪑 Interieurband</button>
+    <button class="filter-btn" data-filter="wasboxen" onclick="setFilter(this,'wasboxen')">📦 Wasboxen</button>
+    <div class="filter-search">
+      <span class="filter-search-icon">🔍</span>
+      <input type="text" id="search-input" placeholder="Zoek stad of adres…" oninput="doSearch(this.value)">
+    </div>
+  </div>
+</div>
+
+<!-- VESTIGINGEN -->
+<section class="vest-section">
+  <div class="vest-inner">
+
+    <div class="no-results" id="no-results">Geen vestigingen gevonden voor deze zoekopdracht.</div>
+
+    <!-- AMSTERDAM -->
+    <div class="regio-label" data-regio="amsterdam">Amsterdam</div>
+    <div class="vest-grid" id="grid-amsterdam">
+
+      <div class="vest-card" data-naam="Amsterdam Noord" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Amsterdam Noord</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Monitorstraat 15–17, 1033 RM Amsterdam</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.20 m</span></div>
+          <a href="https://www.google.nl/maps/place/BOB+Autowas+Amsterdam-Noord" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card has-interieur" data-naam="Amsterdam Osdorp" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Amsterdam Osdorp</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">L. van Sonsbeeckstraat 2, 1068 EW Amsterdam</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 18:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 18:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.00 m</span></div>
+          <a href="https://www.google.nl/maps/place/BOB+Autowas+Amsterdam+Osdorp" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card has-interieur" data-naam="Amsterdam Sloterdijk" data-interieur="1" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Amsterdam Sloterdijk</div>
+          <div class="vest-badges">
+            <span class="badge badge-int">Interieur</span>
+          </div>
+        </div>
+        <div class="vest-adres">Transformatorweg 37, 1014 AJ Amsterdam</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill" style="border-color:rgba(227,6,19,.3);color:var(--red)"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Interieurband</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.00 m</span></div>
+          <a href="https://www.google.nl/maps/place/BOB+Autowas+Amsterdam/@52.3913032,4.8472509" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+    </div><!-- /amsterdam -->
+
+    <!-- MIDDEN NEDERLAND -->
+    <div class="regio-label" data-regio="midden">Midden Nederland</div>
+    <div class="vest-grid" id="grid-midden">
+
+      <div class="vest-card" data-naam="Apeldoorn" data-interieur="0" data-wasboxen="1">
+        <div class="vest-card-head">
+          <div class="vest-naam">Apeldoorn</div>
+          <div class="vest-badges"><span class="badge badge-box">Wasboxen</span></div>
+        </div>
+        <div class="vest-adres">Laan van Spitsbergen 110, 7336 AX Apeldoorn</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">08:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill" style="border-color:rgba(34,197,94,.3);color:var(--green)"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasboxen</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/place/BOB+Autowas+Apeldoorn/@52.1945403,5.9301469" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Hilversum" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Hilversum</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Franciscusweg 150, 1216 SK Hilversum</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Hilversum" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Nijmegen" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Nijmegen</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Energieweg 15, 6662 LA Elst</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Nijmegen" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Utrecht" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Utrecht</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Cartesiusweg 150, 3534 BD Utrecht</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.20 m</span></div>
+          <a href="https://maps.app.goo.gl/kmov3FZYRJRNB3nt6" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Cuijk" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Cuijk</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Kasteellaan 2, 5431 NE Cuijk</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Cuijk" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+    </div><!-- /midden -->
+
+    <!-- ROTTERDAM / DEN HAAG -->
+    <div class="regio-label" data-regio="rijnmond">Rotterdam & Den Haag regio</div>
+    <div class="vest-grid" id="grid-rijnmond">
+
+      <div class="vest-card has-interieur" data-naam="Rotterdam Charlois" data-interieur="1" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Rotterdam Charlois</div>
+          <div class="vest-badges"><span class="badge badge-int">Interieur</span></div>
+        </div>
+        <div class="vest-adres">Groene Hilledijk 253, 3074 AC Rotterdam</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill" style="border-color:rgba(227,6,19,.3);color:var(--red)"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Interieurband</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Rotterdam+Charlois" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card has-interieur" data-naam="Rotterdam IJsselmonde" data-interieur="1" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Rotterdam IJsselmonde</div>
+          <div class="vest-badges"><span class="badge badge-int">Interieur</span></div>
+        </div>
+        <div class="vest-adres">Drachmestraat 2, 2988 CR Ridderkerk</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 18:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill" style="border-color:rgba(227,6,19,.3);color:var(--red)"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Interieurband</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/place/BOB+Autowas+Rotterdam-IJsselmonde/@51.8715865,4.5526528" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card has-interieur" data-naam="Schiedam" data-interieur="1" data-wasboxen="1">
+        <div class="vest-card-head">
+          <div class="vest-naam">Schiedam</div>
+          <div class="vest-badges">
+            <span class="badge badge-int">Interieur</span>
+            <span class="badge badge-box">Wasboxen</span>
+          </div>
+        </div>
+        <div class="vest-adres">'s-Gravelandseweg 412, 3125 BK Schiedam</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 18:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>2× Wasstraat</div>
+          <div class="dienst-pill" style="border-color:rgba(227,6,19,.3);color:var(--red)"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Interieurband</div>
+          <div class="dienst-pill" style="border-color:rgba(34,197,94,.3);color:var(--green)"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasboxen</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.00 m</span></div>
+          <a href="https://www.google.nl/maps/place/BOB+Autowas+Schiedam/@51.9282113,4.3998691" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Berkel en Rodenrijs" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Berkel en Rodenrijs</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Nobelsingel 6, 2652 XA Berkel en Rodenrijs</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 21:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 21:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/place/BOB+Autowas+Berkel+en+Rodenrijs/@51.9818885,4.4445392" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Delft" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Delft</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Brasserskade 10, 2497 NX Den Haag</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Delft" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Dordrecht" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Dordrecht</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Laan der Verenigde Naties 2, 3314 AJ Dordrecht</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Dordrecht" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Gouda" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Gouda</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Goudkade 1, 2802 AC Gouda</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Gouda" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card has-interieur" data-naam="Waddinxveen" data-interieur="1" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Waddinxveen</div>
+          <div class="vest-badges"><span class="badge badge-int">Interieur</span></div>
+        </div>
+        <div class="vest-adres">Bredeweg 10, 2742 KP Waddinxveen</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill" style="border-color:rgba(227,6,19,.3);color:var(--red)"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Interieurband</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Waddinxveen" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card has-interieur" data-naam="Zoetermeer" data-interieur="1" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Zoetermeer</div>
+          <div class="vest-badges"><span class="badge badge-int">Interieur</span></div>
+        </div>
+        <div class="vest-adres">Wattstraat 60A, 2723 RD Zoetermeer</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 21:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 21:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill" style="border-color:rgba(227,6,19,.3);color:var(--red)"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Interieurband</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/place/BOB+Autowas+Zoetermeer/@52.0571834,4.5204471" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+    </div><!-- /rijnmond -->
+
+    <!-- NOORD / OOST / ZEELAND -->
+    <div class="regio-label" data-regio="overig">Noord, Oost & Zeeland</div>
+    <div class="vest-grid" id="grid-overig">
+
+      <div class="vest-card" data-naam="Velserbroek" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Velserbroek</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Dokter G.H. Amshoffweg 3, 1991 AB Velserbroek</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Velserbroek" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card has-interieur" data-naam="Zaandam" data-interieur="1" data-wasboxen="1">
+        <div class="vest-card-head">
+          <div class="vest-naam">Zaandam</div>
+          <div class="vest-badges">
+            <span class="badge badge-int">Interieur</span>
+            <span class="badge badge-box">Wasboxen</span>
+          </div>
+        </div>
+        <div class="vest-adres">Provincialeweg 12, 1506 MA Zaandam</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill" style="border-color:rgba(227,6,19,.3);color:var(--red)"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Interieurband</div>
+          <div class="dienst-pill" style="border-color:rgba(34,197,94,.3);color:var(--green)"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasboxen</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Zaandam" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Winschoten" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Winschoten</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Nieuwe Australiëweg 2, 9671 GA Winschoten</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Winschoten" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Middelburg" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Middelburg</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Poelendaelesingel 2, 4335 JB Middelburg</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Middelburg" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Vlissingen" data-interieur="0" data-wasboxen="0">
+        <div class="vest-card-head">
+          <div class="vest-naam">Vlissingen</div>
+          <div class="vest-badges"></div>
+        </div>
+        <div class="vest-adres">Buitenruststraat 2, 4381 BP Vlissingen</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 20:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte">Max. hoogte <span>2.05 m</span></div>
+          <a href="https://www.google.nl/maps/search/BOB+Autowas+Vlissingen" target="_blank" class="vest-route">Route →</a>
+        </div>
+      </div>
+
+    </div><!-- /overig -->
+
+    <!-- CURAÇAO -->
+    <div class="regio-label" data-regio="curacao" style="color:var(--amber);margin-top:56px;">
+      <span style="color:var(--amber)">Curaçao</span>
+    </div>
+    <div class="vest-grid" id="grid-curacao">
+
+      <div class="vest-card" data-naam="Veeris" data-interieur="0" data-wasboxen="0" style="border-color:rgba(245,158,11,.15);">
+        <div class="vest-card-head">
+          <div class="vest-naam">Veeris</div>
+          <div class="vest-badges"><span class="badge" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);color:var(--amber)">Curaçao</span></div>
+        </div>
+        <div class="vest-adres">Gosieweg z/n, Willemstad, Curaçao</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 18:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte"></div>
+          <a href="https://bobautowas.nl/wasstraat-veeris/" target="_blank" class="vest-route">Meer info →</a>
+        </div>
+      </div>
+
+      <div class="vest-card" data-naam="Zeelandia" data-interieur="0" data-wasboxen="0" style="border-color:rgba(245,158,11,.15);">
+        <div class="vest-card-head">
+          <div class="vest-naam">Zeelandia</div>
+          <div class="vest-badges"><span class="badge" style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.35);color:var(--amber)">Curaçao</span></div>
+        </div>
+        <div class="vest-adres">Gosieweg z/n, Willemstad, Curaçao</div>
+        <div class="vest-tijden">
+          <div class="tijden-header">
+            <div class="tijden-col"><div class="tijden-dag">Ma – Za</div><div class="tijden-uren">08:00 – 20:00</div></div>
+            <div class="tijden-col"><div class="tijden-dag">Zondag</div><div class="tijden-uren">10:00 – 18:00</div></div>
+          </div>
+        </div>
+        <div class="vest-diensten">
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Wasstraat</div>
+          <div class="dienst-pill"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="currentColor" stroke-width="1.2"/></svg>Stofzuigplein</div>
+        </div>
+        <div class="vest-foot">
+          <div class="vest-hoogte"></div>
+          <a href="https://bobautowas.nl/wasstraat-zeelandia/" target="_blank" class="vest-route">Meer info →</a>
+        </div>
+      </div>
+
+    </div><!-- /curacao -->
+
+  </div>
+</section>
+
+<!-- STICKY MOBIEL CTA -->
+<div class="mobile-cta">
+  <a href="BOB_Wasclub_Responsive.html">Word Wasclub-lid — v.a. €28/mnd →</a>
+</div>
+
+<script>
+function toggleDrawer(){var d=document.getElementById('nav-drawer'),o=document.getElementById('nav-overlay'),h=document.getElementById('nav-hamburger'),open=d.classList.toggle('open');o.classList.toggle('open',open);h.classList.toggle('open',open);document.body.style.overflow=open?'hidden':'';}
+function closeDrawer(){document.getElementById('nav-drawer').classList.remove('open');document.getElementById('nav-overlay').classList.remove('open');document.getElementById('nav-hamburger').classList.remove('open');document.body.style.overflow='';}
+
+var activeFilter = 'all';
+var activeSearch = '';
+
+function setFilter(btn, type) {
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  activeFilter = type;
+  applyFilter();
+}
+
+function doSearch(val) {
+  activeSearch = val.toLowerCase();
+  applyFilter();
+}
+
+function applyFilter() {
+  var cards = document.querySelectorAll('.vest-card');
+  var visible = 0;
+  cards.forEach(function(card) {
+    var naam = (card.dataset.naam || '').toLowerCase();
+    var adres = (card.querySelector('.vest-adres') ? card.querySelector('.vest-adres').textContent : '').toLowerCase();
+    var matchFilter = activeFilter === 'all'
+      || (activeFilter === 'interieur' && card.dataset.interieur === '1')
+      || (activeFilter === 'wasboxen' && card.dataset.wasboxen === '1');
+    var matchSearch = !activeSearch || naam.includes(activeSearch) || adres.includes(activeSearch);
+    if (matchFilter && matchSearch) {
+      card.classList.remove('hidden'); visible++;
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+  // Toon/verberg regio-labels als alle cards erin hidden zijn
+  document.querySelectorAll('.regio-label').forEach(function(label) {
+    var grid = label.nextElementSibling;
+    if (!grid) return;
+    var anyVisible = Array.from(grid.querySelectorAll('.vest-card')).some(function(c){ return !c.classList.contains('hidden'); });
+    label.style.display = anyVisible ? '' : 'none';
+  });
+  document.getElementById('no-results').classList.toggle('show', visible === 0);
+}
+
+// Nav scroll
+window.addEventListener('scroll', function(){
+  var nav = document.querySelector('.nav');
+  if (nav) nav.style.background = window.scrollY > 80 ? 'rgba(10,10,10,0.99)' : 'rgba(10,10,10,0.97)';
+});
+</script>
+</body>
+</html>
