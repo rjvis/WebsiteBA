@@ -943,6 +943,36 @@ body {
 .prijs-cel.proteqt:hover .prijs-icon  { background: rgba(212,170,80,0.85); }
 .prijs-cel.intensief:hover .prijs-icon { background: rgba(180,188,196,0.8); }
 .prijs-cel.normaal:hover .prijs-icon   { background: rgba(176,120,78,0.8); }
+
+/* ── Hero achtergrondvideo ── */
+.hero-video {
+  position: absolute; inset: 0; z-index: 0;
+  overflow: hidden; pointer-events: none;
+}
+.hero-video video {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%; min-height: 100%;
+  width: auto; height: auto;
+  object-fit: cover;
+}
+/* Overlay zodat tekst leesbaar blijft */
+.hero-video::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(10,10,10,0.72) 0%,
+    rgba(10,10,10,0.50) 50%,
+    rgba(26,2,4,0.62) 100%
+  );
+}
+/* Op mobiel: video verbergen (te zwaar, fallback naar bestaande achtergrond) */
+@media (max-width: 768px) {
+  .hero-video { display: none; }
+}
+
 </style>
 </head>
 <body>
@@ -981,6 +1011,16 @@ body {
 
 <!-- HERO -->
 <section class="hero">
+
+  <!-- Achtergrondvideo — bestand staat in websiteBA/media/ -->
+  <div class="hero-video">
+    <video autoplay muted loop playsinline preload="auto"
+           poster="media/hero-poster.jpg">
+      <source src="media/hero.mp4" type="video/mp4">
+      <source src="media/hero.webm" type="video/webm">
+    </video>
+  </div>
+
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-noise"></div>
