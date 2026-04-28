@@ -1,0 +1,1528 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOB Autowas — Feel the Shine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E30613;
+  --red-dark: #a3040d;
+  --red-glow: rgba(227,6,19,0.25);
+  --black: #0a0a0a;
+  --dark: #111111;
+  --mid: #1c1c1c;
+  --panel: #161616;
+  --border: rgba(255,255,255,0.07);
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.55);
+  --subtle: rgba(255,255,255,0.18);
+  --font-display: 'Inter Tight', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--text);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ─── NAV ─────────────────────────────────────────────────────────── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 72px;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  display: grid; grid-template-columns: repeat(4,8px);
+  grid-template-rows: repeat(4,8px); gap: 3px;
+}
+.logo-mark span {
+  background: #444; border-radius: 1.5px;
+  transition: all 0.6s cubic-bezier(.34,1.56,.64,1);
+}
+.logo-mark span:nth-child(2),.logo-mark span:nth-child(4),
+.logo-mark span:nth-child(11),.logo-mark span:nth-child(13) { background: #666; }
+.logo-mark span:nth-child(6) { background: var(--red); }
+.nav-logo:hover .logo-mark span:nth-child(6) { transform: scale(1.4); box-shadow: 0 0 12px var(--red-glow); }
+.nav-logo:hover .logo-mark span:nth-child(1) { transform: translate(-2px,-2px); }
+.nav-logo:hover .logo-mark span:nth-child(4) { transform: translate(2px,-2px); }
+.nav-logo:hover .logo-mark span:nth-child(13) { transform: translate(-2px,2px); }
+.nav-logo:hover .logo-mark span:nth-child(16) { transform: translate(2px,2px); }
+
+.logo-text {
+  background: var(--red); color: #fff;
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 26px; letter-spacing: 3px;
+  padding: 5px 14px 3px; line-height: 1;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
+}
+
+.nav-menu {
+  display: flex; gap: 36px; list-style: none;
+}
+.nav-menu a {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  transition: color 0.2s; position: relative; padding-bottom: 2px;
+}
+.nav-menu a::after {
+  content:''; position: absolute; left: 0; bottom: -2px;
+  width: 0; height: 2px; background: var(--red);
+  transition: width 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+.nav-menu a:hover { color: var(--text); }
+.nav-menu a:hover::after { width: 100%; }
+
+.nav-cta {
+  background: var(--red); color: #fff;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 11px 24px 9px; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+  transition: all 0.2s;
+}
+.nav-cta:hover {
+  background: #ff1a26;
+  box-shadow: 0 8px 32px var(--red-glow);
+  transform: translateY(-1px);
+}
+
+/* ─── HERO ────────────────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh; position: relative;
+  display: flex; align-items: center;
+  overflow: hidden; padding-top: 72px;
+}
+
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 65% 50%, #1a0406 0%, var(--black) 70%);
+}
+
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(227,6,19,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(227,6,19,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 90% 80% at 60% 50%, black 0%, transparent 70%);
+}
+
+.hero-noise {
+  position: absolute; inset: 0; opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* SVG Arch */
+.hero-arch {
+  position: absolute; right: -80px; top: 50%;
+  transform: translateY(-50%);
+  width: 700px; height: 700px;
+  pointer-events: none;
+}
+.hero-arch svg { width: 100%; height: 100%; overflow: visible; }
+.arch-main {
+  fill: none; stroke: var(--red); stroke-width: 48; stroke-linecap: square;
+  stroke-dasharray: 1900; stroke-dashoffset: 1900;
+  animation: drawArch 2s 0.4s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  filter: drop-shadow(0 0 20px rgba(227,6,19,0.4));
+}
+.arch-inner {
+  fill: none; stroke: rgba(227,6,19,0.15); stroke-width: 4;
+  stroke-dasharray: 1700; stroke-dashoffset: 1700;
+  animation: drawArch 2.4s 0.8s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+.arch-ball {
+  fill: var(--red); opacity: 0;
+  animation: ballPop 0.5s 2.2s cubic-bezier(.34,1.56,.64,1) forwards;
+  filter: drop-shadow(0 0 16px var(--red));
+}
+@keyframes drawArch { to { stroke-dashoffset: 0; } }
+@keyframes ballPop { from { opacity: 0; r: 0; } to { opacity: 1; } }
+
+.hero-scanline {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--red), transparent);
+  opacity: 0; animation: scanline 3s 2.5s ease-in-out forwards;
+  top: 50%;
+}
+@keyframes scanline {
+  0% { opacity: 0; top: 30%; }
+  30% { opacity: 0.6; }
+  70% { opacity: 0.6; }
+  100% { opacity: 0; top: 70%; }
+}
+
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 0 48px 0 80px; max-width: 700px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 10px;
+  border: 1px solid rgba(227,6,19,0.35);
+  background: rgba(227,6,19,0.08);
+  padding: 8px 16px; margin-bottom: 32px;
+  opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+}
+.hero-badge-dot {
+  width: 7px; height: 7px; background: var(--red); border-radius: 50%;
+  box-shadow: 0 0 0 0 var(--red-glow);
+  animation: pulseGlow 2s 1s infinite;
+}
+@keyframes pulseGlow {
+  0%,100% { box-shadow: 0 0 0 0 rgba(227,6,19,0.5); }
+  50% { box-shadow: 0 0 0 10px rgba(227,6,19,0); }
+}
+.hero-badge span {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+  color: #ffffff;
+}
+
+.hero-h1 {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(72px, 10vw, 116px);
+  line-height: 0.92; letter-spacing: -0.5px;
+  text-transform: uppercase; margin-bottom: 28px;
+  opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+}
+.hero-h1 .line1 { display: block; color: var(--text); }
+.hero-h1 .line2 {
+  display: block; color: var(--red);
+  position: relative;
+  text-shadow: 0 0 80px rgba(227,6,19,0.3);
+}
+.hero-h1 .line3 {
+  display: block; color: transparent;
+  -webkit-text-stroke: 1.5px rgba(255,255,255,0.25);
+  letter-spacing: 0px;
+}
+
+.hero-sub {
+  font-size: 18px; color: var(--muted); max-width: 480px;
+  line-height: 1.65; margin-bottom: 44px;
+  opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+}
+.hero-sub strong { color: var(--text); font-weight: 600; }
+
+.hero-ctas {
+  display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 72px;
+  opacity: 0; animation: fadeUp 0.8s 0.65s forwards;
+}
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: var(--red); color: #fff;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 15px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 16px 32px 14px; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 12px 100%);
+  transition: all 0.2s; position: relative; overflow: hidden;
+}
+.btn-primary::before {
+  content:''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transform: translateX(-100%); transition: transform 0.5s;
+}
+.btn-primary:hover::before { transform: translateX(100%); }
+.btn-primary:hover {
+  box-shadow: 0 16px 48px var(--red-glow);
+  transform: translateY(-2px);
+}
+.btn-ghost {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: transparent; color: var(--muted);
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 15px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 15px 32px 13px; text-decoration: none;
+  border: 1px solid var(--subtle);
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 12px 100%);
+  transition: all 0.2s;
+}
+.btn-ghost:hover { border-color: rgba(255,255,255,0.5); color: var(--text); }
+
+.hero-stats {
+  display: flex; gap: 0;
+  border-top: 1px solid var(--border);
+  opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+}
+.hero-stat {
+  padding: 28px 40px 0 0; margin-right: 40px;
+  border-right: 1px solid var(--border); position: relative;
+}
+.hero-stat:last-child { border-right: none; margin-right: 0; }
+.stat-num {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 52px; line-height: 1; letter-spacing: -0.5px; color: #fff;
+}
+.stat-num em { color: var(--red); font-style: normal; }
+.stat-label {
+  font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted); margin-top: 6px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── MARQUEE ─────────────────────────────────────────────────────── */
+.marquee {
+  background: var(--red); overflow: hidden;
+  white-space: nowrap; padding: 16px 0; position: relative;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+.marquee::before, .marquee::after {
+  content:''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+}
+.marquee::before { left: 0; background: linear-gradient(90deg, var(--red), transparent); }
+.marquee::after { right: 0; background: linear-gradient(-90deg, var(--red), transparent); }
+.marquee-track {
+  display: inline-flex; gap: 0;
+  animation: marqueeScroll 28s linear infinite;
+}
+.marquee-item {
+  display: inline-flex; align-items: center; gap: 20px;
+  padding: 0 32px;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+}
+.marquee-item::after {
+  content: '◆'; font-size: 8px; opacity: 0.5;
+}
+@keyframes marqueeScroll { to { transform: translateX(-50%); } }
+
+/* ─── WASCLUB SECTION ─────────────────────────────────────────────── */
+.section-wasclub {
+  background: var(--dark); padding: 120px 0; position: relative; overflow: hidden;
+}
+.section-wasclub::before {
+  content:''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 0% 50%, rgba(227,6,19,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+.wasclub-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 80px;
+  display: grid; grid-template-columns: 1fr 1.1fr; gap: 80px; align-items: center;
+}
+
+.section-label {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--red); margin-bottom: 20px; display: block;
+}
+.section-h2 {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(48px, 6vw, 72px); text-transform: uppercase;
+  line-height: 0.92; letter-spacing: -0.5px; margin-bottom: 24px;
+}
+.section-h2 em { font-style: normal; color: var(--red); }
+.section-body {
+  font-size: 17px; color: var(--muted); line-height: 1.7; margin-bottom: 36px; max-width: 460px;
+}
+.feature-list { list-style: none; margin-bottom: 44px; display: grid; gap: 16px; }
+.feature-item {
+  display: flex; align-items: center; gap: 14px;
+  font-size: 15px; color: rgba(255,255,255,0.8);
+}
+.check {
+  width: 24px; height: 24px; background: var(--red); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 100%, 6px 100%);
+}
+.check svg { width: 12px; height: 10px; }
+
+/* Prijsbord */
+.prijsbord {
+  background: var(--black); border: 1px solid var(--border);
+  overflow: hidden; position: relative;
+}
+.prijsbord::before {
+  content:''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: var(--red);
+}
+
+.prijsbord-tabs {
+  display: flex; border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.prijs-tab {
+  flex: 1; padding: 16px 20px; background: transparent;
+  color: var(--muted); cursor: pointer; border: none;
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+  transition: all 0.25s; border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+}
+.prijs-tab:hover { color: var(--text); }
+.prijs-tab.active { color: var(--text); border-bottom-color: var(--red); background: rgba(227,6,19,0.06); }
+
+.prijsbord-grid {
+  display: grid; grid-template-columns: 1.1fr 1fr;
+}
+.prijs-row { display: contents; }
+.prijs-cel {
+  padding: 28px 24px; border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.2s; position: relative; cursor: default;
+}
+.prijs-cel:hover { background: rgba(255,255,255,0.02); }
+.prijs-cel:nth-child(2n) { border-right: none; }
+.prijs-cel:nth-last-child(-n+2) { border-bottom: none; }
+
+.prijs-cel-naam {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 22px; letter-spacing: 1px; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.gold { background: linear-gradient(135deg, #c8943e 0%, #f5e2a0 45%, #c8943e 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.prijs-icons { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 18px; }
+.prijs-icon {
+  width: 28px; height: 20px; border-radius: 3px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.08);
+  transition: background 0.2s;
+}
+.prijs-cel:hover .prijs-icon { background: rgba(255,255,255,0.1); }
+
+.prijs-block { display: inline-flex; flex-direction: column; align-items: stretch; }
+.prijs-num {
+  background: #fff; color: #000;
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 38px; line-height: 1; padding: 10px 16px 8px;
+  letter-spacing: -0.5px; transition: all 0.35s cubic-bezier(.34,1.56,.64,1);
+}
+.prijs-tag {
+  background: var(--red); color: #fff; text-align: center;
+  padding: 6px 8px; font-family: var(--font-display);
+  font-weight: 800; font-size: 10px; letter-spacing: 1.5px;
+  text-transform: uppercase; line-height: 1.2;
+}
+.prijs-cel.empty {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--subtle); font-size: 13px; font-style: italic;
+}
+.prijs-badge {
+  position: absolute; top: 12px; right: 12px;
+  background: var(--red); color: #fff;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 4px 8px;
+}
+
+/* ─── ZONE / WASRIT ───────────────────────────────────────────────── */
+.section-wasrit {
+  background: var(--black); padding: 120px 0; position: relative;
+}
+.section-wasrit::before {
+  content:''; position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 1px; background: linear-gradient(180deg, transparent, var(--red) 15%, var(--red) 85%, transparent);
+  transform: translateX(-50%);
+}
+.wasrit-inner { max-width: 1280px; margin: 0 auto; padding: 0 80px; }
+.wasrit-head { text-align: center; margin-bottom: 80px; position: relative; z-index: 2; }
+.wasrit-head .section-h2 { display: inline-block; }
+
+.wasrit-grid { display: grid; gap: 48px; position: relative; z-index: 2; }
+.zone {
+  display: grid; grid-template-columns: 1fr 64px 1fr;
+  gap: 32px; align-items: center;
+}
+.zone-dot {
+  width: 24px; height: 24px; background: var(--black);
+  border: 3px solid var(--red); border-radius: 50%;
+  justify-self: center; position: relative; z-index: 2;
+  box-shadow: 0 0 0 8px rgba(227,6,19,0.12), 0 0 24px rgba(227,6,19,0.3);
+  transition: all 0.3s;
+}
+.zone-card {
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 28px 32px; position: relative; overflow: hidden;
+  transition: all 0.35s; cursor: default;
+}
+.zone-card::before {
+  content:''; position: absolute; top: 0; left: 0; width: 3px; bottom: 0;
+  background: var(--red); transform: scaleY(0); transform-origin: bottom;
+  transition: transform 0.3s;
+}
+.zone-card:hover { border-color: rgba(227,6,19,0.3); transform: translateY(-3px); box-shadow: 0 20px 48px rgba(0,0,0,0.4); }
+.zone-card:hover::before { transform: scaleY(1); }
+.zone-card:hover .zone-dot-ref { box-shadow: 0 0 0 12px rgba(227,6,19,0.15), 0 0 32px rgba(227,6,19,0.5); }
+.zone-num {
+  position: absolute; top: -10px; right: 16px;
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 96px; line-height: 1; color: rgba(227,6,19,0.05);
+  letter-spacing: -2px; user-select: none;
+}
+.zone-card h3 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 24px; text-transform: uppercase; letter-spacing: 1px;
+  margin-bottom: 10px; position: relative; z-index: 2;
+}
+.zone-card p { font-size: 15px; color: var(--muted); line-height: 1.65; position: relative; z-index: 2; }
+
+.zone:nth-child(odd) .zone-card { grid-column: 1; }
+.zone:nth-child(odd) .zone-dot { grid-column: 2; }
+.zone:nth-child(even) .zone-dot { grid-column: 2; }
+.zone:nth-child(even) .zone-card { grid-column: 3; }
+
+/* ─── VESTIGINGEN ─────────────────────────────────────────────────── */
+.section-vest {
+  background: var(--mid); padding: 120px 0;
+}
+.vest-inner { max-width: 1280px; margin: 0 auto; padding: 0 80px; }
+.vest-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 56px; gap: 32px;
+}
+.vest-head-right { font-size: 15px; color: var(--muted); max-width: 320px; text-align: right; }
+.vest-link { color: var(--red); text-decoration: none; font-weight: 600; }
+.vest-link:hover { text-decoration: underline; }
+
+.vest-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.vest-card {
+  aspect-ratio: 3/4; position: relative; overflow: hidden;
+  cursor: pointer; background: var(--panel);
+  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+}
+.vest-card:hover { transform: translateY(-6px); z-index: 2; }
+.vest-card-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transition: transform 0.6s;
+}
+.vest-card:hover .vest-card-bg { transform: scale(1.08); }
+.vest-card-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.9) 100%);
+}
+.vest-card-top {
+  position: absolute; top: 14px; left: 14px; right: 14px;
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.vest-tag {
+  background: var(--red); color: #fff;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 5px 10px;
+  clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 100%, 5px 100%);
+}
+.vest-tag.interieur { background: #1a3a1a; border: 1px solid #2a5a2a; color: #5aef5a; clip-path: none; font-size: 9px; padding: 4px 8px; }
+.vest-status {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.7);
+}
+.status-dot { width: 6px; height: 6px; border-radius: 50%; }
+.status-dot.open { background: #22c55e; box-shadow: 0 0 8px #22c55e; animation: blink 2s infinite; }
+.status-dot.busy { background: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+.vest-card-bottom {
+  position: absolute; bottom: 0; left: 0; right: 0; padding: 20px 18px;
+}
+.vest-card-bottom h3 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 22px; text-transform: uppercase; letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.vest-card-bottom p { font-size: 12px; color: rgba(255,255,255,0.6); }
+.vest-card-hover {
+  position: absolute; inset: 0; background: rgba(227,6,19,0.88);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.3s;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  gap: 8px;
+}
+.vest-card:hover .vest-card-hover { opacity: 1; }
+.vest-card-hover .arrow-big {
+  font-size: 32px; display: block;
+  animation: arrowBounce 1s infinite;
+}
+@keyframes arrowBounce { 0%,100% { transform: translateX(0); } 50% { transform: translateX(6px); } }
+
+.vest-all {
+  margin-top: 40px; text-align: center;
+}
+
+/* ─── ZAKELIJK ────────────────────────────────────────────────────── */
+.section-zakelijk {
+  position: relative; overflow: hidden; padding: 0;
+}
+.zakelijk-inner {
+  display: grid; grid-template-columns: 1fr 1fr; min-height: 480px;
+}
+.zakelijk-left {
+  background: var(--red); padding: 96px 80px;
+  position: relative; overflow: hidden;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.zakelijk-left::before {
+  content:''; position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+.zakelijk-left .section-label { color: rgba(255,255,255,0.7); }
+.zakelijk-left .section-h2 { color: #fff; margin-bottom: 20px; max-width: 440px; }
+.zakelijk-left p { color: rgba(255,255,255,0.85); font-size: 17px; margin-bottom: 36px; max-width: 440px; }
+.btn-white {
+  display: inline-flex; align-items: center; gap: 12px;
+  background: #fff; color: var(--red);
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 16px 32px 14px; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 12px 100%);
+  transition: all 0.2s; align-self: flex-start;
+}
+.btn-white:hover { box-shadow: 0 12px 36px rgba(0,0,0,0.25); transform: translateY(-2px); }
+
+.zakelijk-right {
+  background: var(--dark); padding: 96px 80px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr; gap: 2px;
+  align-content: center; position: relative;
+}
+.zak-stat {
+  background: var(--panel); padding: 40px 32px;
+  transition: background 0.2s;
+}
+.zak-stat:hover { background: var(--mid); }
+.zak-stat-num {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 52px; line-height: 1; letter-spacing: -0.5px;
+  color: #fff; margin-bottom: 8px;
+}
+.zak-stat-num em { color: var(--red); font-style: normal; }
+.zak-stat-label { font-size: 13px; color: var(--muted); letter-spacing: 0.5px; }
+
+/* ─── STRIP / BELT ────────────────────────────────────────────────── */
+.section-belt {
+  background: var(--black); padding: 64px 0;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  overflow: hidden; position: relative;
+}
+.belt-row {
+  display: flex; gap: 20px; margin-bottom: 16px;
+  animation: beltScroll 40s linear infinite;
+}
+.belt-row:last-child {
+  animation: beltScroll 40s linear infinite reverse;
+  margin-bottom: 0;
+}
+.belt-pill {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--panel); border: 1px solid var(--border);
+  padding: 14px 22px; white-space: nowrap; flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+.belt-pill:hover { border-color: rgba(227,6,19,0.4); }
+.belt-icon {
+  width: 32px; height: 32px; background: var(--red);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 900; font-size: 14px;
+  clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 100%, 6px 100%);
+}
+.belt-text { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85); }
+.belt-sub { font-size: 11px; color: var(--muted); margin-top: 2px; letter-spacing: 0.5px; }
+@keyframes beltScroll { to { transform: translateX(-50%); } }
+
+/* ─── FOOTER ──────────────────────────────────────────────────────── */
+.footer {
+  background: var(--black); border-top: 1px solid var(--border);
+  padding: 80px 0 0;
+}
+.footer-inner {
+  max-width: 1280px; margin: 0 auto; padding: 0 80px;
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 56px;
+  padding-bottom: 64px; border-bottom: 1px solid var(--border);
+}
+.footer-brand-logo {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 36px; letter-spacing: 4px; background: var(--red);
+  color: #fff; display: inline-block; padding: 8px 18px 6px;
+  margin-bottom: 20px;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+}
+.footer-brand-text { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 24px; }
+.footer-social { display: flex; gap: 12px; }
+.social-btn {
+  width: 36px; height: 36px; background: var(--panel); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 14px; font-weight: 700;
+  text-decoration: none; transition: all 0.2s;
+  font-family: var(--font-display);
+}
+.social-btn:hover { background: var(--red); border-color: var(--red); color: #fff; }
+
+.footer h4 {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: rgba(255,255,255,0.5); margin-bottom: 20px;
+}
+.footer ul { list-style: none; display: grid; gap: 10px; }
+.footer li a {
+  font-size: 15px; color: var(--muted); text-decoration: none; transition: color 0.2s;
+}
+.footer li a:hover { color: var(--text); }
+
+.footer-bottom {
+  max-width: 1280px; margin: 0 auto; padding: 24px 80px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 13px; color: var(--subtle);
+}
+.footer-bottom a { color: var(--subtle); text-decoration: none; }
+.footer-bottom a:hover { color: var(--muted); }
+
+/* ─── STRIPE ──────────────────────────────────────────────────────── */
+.footer-stripe {
+  height: 5px;
+  background: linear-gradient(90deg, var(--red) 0%, var(--red) 40%, #222 40%, #222 70%, #555 70%, #555 100%);
+}
+
+/* ─── SCROLL REVEAL ───────────────────────────────────────────────── */
+.reveal { opacity: 1; transform: none; }
+.reveal.animated { animation: revealUp 0.7s cubic-bezier(0.16,1,0.3,1) both; }
+@keyframes revealUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ═══════════════════════════════════════════════════
+   HAMBURGER & MOBILE NAV DRAWER
+═══════════════════════════════════════════════════ */
+.nav-hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: transparent; border: none; cursor: pointer; padding: 8px;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 2px; background: var(--text);
+  transition: all 0.3s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+
+.nav-drawer {
+  position: fixed; top: 0; right: -300px; bottom: 0; width: 280px;
+  background: var(--dark); z-index: 200;
+  border-left: 1px solid var(--border);
+  transition: right 0.35s cubic-bezier(0.16,1,0.3,1);
+  display: flex; flex-direction: column; padding: 80px 32px 40px;
+}
+.nav-drawer.open { right: 0; }
+.nav-overlay {
+  position: fixed; inset: 0; z-index: 199;
+  background: rgba(0,0,0,0); pointer-events: none;
+  transition: background 0.3s;
+}
+.nav-overlay.open { background: rgba(0,0,0,0.7); pointer-events: all; }
+.nav-drawer ul { list-style: none; display: grid; gap: 4px; }
+.nav-drawer ul a {
+  display: block; padding: 13px 0;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 22px; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  border-bottom: 1px solid var(--border); transition: color 0.2s;
+}
+.nav-drawer ul a:hover { color: var(--red); }
+.nav-drawer-cta {
+  margin-top: 32px; display: block; background: var(--red); color: #fff;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 14px 20px 12px; text-align: center; text-decoration: none;
+  clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);
+}
+
+/* Sticky bottom CTA (mobile only) */
+.mobile-sticky-cta {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0;
+  z-index: 90; padding: 12px 20px;
+  background: rgba(10,10,10,0.97); border-top: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+.mobile-sticky-cta a {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; padding: 15px 20px 13px;
+  background: var(--red); color: #fff;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  text-decoration: none;
+  clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);
+}
+
+/* ═══════════════════════════════════════════════════
+   TABLET  ≤ 1024px
+═══════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .nav { padding: 0 28px; }
+  .hero-content { padding: 0 28px 0 40px; }
+  .hero-h1 { font-size: clamp(60px, 9vw, 90px); }
+  .wasclub-inner { padding: 0 40px; gap: 48px; }
+  .wasrit-inner { padding: 0 40px; }
+  .vest-inner { padding: 0 40px; }
+  .vest-grid { grid-template-columns: repeat(2,1fr); }
+  .section-wasrit::before { display: none; }
+  .zone { grid-template-columns: 1fr 48px 1fr; gap: 20px; }
+  .zakelijk-left { padding: 72px 48px; }
+  .zakelijk-right { padding: 72px 48px; }
+  .footer-inner { padding: 0 40px; grid-template-columns: 1.2fr 1fr 1fr 1fr; gap: 32px; }
+  .footer-bottom { padding: 24px 40px; }
+}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE  ≤ 768px
+═══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* NAV */
+  .nav { padding: 0 20px; height: 56px; }
+  .nav-menu { display: none; }
+  .nav-cta { display: none; }
+  .nav-hamburger { display: flex; }
+  .mobile-sticky-cta { display: block; }
+
+  /* HERO */
+  .hero {
+    min-height: auto; padding-top: 56px;
+    align-items: flex-end; padding-bottom: 0;
+  }
+  .hero-bg {
+    background: radial-gradient(ellipse 140% 80% at 60% 70%, #1a0406 0%, var(--black) 65%);
+  }
+  .hero-arch {
+    right: -100px; top: -60px;
+    width: 340px; height: 340px;
+    transform: none;
+  }
+  .hero-content {
+    padding: 50px 20px 32px; max-width: 100%;
+  }
+  .hero-badge { margin-bottom: 20px; }
+  .hero-h1 { font-size: clamp(60px,18vw,84px); margin-bottom: 18px; }
+  .hero-sub { font-size: 16px; margin-bottom: 28px; max-width: 100%; }
+  .hero-ctas {
+    flex-direction: column; gap: 10px; margin-bottom: 36px;
+  }
+  .hero-ctas .btn-primary,
+  .hero-ctas .btn-ghost {
+    width: 100%; justify-content: center;
+    clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);
+  }
+  .hero-stats {
+    padding-top: 24px; gap: 0;
+    border-top: 1px solid var(--border);
+  }
+  .hero-stat { padding: 20px 16px 24px 0; margin-right: 16px; }
+  .stat-num { font-size: 36px; }
+  .stat-label { font-size: 10px; }
+
+  /* MARQUEE */
+  .marquee { padding: 12px 0; }
+  .marquee-item { font-size: 12px; padding: 0 20px; gap: 14px; }
+
+  /* WASCLUB */
+  .section-wasclub { padding: 64px 0; }
+  .wasclub-inner {
+    grid-template-columns: 1fr; gap: 40px; padding: 0 20px;
+  }
+  .section-h2 { font-size: clamp(40px,11vw,56px); }
+  .section-body { font-size: 16px; max-width: 100%; }
+  .feature-list { margin-bottom: 28px; }
+  .prijsbord-grid { grid-template-columns: 1fr; }
+  .prijs-cel:nth-child(2n) { border-right: 1px solid var(--border); }
+  .prijs-cel:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
+  .prijs-cel:last-child { border-bottom: none; }
+  .prijs-num { font-size: 30px; padding: 8px 12px 6px; }
+
+  /* WASRIT */
+  .section-wasrit { padding: 64px 0; }
+  .section-wasrit::before { display: none; }
+  .wasrit-inner { padding: 0 20px; }
+  .wasrit-head { margin-bottom: 48px; }
+  .wasrit-grid { gap: 32px; }
+  .zone {
+    grid-template-columns: 48px 1fr !important;
+    gap: 16px;
+  }
+  .zone::before {
+    content:''; position: absolute; left: 20px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg,transparent,var(--red) 15%,var(--red) 85%,transparent);
+  }
+  .wasrit-grid { position: relative; }
+  .zone-dot {
+    grid-column: 1 !important; grid-row: 1;
+    justify-self: center; margin-top: 4px;
+  }
+  .zone-card {
+    grid-column: 2 !important; grid-row: 1;
+    padding: 20px;
+  }
+  .zone-card h3 { font-size: 20px; }
+  .zone-num { font-size: 72px; }
+
+  /* VESTIGINGEN */
+  .section-vest { padding: 64px 0; }
+  .vest-inner { padding: 0 20px; }
+  .vest-head {
+    flex-direction: column; align-items: flex-start;
+    margin-bottom: 32px;
+  }
+  .vest-head-right { text-align: left; max-width: 100%; }
+  .vest-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .vest-card-bottom h3 { font-size: 16px; }
+  .vest-card-bottom p { font-size: 11px; }
+  .vest-card-hover { display: none; }
+
+  /* BELT */
+  .belt-pill { padding: 10px 14px; }
+  .belt-text { font-size: 12px; }
+  .belt-sub { font-size: 10px; }
+
+  /* ZAKELIJK */
+  .zakelijk-inner {
+    grid-template-columns: 1fr; min-height: auto;
+  }
+  .zakelijk-left { padding: 56px 20px; }
+  .zakelijk-left .section-h2 { font-size: clamp(40px,11vw,56px); }
+  .zakelijk-left p { font-size: 16px; margin-bottom: 28px; }
+  .btn-white { width: 100%; justify-content: center; }
+  .zakelijk-right { padding: 0 20px 56px; grid-template-columns: 1fr 1fr; }
+
+  /* FOOTER */
+  .footer { padding: 56px 0 80px; }
+  .footer-inner {
+    grid-template-columns: 1fr 1fr; gap: 36px 24px;
+    padding: 0 20px; padding-bottom: 48px;
+  }
+  .footer-inner > div:first-child { grid-column: 1 / -1; }
+  .footer-bottom {
+    padding: 20px; flex-direction: column; gap: 8px; text-align: center;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   SMALL MOBILE  ≤ 390px
+═══════════════════════════════════════════════════ */
+@media (max-width: 390px) {
+  .hero-h1 { font-size: 58px; }
+  .section-h2 { font-size: 40px; }
+  .vest-grid { grid-template-columns: 1fr; }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+
+
+/* ── Prijsbord icon kleuren per niveau ── */
+.prijs-cel.proteqt .prijs-icon  { background: rgba(212,170,80,0.55);  border-color: rgba(212,170,80,0.85); }
+.prijs-cel.intensief .prijs-icon { background: rgba(180,188,196,0.5);  border-color: rgba(180,188,196,0.8); }
+.prijs-cel.normaal .prijs-icon   { background: rgba(176,120,78,0.5);  border-color: rgba(176,120,78,0.8); }
+.prijs-cel.proteqt:hover .prijs-icon  { background: rgba(212,170,80,0.85); }
+.prijs-cel.intensief:hover .prijs-icon { background: rgba(180,188,196,0.8); }
+.prijs-cel.normaal:hover .prijs-icon   { background: rgba(176,120,78,0.8); }
+
+/* ── Hero achtergrondvideo ── */
+.hero-video {
+  position: absolute; inset: 0; z-index: 1;
+  overflow: hidden; pointer-events: none;
+}
+.hero-video video {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%; min-height: 100%;
+  width: auto; height: auto; object-fit: cover;
+}
+.hero-video::after {
+  content: ''; position: absolute; inset: 0;
+  background: rgba(10,10,10,0.55); z-index: 2;
+}
+.hero-bg { z-index: 0 !important; opacity: 0; }
+.hero-grid, .hero-noise, .hero-scanline { z-index: 2; }
+.hero-arch, .hero-content { z-index: 3; }
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+
+<!-- Mobile drawer overlay -->
+<div class="nav-overlay" id="nav-overlay" onclick="closeDrawer()"></div>
+<!-- Mobile drawer -->
+<div class="nav-drawer" id="nav-drawer">
+  <ul>
+    <li><a href="BOB_Wasclub_Responsive.html" onclick="closeDrawer()">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html" onclick="closeDrawer()">Wasprogramma's</a></li>
+    <li><a href="BOB_Vestigingen.html" onclick="closeDrawer()">Vestigingen</a></li>
+    <li><a href="#zakelijk" onclick="closeDrawer()">Zakelijk</a></li>
+    <li><a href="#" onclick="closeDrawer()">Werken bij</a></li>
+  </ul>
+  <a href="#wasclub" class="nav-drawer-cta" onclick="closeDrawer()">Word lid →</a>
+</div>
+<nav class="nav">
+  <a href="#" class="nav-logo">
+    <img src="data:image/webp;base64,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" alt="BOB Autowas" style="height:36px;width:auto;display:block;">
+  </a>
+  <ul class="nav-menu">
+    <li><a href="BOB_Wasclub_Responsive.html">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html">Wasprogramma's</a></li>
+    <li><a href="BOB_Vestigingen.html">Vestigingen</a></li>
+    <li><a href="#zakelijk">Zakelijk</a></li>
+  </ul>
+  <a href="#wasclub" class="nav-cta">Word lid →</a>
+
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+
+  <div class="hero-video">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="Media/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-noise"></div>
+  <div class="hero-scanline"></div>
+
+  <div class="hero-arch">
+    <svg viewBox="0 0 700 700" preserveAspectRatio="none">
+      <path class="arch-inner" d="M 100 680 Q 100 80 350 80 Q 600 80 600 680"/>
+      <path class="arch-main" d="M 80 680 Q 80 60 350 60 Q 620 60 620 680"/>
+      <circle class="arch-ball" cx="80" cy="680" r="42"/>
+      <circle class="arch-ball" cx="620" cy="680" r="42" style="animation-delay: 0.1s"/>
+    </svg>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      <span>Onbeperkt autowassen vanaf €28/mnd</span>
+    </div>
+    <h1 class="hero-h1">
+      <span class="line1">Schone auto.</span>
+      <span class="line2">Elke dag.</span>
+      <span class="line3">Geen gedoe.</span>
+    </h1>
+    <p class="hero-sub">
+      Bij BOB Autowas rij je er in, rij je er schoon uit.<br>
+      <strong>22 vestigingen</strong> door heel Nederland, één vast maandbedrag,
+      onbeperkt wassen. Voor de prijs van twee koppen koffie per week.
+    </p>
+    <div class="hero-ctas">
+      <a href="BOB_Wasclub_Responsive.html#calculator" class="btn-primary">Bereken mijn voordeel →</a>
+      <a href="BOB_Vestigingen.html" class="btn-ghost">Vind een vestiging</a>
+    </div>
+    <div style="opacity:0;animation:fadeUp 0.8s 0.75s forwards;">
+      <a href="BOB_Wasclub_Responsive.html#calculator" style="display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display);font-size:12px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;margin-top:14px;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--muted)'">
+        <span style="display:inline-block;width:20px;height:1px;background:currentColor;transition:width 0.3s;"></span>
+        Direct naar de besparings­calculator
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="stat-num">22</div>
+        <div class="stat-label">Vestigingen NL</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-num"><em>&gt;2,5</em>M</div>
+        <div class="stat-label">Wassingen per jaar</div>
+      </div>
+      <div class="hero-stat">
+        <div class="stat-num">25</div>
+        <div class="stat-label">Jaar ervaring</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee">
+  <div class="marquee-track">
+    <span class="marquee-item">Feel the Shine</span>
+    <span class="marquee-item">Onbeperkt Wassen</span>
+    <span class="marquee-item">22 Vestigingen</span>
+    <span class="marquee-item">Proteqt Bescherming</span>
+    <span class="marquee-item">Interieurband</span>
+    <span class="marquee-item">Krasloos Gegarandeerd</span>
+    <span class="marquee-item">Feel the Shine</span>
+    <span class="marquee-item">Onbeperkt Wassen</span>
+    <span class="marquee-item">22 Vestigingen</span>
+    <span class="marquee-item">Proteqt Bescherming</span>
+    <span class="marquee-item">Interieurband</span>
+    <span class="marquee-item">Krasloos Gegarandeerd</span>
+  </div>
+</div>
+
+<!-- WASCLUB -->
+<section class="section-wasclub" id="wasclub">
+  <div class="wasclub-inner">
+    <div class="reveal">
+      <span class="section-label">De Wasclub</span>
+      <h2 class="section-h2">Reken af<br>met losse<br><em>wasbeurten</em></h2>
+      <p class="section-body">Één vast bedrag per maand. Onbeperkt wassen bij alle BOB-vestigingen. Automatisch via kenteken. Maandelijks opzegbaar — zonder gezeur.</p>
+      <ul class="feature-list">
+        <li class="feature-item">
+          <span class="check"><svg viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Onbeperkt wassen — zo vaak je wilt
+        </li>
+        <li class="feature-item">
+          <span class="check"><svg viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Automatisch inchecken via kentekenherkenning
+        </li>
+        <li class="feature-item">
+          <span class="check"><svg viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Geldig bij alle 22 Nederlandse vestigingen
+        </li>
+        <li class="feature-item">
+          <span class="check"><svg viewBox="0 0 12 10" fill="none"><path d="M1 5L4.5 8.5L11 1" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          Maandelijks opzegbaar — geen verborgen kosten
+        </li>
+      </ul>
+      <a href="#" class="btn-primary">Start mijn abonnement →</a>
+    </div>
+
+    <div class="reveal reveal-delay-2">
+      <div class="prijsbord">
+        <div class="prijsbord-tabs">
+          <button class="prijs-tab" data-mode="los">Losse prijs</button>
+          <button class="prijs-tab active" data-mode="abo">Wasclub p/mnd</button>
+        </div>
+        <div class="prijsbord-grid">
+
+          <div class="prijs-cel proteqt">
+            <div class="prijs-badge">Beste keuze</div>
+            <div class="prijs-cel-naam gold">Proteqt</div>
+            <div class="prijs-icons">
+              <span class="prijs-icon"></span><span class="prijs-icon"></span>
+              <span class="prijs-icon"></span><span class="prijs-icon"></span>
+              <span class="prijs-icon"></span><span class="prijs-icon"></span>
+              <span class="prijs-icon"></span>
+            </div>
+            <div class="prijs-block">
+              <div class="prijs-num" data-los="21" data-abo="39">39</div>
+              <div class="prijs-tag" id="tag1">WASCLUB · P/MND</div>
+            </div>
+          </div>
+
+          <div class="prijs-cel proteqt">
+            <div class="prijs-cel-naam">+ Interieur</div>
+            <div class="prijs-icons">
+              <span class="prijs-icon"></span><span class="prijs-icon"></span>
+              <span class="prijs-icon"></span>
+            </div>
+            <div class="prijs-block">
+              <div class="prijs-num" data-los="41" data-abo="59">59</div>
+              <div class="prijs-tag" id="tag2">WASCLUB · P/MND</div>
+            </div>
+          </div>
+
+          <div class="prijs-cel intensief">
+            <div class="prijs-cel-naam">Intensief</div>
+            <div class="prijs-icons">
+              <span class="prijs-icon"></span><span class="prijs-icon"></span>
+              <span class="prijs-icon"></span><span class="prijs-icon"></span>
+              <span class="prijs-icon"></span>
+            </div>
+            <div class="prijs-block">
+              <div class="prijs-num" data-los="17" data-abo="34">34</div>
+              <div class="prijs-tag" id="tag3">WASCLUB · P/MND</div>
+            </div>
+          </div>
+
+          <div class="prijs-cel intensief">
+            <div class="prijs-cel-naam">+ Interieur</div>
+            <div class="prijs-icons">
+              <span class="prijs-icon"></span><span class="prijs-icon"></span>
+            </div>
+            <div class="prijs-block">
+              <div class="prijs-num" data-los="37" data-abo="54">54</div>
+              <div class="prijs-tag" id="tag4">WASCLUB · P/MND</div>
+            </div>
+          </div>
+
+          <div class="prijs-cel normaal">
+            <div class="prijs-cel-naam">Normaal</div>
+            <div class="prijs-icons">
+              <span class="prijs-icon"></span><span class="prijs-icon"></span>
+              <span class="prijs-icon"></span>
+            </div>
+            <div class="prijs-block">
+              <div class="prijs-num" data-los="13" data-abo="28">28</div>
+              <div class="prijs-tag" id="tag5">WASCLUB · P/MND</div>
+            </div>
+          </div>
+
+          <div class="prijs-cel empty">enkel los verkrijgbaar</div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DE BOB-RIT -->
+<section class="section-wasrit" id="programma">
+  <div class="wasrit-inner">
+    <div class="wasrit-head reveal">
+      <span class="section-label">De BOB-rit</span>
+      <h2 class="section-h2">Van vies naar<br><em>Feel the Shine</em></h2>
+    </div>
+    <div class="wasrit-grid">
+
+      <div class="zone reveal">
+        <div class="zone-card">
+          <div class="zone-num">01</div>
+          <h3>Voorwas &amp; schuimbad</h3>
+          <p>Eerst wordt grof vuil losgeweekt met actief schuim, zodat je lak niet beschadigt bij de eigenlijke wasbeurt. Inclusief onderspuiting bij Proteqt.</p>
+        </div>
+        <div class="zone-dot"></div>
+        <div></div>
+      </div>
+
+      <div class="zone reveal reveal-delay-1">
+        <div></div>
+        <div class="zone-dot"></div>
+        <div class="zone-card">
+          <div class="zone-num">02</div>
+          <h3>Zachte textielborstels</h3>
+          <p>Onze borstels zijn zachter dan je ruit. Krasloos resultaat, ook bij cabrio's, matte lak en nieuwe auto's. Gegarandeerd veilig voor alle laksoorten.</p>
+        </div>
+      </div>
+
+      <div class="zone reveal reveal-delay-2">
+        <div class="zone-card">
+          <div class="zone-num">03</div>
+          <h3>Proteqt lakbescherming</h3>
+          <p>De extra laag die je auto weken beschermt tegen vuil, regen en strooizout. Hydrofobe coating inbegrepen. Alleen in het Proteqt-programma.</p>
+        </div>
+        <div class="zone-dot"></div>
+        <div></div>
+      </div>
+
+      <div class="zone reveal reveal-delay-3">
+        <div></div>
+        <div class="zone-dot"></div>
+        <div class="zone-card">
+          <div class="zone-num">04</div>
+          <h3>Drogen &amp; blinken</h3>
+          <p>Vlekvrij drogen door ons wateronthardingssysteem. Je auto rolt eruit zoals hij de showroom ooit verliet. Inclusief velgenreiniging bij Proteqt.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- VESTIGINGEN -->
+<section class="section-vest" id="vestigingen">
+  <div class="vest-inner">
+    <div class="vest-head reveal">
+      <div>
+        <span class="section-label">22 vestigingen</span>
+        <h2 class="section-h2">Er is altijd<br>een BOB<br><em>in de buurt</em></h2>
+      </div>
+      <div class="vest-head-right">
+        Hover over een vestiging voor details. Of bekijk <a href="#" class="vest-link">alle 22 locaties op de kaart →</a>
+      </div>
+    </div>
+
+    <div class="vest-grid reveal">
+
+      <div class="vest-card">
+        <div class="vest-card-bg" style="background: linear-gradient(135deg, #2a0406 0%, #0a0a0a 100%); background-image: url('https://bobautowas.nl/wp-content/uploads/2024/12/Utrecht.jpg'); background-size: cover;"></div>
+        <div class="vest-card-overlay"></div>
+        <div class="vest-card-top">
+          <span class="vest-tag">Utrecht</span>
+          <span class="vest-status"><span class="status-dot open"></span>Rustig</span>
+        </div>
+        <div class="vest-card-bottom">
+          <h3>Utrecht</h3>
+          <p>Interieurband · Dubbele baan · 08:00–20:00</p>
+        </div>
+        <div class="vest-card-hover">
+          <span class="arrow-big">→</span>
+          Bekijk vestiging
+        </div>
+      </div>
+
+      <div class="vest-card">
+        <div class="vest-card-bg" style="background: linear-gradient(135deg, #1a1a2a 0%, #0a0a0a 100%);"></div>
+        <div class="vest-card-overlay"></div>
+        <div class="vest-card-top">
+          <span class="vest-tag">Amsterdam</span>
+          <span class="vest-status"><span class="status-dot busy"></span>Druk</span>
+        </div>
+        <div class="vest-card-bottom">
+          <h3>Sloterdijk</h3>
+          <p>Interieurband · 08:00–20:00</p>
+        </div>
+        <div class="vest-card-hover">
+          <span class="arrow-big">→</span>
+          Bekijk vestiging
+        </div>
+      </div>
+
+      <div class="vest-card">
+        <div class="vest-card-bg" style="background: linear-gradient(135deg, #0a1a0a 0%, #0a0a0a 100%);"></div>
+        <div class="vest-card-overlay"></div>
+        <div class="vest-card-top">
+          <span class="vest-tag">Rotterdam</span>
+          <span class="vest-status"><span class="status-dot open"></span>Normaal</span>
+        </div>
+        <div class="vest-card-bottom">
+          <h3>IJsselmonde</h3>
+          <p>Interieurband · 08:00–20:00</p>
+        </div>
+        <div class="vest-card-hover">
+          <span class="arrow-big">→</span>
+          Bekijk vestiging
+        </div>
+      </div>
+
+      <div class="vest-card">
+        <div class="vest-card-bg" style="background: linear-gradient(135deg, #1a0a0a 0%, #0a0a0a 100%);"></div>
+        <div class="vest-card-overlay"></div>
+        <div class="vest-card-top">
+          <span class="vest-tag">Schiedam</span>
+          <span class="vest-status"><span class="status-dot open"></span>Rustig</span>
+        </div>
+        <div class="vest-card-bottom">
+          <h3>Schiedam</h3>
+          <p>Dubbele wasstraat · 07:00–21:00</p>
+        </div>
+        <div class="vest-card-hover">
+          <span class="arrow-big">→</span>
+          Bekijk vestiging
+        </div>
+      </div>
+
+    </div>
+    <div class="vest-all reveal">
+      <a href="#" class="btn-ghost" style="display: inline-flex;">Alle 22 vestigingen bekijken →</a>
+    </div>
+  </div>
+</section>
+
+<!-- BELT / FEATURES -->
+<section class="section-belt">
+  <div class="belt-row">
+    <div class="belt-pill"><div class="belt-icon">✓</div><div><div class="belt-text">Textielborstels</div><div class="belt-sub">Krasloos gegarandeerd</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">♻</div><div><div class="belt-text">Waterrecycling 90%</div><div class="belt-sub">Milieuvriendelijk wassen</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">⟳</div><div><div class="belt-text">Kentekenherkenning</div><div class="belt-sub">Rijden, wassen, weg</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">25</div><div><div class="belt-text">Jaar ervaring</div><div class="belt-sub">Opgericht in 2000</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">★</div><div><div class="belt-text">BOVAG erkend</div><div class="belt-sub">Kwaliteitsgarantie</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">⊙</div><div><div class="belt-text">Interieurband</div><div class="belt-sub">Binnen 9 min. schoon</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">✓</div><div><div class="belt-text">Textielborstels</div><div class="belt-sub">Krasloos gegarandeerd</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">♻</div><div><div class="belt-text">Waterrecycling 90%</div><div class="belt-sub">Milieuvriendelijk wassen</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">⟳</div><div><div class="belt-text">Kentekenherkenning</div><div class="belt-sub">Rijden, wassen, weg</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">25</div><div><div class="belt-text">Jaar ervaring</div><div class="belt-sub">Opgericht in 2000</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">★</div><div><div class="belt-text">BOVAG erkend</div><div class="belt-sub">Kwaliteitsgarantie</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">⊙</div><div><div class="belt-text">Interieurband</div><div class="belt-sub">Binnen 9 min. schoon</div></div></div>
+  </div>
+  <div class="belt-row">
+    <div class="belt-pill"><div class="belt-icon">22</div><div><div class="belt-text">Vestigingen NL</div><div class="belt-sub">Groeit naar 40+</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">€</div><div><div class="belt-text">Wasclub v.a. €28</div><div class="belt-sub">Onbeperkt wassen</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">⚡</div><div><div class="belt-text">EV-laadpunten</div><div class="belt-sub">Op selecte locaties</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">P</div><div><div class="belt-text">Ruim stofzuigplein</div><div class="belt-sub">Gratis bij abonnement</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">Z</div><div><div class="belt-text">Zakelijk aanbod</div><div class="belt-sub">Vanaf 5 auto's</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">♦</div><div><div class="belt-text">Proteqt coating</div><div class="belt-sub">Weken bescherming</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">22</div><div><div class="belt-text">Vestigingen NL</div><div class="belt-sub">Groeit naar 40+</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">€</div><div><div class="belt-text">Wasclub v.a. €28</div><div class="belt-sub">Onbeperkt wassen</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">⚡</div><div><div class="belt-text">EV-laadpunten</div><div class="belt-sub">Op selecte locaties</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">P</div><div><div class="belt-text">Ruim stofzuigplein</div><div class="belt-sub">Gratis bij abonnement</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">Z</div><div><div class="belt-text">Zakelijk aanbod</div><div class="belt-sub">Vanaf 5 auto's</div></div></div>
+    <div class="belt-pill"><div class="belt-icon">♦</div><div><div class="belt-text">Proteqt coating</div><div class="belt-sub">Weken bescherming</div></div></div>
+  </div>
+</section>
+
+<!-- ZAKELIJK -->
+<section class="section-zakelijk" id="zakelijk">
+  <div class="zakelijk-inner">
+    <div class="zakelijk-left reveal">
+      <div style="position:relative;z-index:2;">
+        <span class="section-label">BOB Zakelijk</span>
+        <h2 class="section-h2" style="color:#fff;max-width:none;">Eén factuur.<br>Heel<br><em style="color:#fff;text-decoration:underline;text-decoration-thickness:4px;text-underline-offset:8px;">wagenpark.</em></h2>
+        <p>Kentekenherkenning, centrale facturatie, één vaste contactpersoon. Geen administratie-gedoe, gewoon schone auto's — voor de hele vloot.</p>
+        <a href="BOB_Zakelijk_Aanvraag.html" class="btn-white">Vraag een zakelijk voorstel →</a>
+      </div>
+    </div>
+    <div class="zakelijk-right reveal reveal-delay-2">
+      <div class="zak-stat">
+        <div class="zak-stat-num"><em>€</em>24</div>
+        <div class="zak-stat-label">per auto per maand (v.a.)</div>
+      </div>
+      <div class="zak-stat">
+        <div class="zak-stat-num">22</div>
+        <div class="zak-stat-label">locaties beschikbaar</div>
+      </div>
+      <div class="zak-stat">
+        <div class="zak-stat-num"><em>1</em></div>
+        <div class="zak-stat-label">factuur per maand</div>
+      </div>
+      <div class="zak-stat">
+        <div class="zak-stat-num">5<em>+</em></div>
+        <div class="zak-stat-label">auto's minimum</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <img src="data:image/webp;base64,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" alt="BOB Autowas" style="height:40px;width:auto;display:block;margin-bottom:16px;">
+      <p class="footer-brand-text">
+        Feel the Shine — al 25 jaar de meest vertrouwde autowasketen van Nederland.
+        Onbeperkt wassen, altijd een schone auto, overal waar je bent.
+      </p>
+      <div class="footer-social">
+        <a href="#" class="social-btn">f</a>
+        <a href="#" class="social-btn">in</a>
+        <a href="#" class="social-btn">ig</a>
+      </div>
+    </div>
+    <div>
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="#">Wasstraat</a></li>
+        <li><a href="#">Proteqt</a></li>
+        <li><a href="#">Interieurband</a></li>
+        <li><a href="#">Stofzuigplein</a></li>
+        <li><a href="#">Wasboxen</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Voordeel</h4>
+      <ul>
+        <li><a href="#">De Wasclub</a></li>
+        <li><a href="#">Waspas</a></li>
+        <li><a href="#">BOB Zakelijk</a></li>
+        <li><a href="#">Acties</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>BOB</h4>
+      <ul>
+        <li><a href="#">Vestigingen</a></li>
+        <li><a href="#">Over ons</a></li>
+        <li><a href="#">Werken bij BOB</a></li>
+        <li><a href="#">BOB Academy</a></li>
+        <li><a href="#">FAQ &amp; Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 BOB Autowas · Feel the Shine · 25 jaar vakmanschap</div>
+    <div>
+      <a href="#">Privacy</a> &nbsp;·&nbsp;
+      <a href="#">Cookies</a> &nbsp;·&nbsp;
+      <a href="#">info@bobautowas.nl</a>
+    </div>
+  </div>
+</footer>
+<div class="footer-stripe"></div>
+
+<script>
+// Prijsbord toggle
+(function(){
+  const tabs = document.querySelectorAll('.prijs-tab');
+  const nums = document.querySelectorAll('.prijs-num');
+  const tags = document.querySelectorAll('.prijs-tag');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const mode = tab.dataset.mode;
+      nums.forEach(n => {
+        const val = mode === 'los' ? n.dataset.los : n.dataset.abo;
+        n.style.transform = 'scale(0.85)';
+        n.style.opacity = '0';
+        setTimeout(() => {
+          n.textContent = '€' + val;
+          n.style.transform = 'scale(1)';
+          n.style.opacity = '1';
+          n.style.transition = 'all 0.35s cubic-bezier(.34,1.56,.64,1)';
+        }, 180);
+      });
+      tags.forEach(t => {
+        t.textContent = mode === 'los' ? 'PER WASBEURT' : 'WASCLUB · P/MND';
+      });
+    });
+  });
+  // init
+  nums.forEach(n => { n.textContent = '€' + n.dataset.abo; });
+})();
+
+// Scroll reveal
+(function(){
+  var els = document.querySelectorAll('.reveal');
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible','animated'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.05 });
+  els.forEach(function(el) { io.observe(el); });
+})();
+
+// Nav scroll
+(function(){
+  const nav = document.querySelector('.nav');
+  window.addEventListener('scroll', () => {
+    nav.style.background = window.scrollY > 80 ? 'rgba(10,10,10,0.97)' : 'rgba(10,10,10,0.85)';
+  });
+})();
+</script>
+
+<!-- Mobile sticky CTA -->
+<div class="mobile-sticky-cta">
+  <a href="BOB_Wasclub_Responsive.html">Word Wasclub-lid — v.a. €28/mnd →</a>
+</div>
+<script>
+function toggleDrawer() {
+  const d = document.getElementById('nav-drawer');
+  const o = document.getElementById('nav-overlay');
+  const h = document.getElementById('nav-hamburger');
+  const open = d.classList.toggle('open');
+  o.classList.toggle('open', open);
+  h.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeDrawer() {
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('nav-overlay').classList.remove('open');
+  document.getElementById('nav-hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
+</script>
+</body>
+</html>
