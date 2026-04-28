@@ -946,7 +946,8 @@ body {
 
 /* ── Hero achtergrondvideo ── */
 .hero-video {
-  position: absolute; inset: 0; z-index: 0;
+  position: absolute; inset: 0;
+  z-index: 1;
   overflow: hidden; pointer-events: none;
 }
 .hero-video video {
@@ -957,20 +958,26 @@ body {
   width: auto; height: auto;
   object-fit: cover;
 }
-/* Overlay zodat tekst leesbaar blijft */
+/* Donkere overlay direct op de video */
 .hero-video::after {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(10,10,10,0.72) 0%,
-    rgba(10,10,10,0.50) 50%,
-    rgba(26,2,4,0.62) 100%
-  );
+  background: rgba(10,10,10,0.55);
+  z-index: 2;
 }
-/* Op mobiel: video verbergen (te zwaar, fallback naar bestaande achtergrond) */
+/* hero-bg en hero-grid mogen de video NIET bedekken */
+.hero-bg {
+  z-index: 0 !important;
+  opacity: 0;  /* verberg de kleur-gradient als video afspeelt */
+}
+.hero-grid   { z-index: 2; }
+.hero-noise  { z-index: 2; }
+.hero-scanline { z-index: 2; }
+.hero-arch   { z-index: 3; }
+.hero-content { z-index: 3; }
 @media (max-width: 768px) {
   .hero-video { display: none; }
+  .hero-bg { opacity: 1 !important; }
 }
 
 </style>
@@ -1012,12 +1019,9 @@ body {
 <!-- HERO -->
 <section class="hero">
 
-  <!-- Achtergrondvideo — bestand staat in websiteBA/media/ -->
   <div class="hero-video">
-    <video autoplay muted loop playsinline preload="auto"
-           poster="media/hero-poster.jpg">
-      <source src="media/hero.mp4" type="video/mp4">
-      <source src="media/hero.webm" type="video/webm">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="Media/hero.mp4" type="video/mp4">
     </video>
   </div>
 
