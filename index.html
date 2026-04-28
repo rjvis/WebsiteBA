@@ -943,6 +943,43 @@ body {
 .prijs-cel.proteqt:hover .prijs-icon  { background: rgba(212,170,80,0.85); }
 .prijs-cel.intensief:hover .prijs-icon { background: rgba(180,188,196,0.8); }
 .prijs-cel.normaal:hover .prijs-icon   { background: rgba(176,120,78,0.8); }
+
+/* ── Hero achtergrondvideo ── */
+.hero-video {
+  position: absolute; inset: 0;
+  z-index: 1;
+  overflow: hidden; pointer-events: none;
+}
+.hero-video video {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%; min-height: 100%;
+  width: auto; height: auto;
+  object-fit: cover;
+}
+/* Donkere overlay direct op de video */
+.hero-video::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: rgba(10,10,10,0.55);
+  z-index: 2;
+}
+/* hero-bg en hero-grid mogen de video NIET bedekken */
+.hero-bg {
+  z-index: 0 !important;
+  opacity: 0;  /* verberg de kleur-gradient als video afspeelt */
+}
+.hero-grid   { z-index: 2; }
+.hero-noise  { z-index: 2; }
+.hero-scanline { z-index: 2; }
+.hero-arch   { z-index: 3; }
+.hero-content { z-index: 3; }
+@media (max-width: 768px) {
+  .hero-video { display: none; }
+  .hero-bg { opacity: 1 !important; }
+}
+
 </style>
 </head>
 <body>
@@ -981,6 +1018,13 @@ body {
 
 <!-- HERO -->
 <section class="hero">
+
+  <div class="hero-video">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="Media/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
   <div class="hero-noise"></div>
