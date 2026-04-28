@@ -1,0 +1,35 @@
+<svg width="500" height="180" viewBox="0 0 500 180" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="250" height="180" fill="#4a4a4a"/>
+
+  <g transform="translate(60,40)">
+    <rect x="0" y="0" width="14" height="14" fill="#6a6a6a"/>
+    <rect x="24" y="0" width="14" height="14" fill="#7a7a7a"/>
+    <rect x="48" y="0" width="14" height="14" fill="#9a9a9a"/>
+
+    <rect x="0" y="24" width="14" height="14" fill="#7a7a7a"/>
+    <rect x="24" y="24" width="14" height="14" fill="#bfbfbf"/>
+    <rect x="48" y="24" width="14" height="14" fill="#7a7a7a"/>
+
+    <rect x="0" y="48" width="14" height="14" fill="#9a9a9a"/>
+    <rect x="24" y="48" width="14" height="14" fill="#e30613"/>
+    <rect x="48" y="48" width="14" height="14" fill="#9a9a9a"/>
+
+    <rect x="0" y="72" width="14" height="14" fill="#7a7a7a"/>
+    <rect x="24" y="72" width="14" height="14" fill="#bfbfbf"/>
+    <rect x="48" y="72" width="14" height="14" fill="#7a7a7a"/>
+
+    <rect x="0" y="96" width="14" height="14" fill="#6a6a6a"/>
+    <rect x="24" y="96" width="14" height="14" fill="#7a7a7a"/>
+    <rect x="48" y="96" width="14" height="14" fill="#6a6a6a"/>
+  </g>
+
+  <rect x="250" y="0" width="250" height="180" fill="#e30613"/>
+
+  <text x="300" y="85" font-family="Arial, Helvetica, sans-serif" font-size="70" font-weight="bold" fill="white">
+    BOB
+  </text>
+
+  <text x="305" y="130" font-family="Arial, Helvetica, sans-serif" font-size="26" letter-spacing="3" fill="white">
+    AUTOWAS
+  </text>
+</svg>
