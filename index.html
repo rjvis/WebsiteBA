@@ -819,7 +819,7 @@ body {
     transform: none;
   }
   .hero-content {
-    padding: 100px 20px 32px; max-width: 100%;
+    padding: 50px 20px 32px; max-width: 100%;
   }
   .hero-badge { margin-bottom: 20px; }
   .hero-h1 { font-size: clamp(60px,18vw,84px); margin-bottom: 18px; }
@@ -946,23 +946,18 @@ body {
 
 /* ── Hero achtergrondvideo ── */
 .hero-video {
-  position: absolute; inset: 0;
-  z-index: 1;
+  position: absolute; inset: 0; z-index: 1;
   overflow: hidden; pointer-events: none;
 }
 .hero-video video {
-  position: absolute;
-  top: 50%; left: 50%;
+  position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   min-width: 100%; min-height: 100%;
-  width: auto; height: auto;
-  object-fit: cover;
+  width: auto; height: auto; object-fit: cover;
 }
 .hero-video::after {
-  content: '';
-  position: absolute; inset: 0;
-  background: rgba(10,10,10,0.55);
-  z-index: 2;
+  content: ''; position: absolute; inset: 0;
+  background: rgba(10,10,10,0.55); z-index: 2;
 }
 .hero-bg { z-index: 0 !important; opacity: 0; }
 .hero-grid, .hero-noise, .hero-scanline { z-index: 2; }
