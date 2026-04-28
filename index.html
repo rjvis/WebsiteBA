@@ -819,7 +819,7 @@ body {
     transform: none;
   }
   .hero-content {
-    padding: 50px 20px 32px; max-width: 100%;
+    padding: 100px 20px 32px; max-width: 100%;
   }
   .hero-badge { margin-bottom: 20px; }
   .hero-h1 { font-size: clamp(60px,18vw,84px); margin-bottom: 18px; }
@@ -944,24 +944,13 @@ body {
 .prijs-cel.intensief:hover .prijs-icon { background: rgba(180,188,196,0.8); }
 .prijs-cel.normaal:hover .prijs-icon   { background: rgba(176,120,78,0.8); }
 
-/* ── Hero achtergrondvideo ── */
-.hero-video {
-  position: absolute; inset: 0; z-index: 1;
-  overflow: hidden; pointer-events: none;
-}
-.hero-video video {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  min-width: 100%; min-height: 100%;
-  width: auto; height: auto; object-fit: cover;
-}
-.hero-video::after {
-  content: ''; position: absolute; inset: 0;
-  background: rgba(10,10,10,0.55); z-index: 2;
-}
+.hero-video { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.hero-video video { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; width: auto; height: auto; object-fit: cover; }
+.hero-video::after { content: ''; position: absolute; inset: 0; background: rgba(10,10,10,0.55); z-index: 2; }
 .hero-bg { z-index: 0 !important; opacity: 0; }
 .hero-grid, .hero-noise, .hero-scanline { z-index: 2; }
 .hero-arch, .hero-content { z-index: 3; }
+.hero-content { padding: 50px 20px 32px; }
 
 </style>
 </head>
@@ -1053,7 +1042,7 @@ body {
         <div class="stat-label">Vestigingen NL</div>
       </div>
       <div class="hero-stat">
-        <div class="stat-num"><em>1,8</em>M</div>
+        <div class="stat-num"><em>&gt;2,5</em>M</div>
         <div class="stat-label">Wassingen per jaar</div>
       </div>
       <div class="hero-stat">
