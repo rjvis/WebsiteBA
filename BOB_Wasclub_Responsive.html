@@ -67,10 +67,7 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
   mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 0%, transparent 75%);
 }
 /* Animated arch background */
-.wc-arch-left { position: absolute; left: -180px; top: 50%; transform: translateY(-50%); width: 500px; height: 500px; opacity: 0.18; pointer-events: none; }
-.wc-arch-right { position: absolute; right: -180px; top: 50%; transform: translateY(-50%) scaleX(-1); width: 500px; height: 500px; opacity: 0.18; pointer-events: none; }
-.arch-stroke { fill: none; stroke: var(--red); stroke-width: 36; stroke-linecap: square; stroke-dasharray: 1400; stroke-dashoffset: 1400; animation: archDraw 2s 0.3s ease-out forwards; }
-@keyframes archDraw { to { stroke-dashoffset: 0; } }
+}
 
 .wc-hero-content { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; padding: 0 48px; text-align: center; }
 
@@ -401,8 +398,6 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
   .wc-hero-ctas { flex-direction: column; gap: 10px; }
   .wc-hero-ctas .btn-primary,
   .wc-hero-ctas .btn-ghost { width: 100%; justify-content: center; }
-  .wc-arch-left, .wc-arch-right { width: 280px; height: 280px; opacity: 0.1; }
-
   /* CALC */
   .calc-section { padding: 64px 0; }
   .calc-inner { padding: 0 20px; }
@@ -744,12 +739,8 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 <section class="wc-hero">
   <div class="wc-hero-bg"></div>
   <div class="wc-hero-grid"></div>
-  <div class="wc-arch-left">
-    <svg viewBox="0 0 500 500"><path class="arch-stroke" d="M 60 480 Q 60 60 250 60 Q 440 60 440 480"/></svg>
-  </div>
-  <div class="wc-arch-right">
-    <svg viewBox="0 0 500 500"><path class="arch-stroke" d="M 60 480 Q 60 60 250 60 Q 440 60 440 480" style="animation-delay:0.2s"/></svg>
-  </div>
+  
+  
 
   <div class="wc-hero-content">
     <div class="wc-badge">
