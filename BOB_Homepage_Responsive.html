@@ -154,28 +154,10 @@ to { opacity: 1; } }
   padding: 0 48px 0 80px; max-width: 700px;
 }
 
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 10px;
-  border: 1px solid rgba(227,6,19,0.35);
-  background: rgba(227,6,19,0.08);
-  padding: 8px 16px; margin-bottom: 32px;
-  opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
-}
-.hero-badge-dot {
-  width: 7px; height: 7px; background: var(--red); border-radius: 50%;
-  box-shadow: 0 0 0 0 var(--red-glow);
-  animation: pulseGlow 2s 1s infinite;
-}
 @keyframes pulseGlow {
   0%,100% { box-shadow: 0 0 0 0 rgba(227,6,19,0.5); }
   50% { box-shadow: 0 0 0 10px rgba(227,6,19,0); }
 }
-.hero-badge span {
-  font-family: var(--font-display); font-weight: 700;
-  font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
-  color: #ffffff;
-}
-
 .hero-h1 {
   font-family: var(--font-display); font-weight: 900;
   font-size: clamp(72px, 10vw, 116px);
@@ -241,7 +223,7 @@ to { opacity: 1; } }
 .hero-stats {
   display: flex; gap: 0;
   border-top: 1px solid var(--border);
-  opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+  opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
 }
 .hero-stat {
   padding: 28px 40px 0 0; margin-right: 40px;
@@ -792,7 +774,6 @@ to { opacity: 1; } }
   .hero-content {
     padding: 50px 20px 32px; max-width: 100%;
   }
-  .hero-badge { margin-bottom: 20px; }
   .hero-h1 { font-size: clamp(60px,18vw,84px); margin-bottom: 18px; }
   .hero-sub { font-size: 16px; margin-bottom: 28px; max-width: 100%; }
   .hero-ctas {
@@ -985,10 +966,6 @@ to { opacity: 1; } }
   <div class="hero-scanline"></div>
 
   <div class="hero-content">
-    <div class="hero-badge">
-      <span class="hero-badge-dot"></span>
-      <span>Onbeperkt autowassen vanaf €28/mnd</span>
-    </div>
     <h1 class="hero-h1">
       <span class="line1">Schone auto.</span>
       <span class="line2">Elke dag.</span>
