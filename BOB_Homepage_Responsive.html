@@ -786,9 +786,12 @@ to { opacity: 1; } }
   .section-h2 { font-size: clamp(40px,11vw,56px); }
   .section-body { font-size: 16px; max-width: 100%; }
   .feature-list { margin-bottom: 28px; }
-  .prijsbord-grid { grid-template-columns: 1fr; }
-  .prijs-cel:nth-child(2n) { border-right: 1px solid var(--border); }
-  .prijs-cel:nth-last-child(-n+2) { border-bottom: 1px solid var(--border); }
+  .prijsbord-grid { grid-template-columns: 1.1fr 1fr; }
+  /* Prijsbord mobiel: compacter */
+  .prijs-num { font-size: 28px; padding: 7px 10px 5px; }
+  .prijs-cel-naam { font-size: 17px; }
+  .prijs-cel { padding: 18px 14px; }
+
   .prijs-cel:last-child { border-bottom: none; }
   .prijs-num { font-size: 30px; padding: 8px 12px 6px; }
 
@@ -940,7 +943,7 @@ to { opacity: 1; } }
     <li><a href="#zakelijk" onclick="closeDrawer()">Zakelijk</a></li>
     <li><a href="BOB_Werken_Bij.html" onclick="closeDrawer()">Werken bij</a></li>
   </ul>
-  <a href="#wasclub" class="nav-drawer-cta" onclick="closeDrawer()">Word lid →</a>
+  <a href="#wasclub" class="nav-drawer-cta" onclick="closeDrawer()">Word lid van onze Wasclub →</a>
 </div>
 <nav class="nav">
   <a href="#" class="nav-logo">
@@ -952,7 +955,7 @@ to { opacity: 1; } }
     <li><a href="BOB_Vestigingen.html">Vestigingen</a></li>
     <li><a href="#zakelijk">Zakelijk</a></li>
   </ul>
-  <a href="#wasclub" class="nav-cta">Word lid →</a>
+  <a href="#wasclub" class="nav-cta">Word lid van onze Wasclub →</a>
 
   <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()" aria-label="Menu">
     <span></span><span></span><span></span>
@@ -985,7 +988,7 @@ to { opacity: 1; } }
       Al vanaf <strong>2× autowassen per maand</strong> voordeliger dan losse wasbeurten!
     </p>
     <div class="hero-ctas" style="opacity:0;animation:fadeUp 0.7s 0.45s forwards;">
-      <a href="BOB_Wasclub_Responsive.html#calculator" class="btn-primary">Bereken direct je voordeel →</a>
+      <a href="BOB_Wasclub_Responsive.html#calculator" class="btn-primary">Bereken direct je voordeel in de Wasclub Calculator →</a>
     </div>
     <div class="hero-stats">
       <div class="hero-stat">
@@ -1457,7 +1460,7 @@ to { opacity: 1; } }
 
 <!-- Mobile sticky CTA -->
 <div class="mobile-sticky-cta">
-  <a href="BOB_Wasclub_Responsive.html">Word Wasclub-lid — v.a. €28/mnd →</a>
+  <a href="BOB_Wasclub_Responsive.html">Word lid van onze Wasclub →</a>
 </div>
 <script>
 function toggleDrawer() {
