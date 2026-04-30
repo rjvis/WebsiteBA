@@ -51,28 +51,41 @@ body { background: var(--black); color: var(--text); font-family: var(--fb); lin
 
 /* ─── HERO STRIP ─── */
 .zakelijk-hero {
-  background: var(--red); padding: 56px 48px; position: relative; overflow: hidden;
+  background: var(--dark); padding: 56px 48px; position: relative; overflow: hidden;
+  border-bottom: 1px solid var(--border);
 }
 .zakelijk-hero::before {
   content: ''; position: absolute; inset: 0;
-  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.07) 1px, transparent 0);
-  background-size: 22px 22px;
+  background-image: linear-gradient(rgba(227,6,19,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(227,6,19,0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 70% 90% at 70% 50%, black, transparent 75%);
 }
 .zakelijk-hero-inner {
   max-width: 1000px; margin: 0 auto; position: relative; z-index: 2;
-  display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center;
 }
 .zakelijk-hero h1 {
   font-family: var(--fd); font-weight: 900;
   font-size: clamp(36px, 5vw, 56px); text-transform: uppercase;
   line-height: 0.92; letter-spacing: -1px; margin-bottom: 14px;
 }
-.zakelijk-hero p { font-size: 16px; opacity: 0.9; max-width: 480px; line-height: 1.6; }
-.zakelijk-hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; min-width: 260px; }
-.zak-stat { background: rgba(0,0,0,0.15); padding: 20px 22px; }
-.zak-stat-num { font-family: var(--fd); font-weight: 900; font-size: 36px; line-height: 1; margin-bottom: 4px; }
-.zak-stat-num em { color: rgba(255,255,255,0.65); font-style: normal; }
-.zak-stat-label { font-size: 11px; opacity: 0.8; letter-spacing: 0.3px; }
+.zakelijk-hero h1 em { font-style: normal; color: var(--red); }
+.zakelijk-hero p { font-size: 16px; color: var(--muted); max-width: 480px; line-height: 1.65; }
+.zakelijk-hero-voordelen { display: grid; gap: 16px; }
+.zakelijk-hero-voordeel {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 18px 20px; background: var(--panel);
+  border: 1px solid var(--border); position: relative;
+}
+.zakelijk-hero-voordeel::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--red);
+}
+.zh-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+.zh-titel { font-family: var(--fd); font-weight: 800; font-size: 15px;
+  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 3px; }
+.zh-sub { font-size: 13px; color: var(--muted); line-height: 1.55; }
 
 /* ─── MAIN LAYOUT ─── */
 .zakelijk-wrap {
@@ -248,18 +261,7 @@ input[type="range"].autos-range::-webkit-slider-thumb {
 }
 .voordeel-check svg { width: 9px; height: 8px; }
 
-/* Live prijsindicator */
-.prijs-indicatie {
-  background: var(--dark); border: 1px solid var(--border);
-  padding: 24px; position: relative; overflow: hidden;
-}
-.prijs-indicatie::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--red); }
-.pi-label { font-size: 11px; color: var(--muted); font-family: var(--fd); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
-.pi-bedrag { font-family: var(--fd); font-weight: 900; font-size: 48px; line-height: 1; letter-spacing: -2px; margin-bottom: 4px; }
 .pi-bedrag em { color: var(--red); font-style: normal; }
-.pi-period { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
-.pi-breakdown { display: grid; gap: 8px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; }
-.pi-row { display: flex; justify-content: space-between; }
 .pi-row strong { color: var(--text); }
 
 /* Contactpersoon */
@@ -285,8 +287,7 @@ input[type="range"].autos-range::-webkit-slider-thumb {
 @media (max-width: 1024px) {
   .nav { padding: 0 28px; }
   .zakelijk-hero { padding: 48px 28px; }
-  .zakelijk-hero-inner { grid-template-columns: 1fr; gap: 28px; }
-  .zakelijk-hero-stats { grid-template-columns: repeat(4, 1fr); min-width: auto; }
+  .zakelijk-hero-inner { gap: 40px; }
   .zakelijk-wrap { padding: 48px 28px 100px; gap: 40px; }
 }
 @media (max-width: 768px) {
@@ -294,14 +295,13 @@ input[type="range"].autos-range::-webkit-slider-thumb {
   .nav-title { display: none; }
   .zakelijk-hero { padding: 36px 20px; }
   .zakelijk-hero h1 { font-size: 40px; }
-  .zakelijk-hero-stats { grid-template-columns: 1fr 1fr; }
+  .zakelijk-hero-inner { grid-template-columns: 1fr; gap: 32px; }
   .zakelijk-wrap { grid-template-columns: 1fr; padding: 36px 20px 100px; gap: 32px; }
   .form-inner { padding: 28px 20px; }
   .form-row { grid-template-columns: 1fr; }
   .prog-checks { grid-template-columns: 1fr 1fr 1fr; }
   .sidebar { order: -1; }
-  .prijs-indicatie { display: none; }
-}
+  }
 @media (max-width: 480px) {
   .zakelijk-hero-stats { grid-template-columns: 1fr 1fr; }
   .prog-checks { grid-template-columns: 1fr; }
@@ -327,14 +327,27 @@ input[type="range"].autos-range::-webkit-slider-thumb {
 <div class="zakelijk-hero">
   <div class="zakelijk-hero-inner">
     <div>
-      <h1>BOB Zakelijk.<br>Eén factuur.<br>Heel wagenpark.</h1>
-      <p>Vraag een vrijblijvend voorstel aan. We nemen binnen één werkdag contact op met een op maat gemaakt aanbod voor uw vloot.</p>
+      <span style="font-family:var(--fd);font-weight:800;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:16px;display:block;">BOB Zakelijk</span>
+      <h1>Eén factuur.<br>Heel <em>wagenpark.</em></h1>
+      <p style="margin-top:16px;">Vraag een vrijblijvend voorstel aan. We nemen binnen één werkdag contact op met een aanbod op maat voor uw vloot.</p>
     </div>
-    <div class="zakelijk-hero-stats">
-      <div class="zak-stat"><div class="zak-stat-num"><em>€</em>24</div><div class="zak-stat-label">p/auto/mnd v.a.</div></div>
-      <div class="zak-stat"><div class="zak-stat-num">22</div><div class="zak-stat-label">locaties NL</div></div>
-      <div class="zak-stat"><div class="zak-stat-num"><em>1</em></div><div class="zak-stat-label">factuur/mnd</div></div>
-      <div class="zak-stat"><div class="zak-stat-num">5<em>+</em></div><div class="zak-stat-label">auto's min.</div></div>
+    <div class="zakelijk-hero-voordelen">
+      <div class="zakelijk-hero-voordeel">
+        <div class="zh-icon">🔑</div>
+        <div><div class="zh-titel">Kentekenherkenning</div><div class="zh-sub">Chauffeurs rijden gewoon de wasstraat in — geen pasjes of codes.</div></div>
+      </div>
+      <div class="zakelijk-hero-voordeel">
+        <div class="zh-icon">📋</div>
+        <div><div class="zh-titel">Centrale facturatie</div><div class="zh-sub">Één factuur per maand voor de hele vloot. Overzichtelijk en eenvoudig.</div></div>
+      </div>
+      <div class="zakelijk-hero-voordeel">
+        <div class="zh-icon">👤</div>
+        <div><div class="zh-titel">Vaste accountmanager</div><div class="zh-sub">Één aanspreekpunt die uw vloot kent en direct bereikbaar is.</div></div>
+      </div>
+      <div class="zakelijk-hero-voordeel">
+        <div class="zh-icon">📍</div>
+        <div><div class="zh-titel">22 vestigingen</div><div class="zh-sub">Geldig bij alle BOB Autowas-locaties door heel Nederland.</div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -577,19 +590,6 @@ input[type="range"].autos-range::-webkit-slider-thumb {
   <!-- SIDEBAR -->
   <aside class="sidebar">
 
-    <!-- Live prijsindicatie -->
-    <div class="prijs-indicatie">
-      <div class="pi-label">Indicatie maandbedrag</div>
-      <div class="pi-bedrag"><em>€</em><span id="pi-totaal">240</span></div>
-      <div class="pi-period">per maand voor <span id="pi-autos">10</span> auto's</div>
-      <div class="pi-breakdown">
-        <div class="pi-row"><span>Wasprogramma</span><span id="pi-prog">Intensief</span></div>
-        <div class="pi-row"><span>Prijs per auto</span><span><strong id="pi-pa">€24/mnd</strong></span></div>
-        <div class="pi-row"><span>Interieur</span><span id="pi-int">Niet</span></div>
-        <div class="pi-row" style="padding-top:10px;border-top:1px solid var(--border);color:var(--text);"><span><strong>Totaal/mnd</strong></span><span><strong id="pi-tot2" style="color:var(--red)">€240</strong></span></div>
-      </div>
-    </div>
-
     <!-- Voordelen -->
     <div class="sidebar-block">
       <div class="sidebar-block-title">Waarom BOB Zakelijk</div>
@@ -649,80 +649,6 @@ input[type="range"].autos-range::-webkit-slider-thumb {
 </div>
 
 <script>
-// ── PRIJZEN PER PROGRAMMA ─────────────────────────────────────────
-var PROG_PRIJS = { normaal: 28, intensief: 34, proteqt: 39 };
-var INT_PRIJS  = { normaal: 0,  intensief: 20, proteqt: 18 };
-var intOn = false;
-
-function getActieveProg() {
-  var checks = ['normaal','intensief','proteqt'];
-  var actief = [];
-  checks.forEach(function(p) {
-    if (document.getElementById('prog-' + p).checked) actief.push(p);
-  });
-  return actief.length ? actief : ['intensief'];
-}
-
-function getHoogstePrijs(progs) {
-  return Math.max.apply(null, progs.map(function(p) { return PROG_PRIJS[p]; }));
-}
-function getIntPrijs(progs) {
-  if (!intOn) return 0;
-  return Math.min.apply(null, progs.map(function(p) { return INT_PRIJS[p] || 20; }));
-}
-
-function updatePrijsIndicatie() {
-  var n = parseInt(document.getElementById('autos-slider').value);
-  var progs = getActieveProg();
-  var wasPA = getHoogstePrijs(progs);
-  var intPA = getIntPrijs(progs);
-  var totPA = wasPA + intPA;
-  var totaal = totPA * n;
-
-  // Slider fill
-  var pct = ((n - 5) / 95) * 100;
-  document.getElementById('autos-slider').style.setProperty('--pct', pct + '%');
-
-  // Waarde display
-  document.getElementById('autos-val').textContent = n;
-  document.getElementById('autos-price-hint').textContent =
-    'v.a. €' + totPA + '/auto/mnd · totaal ca. €' + totaal + '/mnd';
-
-  // Prijsindicatie sidebar
-  document.getElementById('pi-autos').textContent = n;
-  document.getElementById('pi-prog').textContent = progs.map(function(p) {
-    return p.charAt(0).toUpperCase() + p.slice(1);
-  }).join(' + ');
-  document.getElementById('pi-pa').textContent = '€' + totPA + '/mnd';
-  document.getElementById('pi-int').textContent = intOn ? '+ €' + getIntPrijs(progs) + '/auto/mnd' : 'Niet';
-  document.getElementById('pi-totaal').textContent = totaal;
-  document.getElementById('pi-tot2').textContent = '€' + totaal;
-}
-
-// Slider
-var slider = document.getElementById('autos-slider');
-if (slider) {
-  slider.addEventListener('input', updatePrijsIndicatie);
-}
-
-// Programma checkboxes
-document.querySelectorAll('.prog-check-item input').forEach(function(cb) {
-  cb.addEventListener('change', updatePrijsIndicatie);
-});
-
-// Interieur toggle
-function toggleInterieur() {
-  intOn = !intOn;
-  var sw = document.getElementById('int-toggle-sw');
-  var row = document.getElementById('int-toggle-row');
-  if (sw) sw.classList.toggle('on', intOn);
-  if (row) row.classList.toggle('active', intOn);
-  updatePrijsIndicatie();
-}
-
-// Init
-updatePrijsIndicatie();
-
 // ── FORM VALIDATIE & SUBMIT ────────────────────────────────────────
 function validateField(id, errId, check) {
   var el = document.getElementById(id);
