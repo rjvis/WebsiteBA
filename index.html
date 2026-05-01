@@ -1639,7 +1639,6 @@ function closeDrawer() {
 
 // ── MOBIELE CALCULATOR JS ──
 (function() {
-  if (window.innerWidth > 768) return;
 // ── STATE ─────────────────────────────────────────────────────────
 var S = {
   step: 1,
@@ -1672,7 +1671,7 @@ var hints = [
 ];
 
 // ── NAVIGATIE ─────────────────────────────────────────────────────
-function goStep(n) {
+window.goStep = function(n) {
   if (n < 1 || n > 4) return;
   S.step = n;
   document.querySelectorAll('.step-panel').forEach(function(p,i){
@@ -1697,13 +1696,13 @@ function goStep(n) {
   updateSummary();
 }
 
-function goNext() {
+window.goNext = function() {
   if (S.step < 4) goStep(S.step + 1);
 }
-function goBack() { goStep(S.step - 1); }
+window.goBack = function() { goStep(S.step - 1); }
 
 // ── INPUTS ────────────────────────────────────────────────────────
-function onFreq(el) {
+window.onFreq = function(el) {
   S.freq = parseInt(el.value);
   var pct = ((S.freq - 1) / 11) * 100;
   el.style.setProperty('--pct', pct + '%');
@@ -1712,7 +1711,7 @@ function onFreq(el) {
   calc();
 }
 
-function onAutos(btn) {
+window.onAutos = function(btn) {
   document.querySelectorAll('[data-autos]').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   S.autos = parseInt(btn.dataset.autos);
@@ -1729,7 +1728,7 @@ function onAutos(btn) {
   calc();
 }
 
-function onProg(btn) {
+window.onProg = function(btn) {
   document.querySelectorAll('[data-prog]').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   S.progKey  = btn.dataset.prog;
@@ -1753,7 +1752,7 @@ function onProg(btn) {
   calc();
 }
 
-function onInterieur() {
+window.onInterieur = function() {
   if (S.progKey === 'normaal') return;
   S.interieur = !S.interieur;
   var tog = document.getElementById('int-toggle');
@@ -1855,7 +1854,21 @@ function updateSummary() {
 }
 
 // ── INIT ─────────────────────────────────────────────────────────
-calc();
+function mobCalcInit() {
+  // Alleen op mobiel initialiseren
+  if (!document.querySelector('.mob-calc-wrap')) return;
+  if (window.getComputedStyle(document.querySelector('.mob-calc-wrap')).display === 'none') return;
+  calc();
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', mobCalcInit);
+} else {
+  mobCalcInit();
+}
+window.addEventListener('resize', function() {
+  var wrap = document.querySelector('.mob-calc-wrap');
+  if (wrap && window.getComputedStyle(wrap).display !== 'none') calc();
+});
 })();
 </script>
 </body>
