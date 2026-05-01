@@ -948,7 +948,7 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
 <!-- MOB CALCULATOR -->
 <div class="mob-calc-iframe-wrap">
-  <iframe class="mob-calc-iframe" id="mob-calc-iframe" src="BOB_Calculator_Test.html" height="820" scrolling="no" title="Wasclub Calculator"></iframe>
+  <iframe class="mob-calc-iframe" id="mob-calc-iframe" src="BOB_Calculator_Test.html" height="1100" scrolling="no" title="Wasclub Calculator"></iframe>
 </div>
 
 <!-- TIERS -->
@@ -1716,13 +1716,6 @@ function closeDrawer() {
 
 
 
-// ── Iframe hoogte aanpassing ──
-window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'calcHeight') {
-    var iframe = document.getElementById('mob-calc-iframe');
-    if (iframe) iframe.height = e.data.height + 10;
-  }
-});
 
 </script>
 </body>
