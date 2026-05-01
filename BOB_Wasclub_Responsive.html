@@ -714,7 +714,10 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 .mob-calc-iframe { display: none; width: 100%; border: none; }
 @media (max-width: 768px) {
   .mob-calc-iframe { display: block; }
-  .calculator { display: none; }
+  .calculator { display: none !important; }
+  .calc-section { padding: 0 !important; background: var(--dark); }
+  .calc-head { display: none !important; }
+  .calc-inner { padding: 0 !important; }
 }
 </style>
 </head>
