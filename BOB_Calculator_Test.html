@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOB Wasclub Calculator — Testversie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E30613;
+  --red-dim: rgba(227,6,19,0.15);
+  --red-glow: rgba(227,6,19,0.25);
+  --black: #0a0a0a;
+  --dark: #111;
+  --mid: #1c1c1c;
+  --panel: #161616;
+  --border: rgba(255,255,255,0.08);
+  --border-active: rgba(227,6,19,0.45);
+  --text: #fff;
+  --muted: rgba(255,255,255,0.5);
+  --subtle: rgba(255,255,255,0.1);
+  --green: #22c55e;
+  --fd: 'Inter Tight', sans-serif;
+  --fb: 'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: var(--fb);
+  margin: 0;
+  padding: 0;
+}
+
+/* ── CARD WRAPPER ── */
+.calc-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--black);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* ── HEADER ── */
+.calc-header {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.calc-label {
+  font-family: var(--fd); font-weight: 800; font-size: 10px;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--red);
+  margin-bottom: 6px; display: block;
+}
+.calc-title {
+  font-family: var(--fd); font-weight: 900; font-size: 22px;
+  text-transform: uppercase; letter-spacing: -0.5px; line-height: 1.1;
+}
+.calc-title em { font-style: normal; color: var(--red); }
+
+/* ── STEP INDICATOR ── */
+.steps-bar {
+  display: flex; gap: 0;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--panel);
+}
+.step-tab {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  padding: 12px 4px 10px; gap: 4px;
+  font-family: var(--fd); font-weight: 700; font-size: 9px;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+  cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all 0.2s; position: relative;
+}
+.step-tab.active { color: var(--text); border-bottom-color: var(--red); }
+.step-tab.done { color: var(--green); border-bottom-color: transparent; }
+.step-tab.done::after {
+  content: '✓';
+  font-size: 12px;
+}
+.step-num {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--mid); border: 1px solid var(--border);
+  font-family: var(--fd); font-weight: 800; font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.step-tab.active .step-num { background: var(--red); border-color: var(--red); color: #fff; }
+.step-tab.done .step-num { background: var(--green); border-color: var(--green); color: #fff; font-size: 10px; }
+
+/* ── STEP PANELS ── */
+.step-panels { position: relative; overflow: hidden; }
+.step-panel {
+  display: none;
+  padding: 28px 24px;
+  animation: slideIn 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.step-panel.active { display: block; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── STEP QUESTION HEADER ── */
+.q-label {
+  font-family: var(--fd); font-weight: 700; font-size: 10px;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 6px; display: block;
+}
+.q-answer {
+  font-family: var(--fd); font-weight: 900; font-size: 32px;
+  line-height: 1; letter-spacing: -0.5px; margin-bottom: 20px;
+}
+.q-answer em { font-style: normal; color: var(--red); }
+
+/* ── FREQUENCY SLIDER ── */
+.freq-display {
+  font-family: var(--fd); font-weight: 900; font-size: 52px;
+  line-height: 1; letter-spacing: -2px; margin-bottom: 4px;
+}
+.freq-display em { font-style: normal; color: var(--red); }
+.freq-sublabel { font-size: 12px; color: var(--muted); margin-bottom: 20px; }
+
+.slider-track { position: relative; margin-bottom: 8px; }
+input[type="range"].main-slider {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px; outline: none; cursor: pointer;
+  background: linear-gradient(90deg,
+    var(--red) 0%, var(--red) var(--pct, 27%),
+    var(--subtle) var(--pct, 27%), var(--subtle) 100%
+  );
+  border-radius: 0;
+}
+input[type="range"].main-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; width: 28px; height: 28px;
+  background: var(--red); cursor: pointer; border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(227,6,19,0.2);
+  transition: box-shadow 0.2s;
+}
+input[type="range"].main-slider:active::-webkit-slider-thumb {
+  box-shadow: 0 0 0 8px rgba(227,6,19,0.15);
+}
+.slider-labels {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--muted); margin-top: 8px;
+  font-family: var(--fd); font-weight: 700;
+}
+
+/* ── PILL BUTTONS (autos + programma) ── */
+.pill-group {
+  display: grid; gap: 8px; margin-bottom: 0;
+}
+.pill-group.cols-4 { grid-template-columns: repeat(4,1fr); }
+.pill-group.cols-3 { grid-template-columns: repeat(3,1fr); }
+
+.pill-btn {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; gap: 2px;
+  padding: 14px 8px; background: var(--mid);
+  border: 1.5px solid var(--border); cursor: pointer;
+  transition: all 0.2s; text-align: center;
+}
+.pill-btn:hover { border-color: rgba(255,255,255,0.2); }
+.pill-btn.active {
+  background: var(--red-dim);
+  border-color: var(--border-active);
+}
+.pill-btn.disabled { opacity: 0.3; pointer-events: none; }
+.pill-main {
+  font-family: var(--fd); font-weight: 900; font-size: 18px;
+  text-transform: uppercase; letter-spacing: 0;
+}
+.pill-sub {
+  font-size: 10px; color: var(--muted); letter-spacing: 0.3px;
+  font-family: var(--fb);
+}
+.pill-btn.active .pill-sub { color: rgba(227,6,19,0.8); }
+
+/* Programma pills: groter en met kleur */
+.pill-prog { gap: 4px; padding: 16px 8px; }
+.pill-prog .pill-main { font-size: 14px; }
+.pill-prog.normaal.active { background: rgba(205,138,90,0.12); border-color: rgba(205,138,90,0.45); }
+.pill-prog.intensief.active { background: rgba(184,196,204,0.1); border-color: rgba(184,196,204,0.4); }
+.pill-prog.proteqt.active { background: rgba(212,170,80,0.1); border-color: rgba(212,170,80,0.45); }
+.pill-prog.normaal .pill-main { color: #cd8a5a; }
+.pill-prog.intensief .pill-main { color: #b8c4cc; }
+.pill-prog.proteqt .pill-main { background: linear-gradient(135deg,#c8943e,#f5e2a0); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+/* ── TOGGLE ── */
+.toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 18px; background: var(--panel);
+  border: 1.5px solid var(--border); cursor: pointer; transition: all 0.2s;
+  user-select: none;
+}
+.toggle-row.on { border-color: var(--border-active); background: var(--red-dim); }
+.toggle-row.disabled { opacity: 0.3; pointer-events: none; }
+.toggle-left {}
+.toggle-name { font-family: var(--fd); font-weight: 800; font-size: 15px; margin-bottom: 3px; }
+.toggle-desc { font-size: 12px; color: var(--muted); }
+.toggle-desc.on { color: rgba(227,6,19,0.8); }
+.toggle-switch {
+  width: 48px; height: 26px; background: var(--mid);
+  border: 1px solid var(--border); position: relative;
+  flex-shrink: 0; transition: background 0.3s;
+  border-radius: 13px;
+}
+.toggle-row.on .toggle-switch { background: var(--red); border-color: var(--red); }
+.toggle-knob {
+  position: absolute; width: 20px; height: 20px; border-radius: 50%;
+  top: 3px; left: 3px; background: var(--muted);
+  transition: left 0.3s cubic-bezier(0.34,1.56,0.64,1), background 0.2s;
+}
+.toggle-row.on .toggle-knob { left: 25px; background: #fff; }
+
+/* ── NAVIGATIEKNOPPEN ── */
+.step-nav {
+  display: flex; gap: 10px; padding: 0 24px 24px; align-items: center;
+}
+.btn-next {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  gap: 10px; padding: 16px 20px; background: var(--red); color: #fff;
+  font-family: var(--fd); font-weight: 800; font-size: 13px;
+  letter-spacing: 2px; text-transform: uppercase; border: none; cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+  transition: all 0.2s;
+}
+.btn-next:hover { box-shadow: 0 8px 24px var(--red-glow); }
+.btn-back {
+  display: flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; background: var(--mid);
+  border: 1px solid var(--border); cursor: pointer;
+  font-size: 18px; color: var(--muted); transition: all 0.2s;
+  flex-shrink: 0;
+}
+.btn-back:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+/* ── RESULTAAT PANEL ── */
+.result-panel {
+  background: var(--black);
+  border-top: 1px solid var(--border);
+}
+
+/* Vergelijking: twee rijen */
+.cmp-row {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.cmp-row.wasclub-row { background: rgba(227,6,19,0.04); }
+.cmp-left {}
+.cmp-type {
+  font-family: var(--fd); font-weight: 800; font-size: 14px;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px;
+  display: flex; align-items: center; gap: 8px;
+}
+.cmp-badge {
+  font-family: var(--fd); font-weight: 800; font-size: 9px;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  background: var(--red); color: #fff; padding: 2px 7px;
+}
+.cmp-detail { font-size: 12px; color: var(--muted); }
+.cmp-price {
+  font-family: var(--fd); font-weight: 900; font-size: 32px;
+  letter-spacing: -1px; line-height: 1; text-align: right; flex-shrink: 0;
+}
+.cmp-price.red { color: var(--red); }
+.cmp-period { font-size: 11px; color: var(--muted); text-align: right; margin-top: 2px; }
+
+/* Besparing block */
+.saving-block {
+  padding: 24px;
+  border-bottom: 1px solid var(--border);
+  display: grid; grid-template-columns: 1fr auto;
+  gap: 12px; align-items: center;
+}
+.saving-label {
+  font-family: var(--fd); font-weight: 700; font-size: 10px;
+  letter-spacing: 2.5px; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 6px;
+}
+.saving-amount {
+  font-family: var(--fd); font-weight: 900; font-size: 56px;
+  line-height: 1; letter-spacing: -2px; color: var(--red);
+  transition: color 0.3s;
+}
+.saving-amount.zero { color: rgba(255,255,255,0.15); }
+.saving-period { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.saving-year {
+  font-family: var(--fd); font-weight: 800; font-size: 16px;
+  color: rgba(255,255,255,0.5); margin-top: 2px;
+}
+
+/* Visuele "thermometer" balk */
+.saving-bar-wrap { padding-right: 4px; }
+.saving-bar {
+  width: 8px; height: 120px; background: var(--panel);
+  border: 1px solid var(--border); position: relative; overflow: hidden;
+}
+.saving-bar-fill {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: var(--red); transition: height 0.5s cubic-bezier(0.16,1,0.3,1);
+  height: 0%;
+}
+
+/* CTA */
+.calc-cta-wrap {
+  padding: 20px 24px 24px;
+}
+.calc-cta {
+  display: flex; align-items: center; justify-content: center;
+  gap: 10px; width: 100%; padding: 18px 20px 16px;
+  background: var(--red); color: #fff;
+  font-family: var(--fd); font-weight: 800; font-size: 14px;
+  letter-spacing: 2px; text-transform: uppercase;
+  border: none; cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 12px 100%);
+  transition: all 0.2s;
+}
+.calc-cta:hover { box-shadow: 0 12px 32px var(--red-glow); transform: translateY(-1px); }
+.calc-note {
+  font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px;
+}
+
+/* ── PROGRESS DOTS ── */
+.progress-dots {
+  display: flex; gap: 6px; justify-content: center;
+  padding: 16px 0 0; border-top: 1px solid var(--border);
+}
+.progress-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--subtle); transition: all 0.3s;
+}
+.progress-dot.active { background: var(--red); width: 18px; border-radius: 3px; }
+.progress-dot.done { background: var(--green); }
+
+/* ── SUMMARY TAG ── */
+.summary-tag {
+  font-size: 12px; color: var(--muted); padding: 10px 16px;
+  border-top: 1px solid var(--border); background: var(--panel);
+  display: flex; gap: 5px; flex-wrap: nowrap; overflow-x: auto;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none;
+}
+.summary-tag::-webkit-scrollbar { display: none; }
+.sum-item {
+  background: var(--mid); border: 1px solid var(--border);
+  padding: 4px 8px; font-family: var(--fd); font-weight: 700;
+  font-size: 10px; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted);
+  cursor: pointer; transition: all 0.2s; white-space: nowrap; flex-shrink: 0;
+}
+.sum-item:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+
+
+/* ── DESKTOP: zij aan zij ── */
+@media (min-width: 900px) {
+  body { padding: 40px; align-items: flex-start; justify-content: center; }
+  .calc-card { max-width: 900px; display: grid; grid-template-columns: 1fr 1fr; }
+  
+  .calc-header { grid-column: 1/-1; border-bottom: none; border-right: 1px solid var(--border); }
+  .steps-bar { grid-column: 1; border-bottom: 1px solid var(--border); }
+  .step-panels { grid-column: 1; }
+  .step-nav { grid-column: 1; border-right: 1px solid var(--border); }
+  .result-panel { grid-column: 2; grid-row: 2/6; border-top: none; border-left: 1px solid var(--border); }
+  .progress-dots { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="calc-card">
+
+  <!-- HEADER -->
+  <div class="calc-header">
+    <span class="calc-label">Wasclub Calculator</span>
+    <div class="calc-title">Hoeveel bespaar<br>jij met de <em>Wasclub?</em></div>
+  </div>
+
+  <!-- STEP TABS (mobiel: stap-voor-stap navigatie, desktop: altijd zichtbaar) -->
+  <div class="steps-bar">
+    <div class="step-tab active" data-step="1" onclick="goStep(1)">
+      <div class="step-num">1</div>
+      Frequentie
+    </div>
+    <div class="step-tab" data-step="2" onclick="goStep(2)">
+      <div class="step-num">2</div>
+      Auto's
+    </div>
+    <div class="step-tab" data-step="3" onclick="goStep(3)">
+      <div class="step-num">3</div>
+      Programma
+    </div>
+    <div class="step-tab" data-step="4" onclick="goStep(4)">
+      <div class="step-num">4</div>
+      Interieur
+    </div>
+  </div>
+
+  <!-- STEP PANELS -->
+  <div class="step-panels">
+
+    <!-- STAP 1: Frequentie -->
+    <div class="step-panel active" id="panel-1">
+      <span class="q-label">Hoe vaak per maand wassen?</span>
+      <div class="freq-display"><em id="s-freq">4</em>×</div>
+      <div class="freq-sublabel" id="s-freq-hint">4 keer per maand — slim rijden</div>
+      <input type="range" class="main-slider" id="freq-slider"
+             min="1" max="12" value="4" style="--pct:27%"
+             oninput="onFreq(this)">
+      <div class="slider-labels">
+        <span>1×</span><span>3×</span><span>6×</span><span>9×</span><span>12×</span>
+      </div>
+    </div>
+
+    <!-- STAP 2: Aantal auto's -->
+    <div class="step-panel" id="panel-2">
+      <span class="q-label">Hoeveel auto's in huis?</span>
+      <div class="q-answer"><em id="s-autos">1</em> auto</div>
+      <div class="pill-group cols-4">
+        <div class="pill-btn active" data-autos="1" onclick="onAutos(this)">
+          <span class="pill-main">1</span>
+          <span class="pill-sub">auto</span>
+        </div>
+        <div class="pill-btn" data-autos="2" onclick="onAutos(this)">
+          <span class="pill-main">2</span>
+          <span class="pill-sub">auto's</span>
+        </div>
+        <div class="pill-btn" data-autos="3" onclick="onAutos(this)">
+          <span class="pill-main">3</span>
+          <span class="pill-sub">auto's</span>
+        </div>
+        <div class="pill-btn" data-autos="4" onclick="onAutos(this)">
+          <span class="pill-main">4</span>
+          <span class="pill-sub">auto's</span>
+        </div>
+      </div>
+      <div id="familie-hint" style="display:none;margin-top:12px;font-size:12px;color:var(--red);font-family:var(--fd);font-weight:700;letter-spacing:0.5px;">
+        Familie-tarief — prijs per auto daalt automatisch
+      </div>
+    </div>
+
+    <!-- STAP 3: Programma -->
+    <div class="step-panel" id="panel-3">
+      <span class="q-label">Welk wasprogramma?</span>
+      <div class="q-answer" id="s-prog-display" style="font-size:24px;margin-bottom:16px;">Intensief</div>
+      <div class="pill-group cols-3">
+        <div class="pill-btn pill-prog normaal" data-prog="normaal" data-los="13" data-abo="28" onclick="onProg(this)">
+          <span class="pill-main">Normaal</span>
+          <span class="pill-sub">€13 / €28</span>
+        </div>
+        <div class="pill-btn pill-prog intensief active" data-prog="intensief" data-los="17" data-abo="34" onclick="onProg(this)">
+          <span class="pill-main">Intensief</span>
+          <span class="pill-sub">€17 / €34</span>
+        </div>
+        <div class="pill-btn pill-prog proteqt" data-prog="proteqt" data-los="21" data-abo="39" onclick="onProg(this)">
+          <span class="pill-main">Proteqt</span>
+          <span class="pill-sub">€21 / €39</span>
+        </div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5;">
+        Los / Wasclub p/mnd · Proteqt heeft extra lakbescherming
+      </div>
+    </div>
+
+    <!-- STAP 4: Interieur -->
+    <div class="step-panel" id="panel-4">
+      <span class="q-label">Extra's toevoegen?</span>
+      <div class="q-answer" style="font-size:20px;margin-bottom:16px;">Interieurband</div>
+      <div class="toggle-row" id="int-toggle" onclick="onInterieur()">
+        <div class="toggle-left">
+          <div class="toggle-name">+ Interieurband</div>
+          <div class="toggle-desc" id="int-desc">Binnenreiniging erbij — +€20/mnd</div>
+        </div>
+        <div class="toggle-switch">
+          <div class="toggle-knob"></div>
+        </div>
+      </div>
+      <div id="normaal-hint" style="display:none;margin-top:12px;font-size:12px;color:var(--red);font-family:var(--fd);font-weight:700;">
+        Interieurband niet beschikbaar bij Normaal
+      </div>
+    </div>
+
+  </div>
+
+  <!-- NAVIGATIE KNOPPEN -->
+  <div class="step-nav">
+    <button class="btn-back" id="btn-back" onclick="goBack()" style="display:none;">←</button>
+    <button class="btn-next" id="btn-next" onclick="goNext()">
+      Volgende stap →
+    </button>
+  </div>
+
+  <!-- SAMENVATTING TAGS (klikbaar terug naar die stap) -->
+  <div class="summary-tag" id="summary-tags"></div>
+
+  <!-- RESULTAAT PANEL -->
+  <div class="result-panel">
+
+    <!-- Vergelijking -->
+    <div class="cmp-row">
+      <div class="cmp-left">
+        <div class="cmp-type">Losse wasbeurten</div>
+        <div class="cmp-detail" id="r-los-detail">4× Intensief à €17</div>
+      </div>
+      <div>
+        <div class="cmp-price" id="r-los-price">€68</div>
+        <div class="cmp-period">per maand</div>
+      </div>
+    </div>
+
+    <div class="cmp-row wasclub-row">
+      <div class="cmp-left">
+        <div class="cmp-type">
+          Wasclub
+          <span class="cmp-badge">abo</span>
+        </div>
+        <div class="cmp-detail" id="r-wc-detail">Onbeperkt Intensief</div>
+      </div>
+      <div>
+        <div class="cmp-price red" id="r-wc-price">€34</div>
+        <div class="cmp-period">per maand</div>
+      </div>
+    </div>
+
+    <!-- Besparing -->
+    <div class="saving-block">
+      <div>
+        <div class="saving-label">Jij bespaart</div>
+        <div class="saving-amount" id="r-saving">€34</div>
+        <div class="saving-period" id="r-period">per maand bij 4 wasbeurten</div>
+        <div class="saving-year" id="r-year">→ €408 per jaar</div>
+      </div>
+      <div class="saving-bar-wrap">
+        <div class="saving-bar">
+          <div class="saving-bar-fill" id="saving-bar-fill"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="calc-cta-wrap">
+      <button class="calc-cta" onclick="window.location='BOB_Wasclub_Responsive.html#aanmelden'">
+        Neem direct een abonnement →
+      </button>
+      <div class="calc-note">Maandelijks opzegbaar · geen aansluitkosten · direct actief</div>
+    </div>
+
+  </div>
+
+  <!-- PROGRESS DOTS (mobiel only) -->
+  <div class="progress-dots">
+    <div class="progress-dot active" id="dot-1"></div>
+    <div class="progress-dot" id="dot-2"></div>
+    <div class="progress-dot" id="dot-3"></div>
+    <div class="progress-dot" id="dot-4"></div>
+  </div>
+
+</div>
+
+<script>
+// ── STATE ─────────────────────────────────────────────────────────
+var S = {
+  step: 1,
+  freq: 4,
+  autos: 1,
+  progKey: 'intensief',
+  progLos: 17,
+  progAbo: 34,
+  progName: 'Intensief',
+  interieur: false
+};
+
+var WAS_ABO = { proteqt:{1:39,2:29,3:26,4:24}, intensief:{1:34,2:25,3:22,4:21} };
+var INT_ABO = { proteqt:{1:18,2:16,3:13,4:10}, intensief:{1:20,2:18,3:15,4:12} };
+var INT_LOS = 20;
+
+var hints = [
+  '1 keer per maand — sporadisch',
+  '2 keer per maand — al voordeliger met Wasclub!',
+  '3 keer — elke week bijna',
+  '4 keer per maand — slim rijden',
+  '5 keer — echte fan',
+  '6 keer — elke twee weken',
+  '7 keer — wekelijks bijna',
+  '8 keer — superclean rijder',
+  '9 keer — serieuze wasclub-kandidaat',
+  '10 keer — bijna dagelijks',
+  '11 keer — auto altijd perfect',
+  '12 keer — maandelijks maximum'
+];
+
+// ── NAVIGATIE ─────────────────────────────────────────────────────
+function goStep(n) {
+  if (n < 1 || n > 4) return;
+  S.step = n;
+  document.querySelectorAll('.step-panel').forEach(function(p,i){
+    p.classList.toggle('active', i+1 === n);
+  });
+  document.querySelectorAll('.step-tab').forEach(function(t,i){
+    t.classList.remove('active','done');
+    if (i+1 < n) t.classList.add('done');
+    if (i+1 === n) t.classList.add('active');
+    t.querySelector('.step-num').textContent = i+1 < n ? '✓' : i+1;
+  });
+  document.querySelectorAll('.progress-dot').forEach(function(d,i){
+    d.classList.remove('active','done');
+    if (i+1 < n) d.classList.add('done');
+    if (i+1 === n) d.classList.add('active');
+  });
+  var back = document.getElementById('btn-back');
+  var next = document.getElementById('btn-next');
+  back.style.display = n > 1 ? 'flex' : 'none';
+  next.textContent = n < 4 ? 'Volgende stap →' : 'Bekijk resultaat ✓';
+  document.querySelector('.step-nav').style.display = n === 4 ? 'none' : 'flex';
+  updateSummary();
+}
+
+function goNext() {
+  if (S.step < 4) goStep(S.step + 1);
+}
+function goBack() { goStep(S.step - 1); }
+
+// ── INPUTS ────────────────────────────────────────────────────────
+function onFreq(el) {
+  S.freq = parseInt(el.value);
+  var pct = ((S.freq - 1) / 11) * 100;
+  el.style.setProperty('--pct', pct + '%');
+  document.getElementById('s-freq').textContent = S.freq;
+  document.getElementById('s-freq-hint').textContent = hints[S.freq - 1];
+  calc();
+}
+
+function onAutos(btn) {
+  document.querySelectorAll('[data-autos]').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  S.autos = parseInt(btn.dataset.autos);
+  document.getElementById('s-autos').textContent = S.autos;
+  var hint = document.getElementById('familie-hint');
+  hint.style.display = S.autos > 1 ? 'block' : 'none';
+  // Normaal niet beschikbaar bij >1 auto
+  var normaalBtn = document.querySelector('[data-prog="normaal"]');
+  if (S.autos > 1 && S.progKey === 'normaal') {
+    var intensiefBtn = document.querySelector('[data-prog="intensief"]');
+    onProg(intensiefBtn);
+  }
+  normaalBtn.classList.toggle('disabled', S.autos > 1);
+  calc();
+}
+
+function onProg(btn) {
+  document.querySelectorAll('[data-prog]').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  S.progKey  = btn.dataset.prog;
+  S.progLos  = parseInt(btn.dataset.los);
+  S.progAbo  = parseInt(btn.dataset.abo);
+  S.progName = btn.dataset.prog.charAt(0).toUpperCase() + btn.dataset.prog.slice(1);
+  document.getElementById('s-prog-display').textContent = S.progName;
+  // Interieur toggle
+  var normaal = S.progKey === 'normaal';
+  var tog = document.getElementById('int-toggle');
+  var hint = document.getElementById('normaal-hint');
+  if (normaal) {
+    tog.classList.add('disabled');
+    S.interieur = false;
+    tog.classList.remove('on');
+    hint.style.display = 'block';
+  } else {
+    tog.classList.remove('disabled');
+    hint.style.display = 'none';
+  }
+  calc();
+}
+
+function onInterieur() {
+  if (S.progKey === 'normaal') return;
+  S.interieur = !S.interieur;
+  var tog = document.getElementById('int-toggle');
+  tog.classList.toggle('on', S.interieur);
+  updateIntDesc();
+  calc();
+}
+
+function updateIntDesc() {
+  var desc = document.getElementById('int-desc');
+  if (S.interieur && S.progKey !== 'normaal') {
+    var prijs = INT_ABO[S.progKey][Math.min(S.autos,4)];
+    var suffix = S.autos > 1 ? ' p/auto — €' + (prijs * S.autos) + ' totaal' : '/mnd';
+    desc.textContent = 'Actief — +€' + prijs + suffix;
+    desc.className = 'toggle-desc on';
+  } else {
+    desc.textContent = 'Binnenreiniging erbij';
+    desc.className = 'toggle-desc';
+  }
+}
+
+// ── BEREKENING ────────────────────────────────────────────────────
+function getWasPA() {
+  if (S.progKey === 'normaal') return S.progAbo;
+  return WAS_ABO[S.progKey][Math.min(S.autos,4)];
+}
+function getIntPA() {
+  if (!S.interieur || S.progKey === 'normaal') return 0;
+  return INT_ABO[S.progKey][Math.min(S.autos,4)];
+}
+
+function calc() {
+  var n = S.autos;
+  var wasPA = getWasPA();
+  var intPA = getIntPA();
+  var aboPA = wasPA + intPA;
+  var aboTot = aboPA * n;
+  var losTot = (S.progLos + (S.interieur ? INT_LOS : 0)) * S.freq * n;
+  var saving = losTot - aboTot;
+
+  // Los rij
+  var losDetail = n > 1
+    ? n + ' auto\'s × ' + S.freq + '× ' + S.progName + (S.interieur ? ' + int.' : '')
+    : S.freq + '× ' + S.progName + ' à €' + S.progLos + (S.interieur ? ' + €' + INT_LOS + ' int.' : '');
+  document.getElementById('r-los-detail').textContent = losDetail;
+  animNum(document.getElementById('r-los-price'), losTot, '€');
+
+  // Wasclub rij
+  var wcDetail = n > 1
+    ? n + ' auto\'s — €' + aboPA + '/auto/mnd'
+    : 'Onbeperkt ' + S.progName + (S.interieur ? ' + Interieur' : '');
+  document.getElementById('r-wc-detail').textContent = wcDetail;
+  animNum(document.getElementById('r-wc-price'), aboTot, '€');
+
+  // Besparing
+  var disp = Math.max(saving, 0);
+  var savEl = document.getElementById('r-saving');
+  savEl.textContent = '€' + disp;
+  savEl.className = 'saving-amount' + (saving > 0 ? '' : ' zero');
+
+  document.getElementById('r-period').textContent = saving > 0
+    ? 'per maand' + (n > 1 ? ' voor ' + n + ' auto\'s' : '') + ' bij ' + S.freq + '× wassen'
+    : saving === 0 ? 'Break-even — je wint gemak'
+    : 'Wasclub €' + Math.abs(saving) + ' duurder bij dit gebruik';
+  document.getElementById('r-year').textContent = saving > 0
+    ? '→ €' + (saving * 12) + ' per jaar'
+    : '';
+
+  // Thermometer
+  var maxSaving = S.freq * S.progLos * n;
+  var pct = maxSaving > 0 ? Math.max(0, Math.min(100, (disp / maxSaving) * 100)) : 0;
+  document.getElementById('saving-bar-fill').style.height = pct + '%';
+
+  updateIntDesc();
+  updateSummary();
+}
+
+function animNum(el, val, prefix) {
+  var cur = parseInt(el.textContent.replace(/\D/g,'')) || 0;
+  var diff = val - cur; var steps = 16; var step = 0;
+  var t = setInterval(function(){
+    step++;
+    el.textContent = prefix + Math.round(cur + diff * (step/steps));
+    if (step >= steps) { el.textContent = prefix + val; clearInterval(t); }
+  }, 16);
+}
+
+function updateSummary() {
+  var tags = document.getElementById('summary-tags');
+  var items = [
+    { label: S.freq + '× p/mnd', step: 1 },
+    { label: S.autos + ' auto' + (S.autos > 1 ? '\'s' : ''), step: 2 },
+    { label: S.progName, step: 3 },
+    { label: S.interieur ? '+ Interieur' : 'Geen interieur', step: 4 }
+  ];
+  tags.innerHTML = items.map(function(it){
+    return '<span class="sum-item" onclick="goStep(' + it.step + ')">' + it.label + '</span>';
+  }).join('');
+}
+
+// ── INIT ─────────────────────────────────────────────────────────
+calc();
+
+// ── Auto-resize voor iframe gebruik ──
+function sendHeight() {
+  var h = document.body.scrollHeight;
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: 'calcHeight', height: h }, '*');
+  }
+}
+// Stuur hoogte na elke stap-wissel en na init
+var _origGoStep = window.goStep;
+window.addEventListener('load', sendHeight);
+setInterval(sendHeight, 500);
+
+</script>
+</body>
+</html>

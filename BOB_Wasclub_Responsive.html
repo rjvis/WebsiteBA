@@ -707,96 +707,15 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
 
 
-/* ══ MOBIELE CALCULATOR ══ */
-.mob-calc-wrap { display: none; }
+
+/* ── Mobiele calculator iframe ── */
+.mob-calc-iframe-wrap { display: none; width: 100%; }
+.mob-calc-iframe-wrap iframe { width: 100%; border: none; min-height: 900px; display: block; }
 @media (max-width: 768px) {
-  .mob-calc-wrap { display: block; }
-  .desktop-calc-wrap { display: none !important; }
+  .mob-calc-iframe-wrap { display: block; }
+  .desktop-calc-wrap { display: none; }
 }
 
-/* Alle calc-card stijlen onder .mob-calc-wrap prefix */
-.mob-calc-wrap .calc-card { width:100%; max-width:100%; background:var(--black); border:1px solid var(--border); position:relative; overflow:hidden; }
-.mob-calc-wrap .calc-header { padding:24px 20px 16px; border-bottom:1px solid var(--border); }
-.mob-calc-wrap .calc-label { font-family:var(--fd); font-weight:800; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--red); margin-bottom:6px; display:block; }
-.mob-calc-wrap .calc-title { font-family:var(--fd); font-weight:900; font-size:20px; text-transform:uppercase; letter-spacing:-0.5px; line-height:1.1; }
-.mob-calc-wrap .calc-title em { font-style:normal; color:var(--red); }
-.mob-calc-wrap .steps-bar { display:flex; gap:0; border-bottom:1px solid var(--border); background:var(--panel); }
-.mob-calc-wrap .step-tab { flex:1; display:flex; flex-direction:column; align-items:center; padding:12px 4px 10px; gap:4px; font-family:var(--fd); font-weight:700; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); cursor:pointer; border-bottom:2px solid transparent; transition:all 0.2s; }
-.mob-calc-wrap .step-tab.active { color:var(--text); border-bottom-color:var(--red); }
-.mob-calc-wrap .step-tab.done { color:#22c55e; }
-.mob-calc-wrap .step-num { width:22px; height:22px; border-radius:50%; background:var(--mid); border:1px solid var(--border); font-family:var(--fd); font-weight:800; font-size:11px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; }
-.mob-calc-wrap .step-tab.active .step-num { background:var(--red); border-color:var(--red); color:#fff; }
-.mob-calc-wrap .step-tab.done .step-num { background:#22c55e; border-color:#22c55e; color:#fff; }
-.mob-calc-wrap .step-panels { position:relative; overflow:hidden; }
-.mob-calc-wrap .step-panel { display:none; padding:24px 20px; animation:mcSlideIn 0.3s cubic-bezier(0.16,1,0.3,1); }
-.mob-calc-wrap .step-panel.active { display:block; }
-@keyframes mcSlideIn { from{opacity:0;transform:translateX(12px)} to{opacity:1;transform:translateX(0)} }
-.mob-calc-wrap .q-label { font-family:var(--fd); font-weight:700; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; display:block; }
-.mob-calc-wrap .q-answer { font-family:var(--fd); font-weight:900; font-size:28px; line-height:1; letter-spacing:-0.5px; margin-bottom:18px; }
-.mob-calc-wrap .q-answer em { font-style:normal; color:var(--red); }
-.mob-calc-wrap .freq-display { font-family:var(--fd); font-weight:900; font-size:48px; line-height:1; letter-spacing:-2px; margin-bottom:4px; }
-.mob-calc-wrap .freq-display em { font-style:normal; color:var(--red); }
-.mob-calc-wrap .freq-sublabel { font-size:12px; color:var(--muted); margin-bottom:18px; }
-.mob-calc-wrap input[type="range"].main-slider { -webkit-appearance:none; appearance:none; width:100%; height:6px; outline:none; cursor:pointer; background:linear-gradient(90deg,var(--red) 0%,var(--red) var(--pct,27%),rgba(255,255,255,0.1) var(--pct,27%),rgba(255,255,255,0.1) 100%); }
-.mob-calc-wrap input[type="range"].main-slider::-webkit-slider-thumb { -webkit-appearance:none; width:28px; height:28px; background:var(--red); cursor:pointer; border-radius:50%; box-shadow:0 0 0 4px rgba(227,6,19,0.2); }
-.mob-calc-wrap .slider-labels { display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-top:8px; font-family:var(--fd); font-weight:700; }
-.mob-calc-wrap .pill-group { display:grid; gap:8px; }
-.mob-calc-wrap .pill-group.cols-4 { grid-template-columns:repeat(4,1fr); }
-.mob-calc-wrap .pill-group.cols-3 { grid-template-columns:repeat(3,1fr); }
-.mob-calc-wrap .pill-btn { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; padding:14px 8px; background:var(--mid); border:1.5px solid var(--border); cursor:pointer; transition:all 0.2s; text-align:center; }
-.mob-calc-wrap .pill-btn.active { background:rgba(227,6,19,0.15); border-color:rgba(227,6,19,0.45); }
-.mob-calc-wrap .pill-btn.disabled { opacity:0.3; pointer-events:none; }
-.mob-calc-wrap .pill-main { font-family:var(--fd); font-weight:900; font-size:18px; text-transform:uppercase; }
-.mob-calc-wrap .pill-sub { font-size:10px; color:var(--muted); font-family:var(--fb); }
-.mob-calc-wrap .pill-prog { padding:16px 8px; }
-.mob-calc-wrap .pill-prog .pill-main { font-size:14px; }
-.mob-calc-wrap .pill-prog.normaal.active { background:rgba(205,138,90,0.12); border-color:rgba(205,138,90,0.45); }
-.mob-calc-wrap .pill-prog.intensief.active { background:rgba(184,196,204,0.1); border-color:rgba(184,196,204,0.4); }
-.mob-calc-wrap .pill-prog.proteqt.active { background:rgba(212,170,80,0.1); border-color:rgba(212,170,80,0.45); }
-.mob-calc-wrap .pill-prog.normaal .pill-main { color:#cd8a5a; }
-.mob-calc-wrap .pill-prog.intensief .pill-main { color:#b8c4cc; }
-.mob-calc-wrap .pill-prog.proteqt .pill-main { background:linear-gradient(135deg,#c8943e,#f5e2a0); -webkit-background-clip:text; background-clip:text; color:transparent; }
-.mob-calc-wrap .toggle-row { display:flex; align-items:center; justify-content:space-between; padding:16px 18px; background:var(--panel); border:1.5px solid var(--border); cursor:pointer; transition:all 0.2s; user-select:none; }
-.mob-calc-wrap .toggle-row.on { border-color:rgba(227,6,19,0.45); background:rgba(227,6,19,0.15); }
-.mob-calc-wrap .toggle-row.disabled { opacity:0.3; pointer-events:none; }
-.mob-calc-wrap .toggle-name { font-family:var(--fd); font-weight:800; font-size:15px; margin-bottom:3px; }
-.mob-calc-wrap .toggle-desc { font-size:12px; color:var(--muted); }
-.mob-calc-wrap .toggle-desc.on { color:rgba(227,6,19,0.8); }
-.mob-calc-wrap .toggle-switch { width:48px; height:26px; background:var(--mid); border:1px solid var(--border); position:relative; flex-shrink:0; border-radius:13px; transition:background 0.3s; }
-.mob-calc-wrap .toggle-row.on .toggle-switch { background:var(--red); border-color:var(--red); }
-.mob-calc-wrap .toggle-knob { position:absolute; width:20px; height:20px; border-radius:50%; top:3px; left:3px; background:var(--muted); transition:left 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-.mob-calc-wrap .toggle-row.on .toggle-knob { left:25px; background:#fff; }
-.mob-calc-wrap .step-nav { display:flex; gap:10px; padding:0 20px 20px; }
-.mob-calc-wrap .btn-next { flex:1; display:flex; align-items:center; justify-content:center; gap:10px; padding:16px 20px; background:var(--red); color:#fff; font-family:var(--fd); font-weight:800; font-size:13px; letter-spacing:2px; text-transform:uppercase; border:none; cursor:pointer; clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); transition:all 0.2s; }
-.mob-calc-wrap .btn-back { display:flex; align-items:center; justify-content:center; width:48px; height:48px; background:var(--mid); border:1px solid var(--border); cursor:pointer; font-size:18px; color:var(--muted); transition:all 0.2s; flex-shrink:0; }
-.mob-calc-wrap .summary-tag { font-size:12px; color:var(--muted); padding:10px 16px; border-top:1px solid var(--border); background:var(--panel); display:flex; gap:5px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
-.mob-calc-wrap .summary-tag::-webkit-scrollbar { display:none; }
-.mob-calc-wrap .sum-item { background:var(--mid); border:1px solid var(--border); padding:4px 8px; font-family:var(--fd); font-weight:700; font-size:10px; letter-spacing:0.5px; text-transform:uppercase; color:var(--muted); cursor:pointer; white-space:nowrap; flex-shrink:0; }
-.mob-calc-wrap .result-panel { background:var(--black); border-top:1px solid var(--border); }
-.mob-calc-wrap .cmp-row { padding:18px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.mob-calc-wrap .cmp-row.wasclub-row { background:rgba(227,6,19,0.04); }
-.mob-calc-wrap .cmp-type { font-family:var(--fd); font-weight:800; font-size:14px; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px; display:flex; align-items:center; gap:8px; }
-.mob-calc-wrap .cmp-badge { font-family:var(--fd); font-weight:800; font-size:9px; letter-spacing:1.5px; text-transform:uppercase; background:var(--red); color:#fff; padding:2px 7px; }
-.mob-calc-wrap .cmp-detail { font-size:12px; color:var(--muted); }
-.mob-calc-wrap .cmp-price { font-family:var(--fd); font-weight:900; font-size:30px; letter-spacing:-1px; line-height:1; text-align:right; flex-shrink:0; }
-.mob-calc-wrap .cmp-price.red { color:var(--red); }
-.mob-calc-wrap .cmp-period { font-size:11px; color:var(--muted); text-align:right; margin-top:2px; }
-.mob-calc-wrap .saving-block { padding:22px 20px; border-bottom:1px solid var(--border); display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; }
-.mob-calc-wrap .saving-label { font-family:var(--fd); font-weight:700; font-size:10px; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
-.mob-calc-wrap .saving-amount { font-family:var(--fd); font-weight:900; font-size:52px; line-height:1; letter-spacing:-2px; color:var(--red); }
-.mob-calc-wrap .saving-amount.zero { color:rgba(255,255,255,0.15); }
-.mob-calc-wrap .saving-period { font-size:13px; color:var(--muted); margin-top:4px; }
-.mob-calc-wrap .saving-year { font-family:var(--fd); font-weight:800; font-size:15px; color:rgba(255,255,255,0.5); margin-top:2px; }
-.mob-calc-wrap .saving-bar-wrap { padding-right:4px; }
-.mob-calc-wrap .saving-bar { width:8px; height:110px; background:var(--panel); border:1px solid var(--border); position:relative; overflow:hidden; }
-.mob-calc-wrap .saving-bar-fill { position:absolute; bottom:0; left:0; right:0; background:var(--red); transition:height 0.5s cubic-bezier(0.16,1,0.3,1); height:0%; }
-.mob-calc-wrap .calc-cta-wrap { padding:18px 20px 22px; }
-.mob-calc-wrap .calc-cta { display:flex; align-items:center; justify-content:center; gap:10px; width:100%; padding:16px 20px 14px; background:var(--red); color:#fff; font-family:var(--fd); font-weight:800; font-size:13px; letter-spacing:2px; text-transform:uppercase; border:none; cursor:pointer; clip-path:polygon(0 0,calc(100% - 12px) 0,100% 100%,12px 100%); }
-.mob-calc-wrap .calc-note { font-size:11px; color:var(--muted); text-align:center; margin-top:10px; }
-.mob-calc-wrap .progress-dots { display:flex; gap:6px; justify-content:center; padding:14px 0; border-top:1px solid var(--border); }
-.mob-calc-wrap .progress-dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.12); transition:all 0.3s; }
-.mob-calc-wrap .progress-dot.active { background:var(--red); width:18px; border-radius:3px; }
-.mob-calc-wrap .progress-dot.done { background:#22c55e; }
 </style>
 </head>
 <body>
@@ -892,8 +811,7 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
       <p>Stel je situatie in en zie direct wat je bespaart — ook bij meerdere auto's.</p>
     </div>
 
-    <div class="desktop-calc-wrap">
-    <div class="calculator reveal">
+    <div class="desktop-calc-wrap"><div class="calculator reveal">
       <div class="calc-grid">
 
         <!-- LINKS: INVOER -->
@@ -1019,10 +937,12 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
           <div class="result-note">Maandelijks opzegbaar &middot; geen aansluitkosten &middot; direct actief</div>
         </div>
 
-      </div>
+      </div></div><!-- /desktop-calc-wrap -->
+
+    <!-- Mobiele calculator via iframe -->
+    <div class="mob-calc-iframe-wrap">
+      <iframe id="mob-calc-iframe" src="BOB_Calculator_Test.html" scrolling="no" title="Wasclub Calculator"></iframe>
     </div>
-
-
 
   </div>
 </section>
@@ -1637,239 +1557,18 @@ function closeDrawer() {
 
 
 
-// ── MOBIELE CALCULATOR JS ──
+
+// ── Mobiele calculator iframe resize ──
 (function() {
-// ── STATE ─────────────────────────────────────────────────────────
-var S = {
-  step: 1,
-  freq: 4,
-  autos: 1,
-  progKey: 'intensief',
-  progLos: 17,
-  progAbo: 34,
-  progName: 'Intensief',
-  interieur: false
-};
-
-var WAS_ABO = { proteqt:{1:39,2:29,3:26,4:24}, intensief:{1:34,2:25,3:22,4:21} };
-var INT_ABO = { proteqt:{1:18,2:16,3:13,4:10}, intensief:{1:20,2:18,3:15,4:12} };
-var INT_LOS = 20;
-
-var hints = [
-  '1 keer per maand — sporadisch',
-  '2 keer per maand — al voordeliger met Wasclub!',
-  '3 keer — elke week bijna',
-  '4 keer per maand — slim rijden',
-  '5 keer — echte fan',
-  '6 keer — elke twee weken',
-  '7 keer — wekelijks bijna',
-  '8 keer — superclean rijder',
-  '9 keer — serieuze wasclub-kandidaat',
-  '10 keer — bijna dagelijks',
-  '11 keer — auto altijd perfect',
-  '12 keer — maandelijks maximum'
-];
-
-// ── NAVIGATIE ─────────────────────────────────────────────────────
-window.goStep = function(n) {
-  if (n < 1 || n > 4) return;
-  S.step = n;
-  document.querySelectorAll('.step-panel').forEach(function(p,i){
-    p.classList.toggle('active', i+1 === n);
+  var iframe = document.getElementById('mob-calc-iframe');
+  if (!iframe) return;
+  window.addEventListener('message', function(e) {
+    if (e.data && e.data.type === 'calcHeight') {
+      iframe.style.minHeight = (e.data.height + 20) + 'px';
+    }
   });
-  document.querySelectorAll('.step-tab').forEach(function(t,i){
-    t.classList.remove('active','done');
-    if (i+1 < n) t.classList.add('done');
-    if (i+1 === n) t.classList.add('active');
-    t.querySelector('.step-num').textContent = i+1 < n ? '✓' : i+1;
-  });
-  document.querySelectorAll('.progress-dot').forEach(function(d,i){
-    d.classList.remove('active','done');
-    if (i+1 < n) d.classList.add('done');
-    if (i+1 === n) d.classList.add('active');
-  });
-  var back = document.getElementById('btn-back');
-  var next = document.getElementById('btn-next');
-  back.style.display = n > 1 ? 'flex' : 'none';
-  next.textContent = n < 4 ? 'Volgende stap →' : 'Bekijk resultaat ✓';
-  document.querySelector('.step-nav').style.display = n === 4 ? 'none' : 'flex';
-  updateSummary();
-}
-
-window.goNext = function() {
-  if (S.step < 4) goStep(S.step + 1);
-}
-window.goBack = function() { goStep(S.step - 1); }
-
-// ── INPUTS ────────────────────────────────────────────────────────
-window.onFreq = function(el) {
-  S.freq = parseInt(el.value);
-  var pct = ((S.freq - 1) / 11) * 100;
-  el.style.setProperty('--pct', pct + '%');
-  document.getElementById('s-freq').textContent = S.freq;
-  document.getElementById('s-freq-hint').textContent = hints[S.freq - 1];
-  calc();
-}
-
-window.onAutos = function(btn) {
-  document.querySelectorAll('[data-autos]').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  S.autos = parseInt(btn.dataset.autos);
-  document.getElementById('s-autos').textContent = S.autos;
-  var hint = document.getElementById('familie-hint');
-  hint.style.display = S.autos > 1 ? 'block' : 'none';
-  // Normaal niet beschikbaar bij >1 auto
-  var normaalBtn = document.querySelector('[data-prog="normaal"]');
-  if (S.autos > 1 && S.progKey === 'normaal') {
-    var intensiefBtn = document.querySelector('[data-prog="intensief"]');
-    onProg(intensiefBtn);
-  }
-  normaalBtn.classList.toggle('disabled', S.autos > 1);
-  calc();
-}
-
-window.onProg = function(btn) {
-  document.querySelectorAll('[data-prog]').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  S.progKey  = btn.dataset.prog;
-  S.progLos  = parseInt(btn.dataset.los);
-  S.progAbo  = parseInt(btn.dataset.abo);
-  S.progName = btn.dataset.prog.charAt(0).toUpperCase() + btn.dataset.prog.slice(1);
-  document.getElementById('s-prog-display').textContent = S.progName;
-  // Interieur toggle
-  var normaal = S.progKey === 'normaal';
-  var tog = document.getElementById('int-toggle');
-  var hint = document.getElementById('normaal-hint');
-  if (normaal) {
-    tog.classList.add('disabled');
-    S.interieur = false;
-    tog.classList.remove('on');
-    hint.style.display = 'block';
-  } else {
-    tog.classList.remove('disabled');
-    hint.style.display = 'none';
-  }
-  calc();
-}
-
-window.onInterieur = function() {
-  if (S.progKey === 'normaal') return;
-  S.interieur = !S.interieur;
-  var tog = document.getElementById('int-toggle');
-  tog.classList.toggle('on', S.interieur);
-  updateIntDesc();
-  calc();
-}
-
-function updateIntDesc() {
-  var desc = document.getElementById('int-desc');
-  if (S.interieur && S.progKey !== 'normaal') {
-    var prijs = INT_ABO[S.progKey][Math.min(S.autos,4)];
-    var suffix = S.autos > 1 ? ' p/auto — €' + (prijs * S.autos) + ' totaal' : '/mnd';
-    desc.textContent = 'Actief — +€' + prijs + suffix;
-    desc.className = 'toggle-desc on';
-  } else {
-    desc.textContent = 'Binnenreiniging erbij';
-    desc.className = 'toggle-desc';
-  }
-}
-
-// ── BEREKENING ────────────────────────────────────────────────────
-function getWasPA() {
-  if (S.progKey === 'normaal') return S.progAbo;
-  return WAS_ABO[S.progKey][Math.min(S.autos,4)];
-}
-function getIntPA() {
-  if (!S.interieur || S.progKey === 'normaal') return 0;
-  return INT_ABO[S.progKey][Math.min(S.autos,4)];
-}
-
-function calc() {
-  var n = S.autos;
-  var wasPA = getWasPA();
-  var intPA = getIntPA();
-  var aboPA = wasPA + intPA;
-  var aboTot = aboPA * n;
-  var losTot = (S.progLos + (S.interieur ? INT_LOS : 0)) * S.freq * n;
-  var saving = losTot - aboTot;
-
-  // Los rij
-  var losDetail = n > 1
-    ? n + ' auto\'s × ' + S.freq + '× ' + S.progName + (S.interieur ? ' + int.' : '')
-    : S.freq + '× ' + S.progName + ' à €' + S.progLos + (S.interieur ? ' + €' + INT_LOS + ' int.' : '');
-  document.getElementById('r-los-detail').textContent = losDetail;
-  animNum(document.getElementById('r-los-price'), losTot, '€');
-
-  // Wasclub rij
-  var wcDetail = n > 1
-    ? n + ' auto\'s — €' + aboPA + '/auto/mnd'
-    : 'Onbeperkt ' + S.progName + (S.interieur ? ' + Interieur' : '');
-  document.getElementById('r-wc-detail').textContent = wcDetail;
-  animNum(document.getElementById('r-wc-price'), aboTot, '€');
-
-  // Besparing
-  var disp = Math.max(saving, 0);
-  var savEl = document.getElementById('r-saving');
-  savEl.textContent = '€' + disp;
-  savEl.className = 'saving-amount' + (saving > 0 ? '' : ' zero');
-
-  document.getElementById('r-period').textContent = saving > 0
-    ? 'per maand' + (n > 1 ? ' voor ' + n + ' auto\'s' : '') + ' bij ' + S.freq + '× wassen'
-    : saving === 0 ? 'Break-even — je wint gemak'
-    : 'Wasclub €' + Math.abs(saving) + ' duurder bij dit gebruik';
-  document.getElementById('r-year').textContent = saving > 0
-    ? '→ €' + (saving * 12) + ' per jaar'
-    : '';
-
-  // Thermometer
-  var maxSaving = S.freq * S.progLos * n;
-  var pct = maxSaving > 0 ? Math.max(0, Math.min(100, (disp / maxSaving) * 100)) : 0;
-  document.getElementById('saving-bar-fill').style.height = pct + '%';
-
-  updateIntDesc();
-  updateSummary();
-}
-
-function animNum(el, val, prefix) {
-  var cur = parseInt(el.textContent.replace(/\D/g,'')) || 0;
-  var diff = val - cur; var steps = 16; var step = 0;
-  var t = setInterval(function(){
-    step++;
-    el.textContent = prefix + Math.round(cur + diff * (step/steps));
-    if (step >= steps) { el.textContent = prefix + val; clearInterval(t); }
-  }, 16);
-}
-
-function updateSummary() {
-  var tags = document.getElementById('summary-tags');
-  var items = [
-    { label: S.freq + '× p/mnd', step: 1 },
-    { label: S.autos + ' auto' + (S.autos > 1 ? '\'s' : ''), step: 2 },
-    { label: S.progName, step: 3 },
-    { label: S.interieur ? '+ Interieur' : 'Geen interieur', step: 4 }
-  ];
-  tags.innerHTML = items.map(function(it){
-    return '<span class="sum-item" onclick="goStep(' + it.step + ')">' + it.label + '</span>';
-  }).join('');
-}
-
-// ── INIT ─────────────────────────────────────────────────────────
-function mobCalcInit() {
-  // Alleen op mobiel initialiseren
-  if (!document.querySelector('.mob-calc-wrap')) return;
-  if (window.getComputedStyle(document.querySelector('.mob-calc-wrap')).display === 'none') return;
-  calc();
-}
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', mobCalcInit);
-} else {
-  mobCalcInit();
-}
-window.addEventListener('resize', function() {
-  var wrap = document.querySelector('.mob-calc-wrap');
-  if (wrap && window.getComputedStyle(wrap).display !== 'none') calc();
-});
 })();
+
 </script>
 </body>
 </html>
