@@ -708,14 +708,14 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
 
 
-/* ── Mobiele calculator iframe ── */
-.mob-calc-iframe-wrap { display: none !important; width: 100%; }
-.mob-calc-iframe-wrap iframe { width: 100%; border: none; min-height: 900px; display: block; }
-@media (max-width: 768px) {
-  .mob-calc-iframe-wrap { display: block !important; }
-  .desktop-calc-wrap { display: none !important; }
-}
 
+
+/* ── Mobiele calculator iframe ── */
+.mob-calc-iframe { display: none; width: 100%; border: none; }
+@media (max-width: 768px) {
+  .mob-calc-iframe { display: block; }
+  .calculator { display: none; }
+}
 </style>
 </head>
 <body>
@@ -811,7 +811,7 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
       <p>Stel je situatie in en zie direct wat je bespaart — ook bij meerdere auto's.</p>
     </div>
 
-    <div class="desktop-calc-wrap"><div class="calculator reveal">
+    <div class="calculator reveal">
       <div class="calc-grid">
 
         <!-- LINKS: INVOER -->
@@ -937,12 +937,15 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
           <div class="result-note">Maandelijks opzegbaar &middot; geen aansluitkosten &middot; direct actief</div>
         </div>
 
-      </div></div><!-- /desktop-calc-wrap -->
-
-    <!-- Mobiele calculator via iframe -->
-    <div class="mob-calc-iframe-wrap">
-      <iframe id="mob-calc-iframe" src="BOB_Calculator_Test.html" scrolling="no" title="Wasclub Calculator"></iframe>
+      </div>
     </div>
+
+    </div>
+
+    <iframe class="mob-calc-iframe" id="mob-calc-iframe"
+      src="BOB_Calculator_Test.html"
+      height="820"
+      scrolling="no" title="Wasclub Calculator"></iframe>
 
   </div>
 </section>
@@ -1386,6 +1389,159 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
 <script>
 // ════════════════════════════════════════════════
+// CALCULATOR
+// ════════════════════════════════════════════════
+(function(){
+  var freqSlider   = document.getElementById('freq-slider');
+  var freqDisplay  = document.getElementById('freq-display');
+  var intToggle    = document.getElementById('interieur-toggle');
+  var progBtns     = document.querySelectorAll('.prog-btn');
+  var autosBtns    = document.querySelectorAll('.autos-btn');
+  var losPrice     = document.getElementById('los-price');
+  var losDetail    = document.getElementById('los-detail');
+  var wcPrice      = document.getElementById('wc-price');
+  var wcDetail     = document.getElementById('wc-detail');
+  var savingAmt    = document.getElementById('saving-amount');
+  var savingPeriod = document.getElementById('saving-period');
+  var savingYear   = document.getElementById('saving-year');
+
+  var freq = 4, priceLos = 17, priceAbo = 34;
+  var progName = 'Intensief', progKey = 'intensief';
+  var interieur = false, aantalAutos = 1;
+
+  var WAS_ABO = {
+    proteqt:   {1:39,2:29,3:26,4:24},
+    intensief: {1:34,2:25,3:22,4:21}
+  };
+  var INT_ABO = {
+    proteqt:   {1:18,2:16,3:13,4:10},
+    intensief: {1:20,2:18,3:15,4:12}
+  };
+  var INT_LOS = 20;
+
+  function animateNum(el, newVal, prefix) {
+    if (!el) return;
+    prefix = prefix || '€';
+    var cur = parseInt(el.textContent.replace(/\D/g,'')) || 0;
+    var diff = newVal - cur; var steps = 18; var step = 0;
+    var timer = setInterval(function() {
+      step++;
+      el.textContent = prefix + Math.round(cur + diff * (step/steps));
+      if (step >= steps) { el.textContent = prefix + newVal; clearInterval(timer); }
+    }, 16);
+  }
+
+  function getWasAboPA() {
+    if (progKey === 'normaal') return priceAbo;
+    return WAS_ABO[progKey][aantalAutos];
+  }
+  function getIntAboPA() {
+    if (progKey === 'normaal' || !interieur) return 0;
+    return INT_ABO[progKey][aantalAutos];
+  }
+
+  function calc() {
+    var n = aantalAutos;
+    var wasAboPA = getWasAboPA();
+    var intAboPA = getIntAboPA();
+    var aboPA    = wasAboPA + intAboPA;
+    var aboTot   = aboPA * n;
+    var losTot   = (priceLos + (interieur ? INT_LOS : 0)) * freq * n;
+    var saving   = losTot - aboTot;
+
+    var pct = ((freq - 1) / 11) * 100;
+    if (freqSlider) freqSlider.style.setProperty('--pct', pct + '%');
+    if (freqDisplay) freqDisplay.innerHTML = '<em>' + freq + '</em>&times;';
+
+    var losLabel = n > 1
+      ? n + ' auto’s × ' + freq + '× ' + progName + (interieur ? ' + int.' : '')
+      : freq + '× ' + progName + ' à €' + priceLos + (interieur ? ' + €' + INT_LOS + ' int.' : '');
+    animateNum(losPrice, losTot);
+    if (losDetail) losDetail.textContent = losLabel;
+    var losSub = document.getElementById('los-sub');
+    if (losSub) losSub.textContent = n > 1 ? 'voor ' + n + ' auto’s per maand' : 'per maand';
+
+    var wcLabel = n > 1
+      ? n + ' auto’s — €' + aboPA + '/auto/mnd'
+      : 'Onbeperkt ' + progName + (interieur ? ' + Interieur' : '');
+    animateNum(wcPrice, aboTot);
+    if (wcDetail) wcDetail.textContent = wcLabel;
+    var wcSub = document.getElementById('wc-sub');
+    if (wcSub) wcSub.textContent = n > 1 ? 'voor ' + n + ' auto’s per maand' : 'per maand';
+
+    var bd = document.getElementById('familie-breakdown');
+    if (bd) bd.style.display = n > 1 ? 'block' : 'none';
+
+    var rh = document.getElementById('result-header');
+    if (rh) rh.textContent = n > 1 ? 'Kosten voor ' + n + ' auto’s per maand' : 'Jouw maandelijkse kosten';
+
+    var disp = Math.max(saving, 0);
+    animateNum(savingAmt, disp);
+    if (savingAmt) savingAmt.style.color = saving > 0 ? 'var(--red)' : 'rgba(255,255,255,0.25)';
+    if (savingPeriod) savingPeriod.textContent = saving > 0
+      ? (n > 1 ? 'per maand voor ' + n + ' auto’s bij ' + freq + '× wassen' : 'per maand bij ' + freq + ' wasbeurt' + (freq===1?'':'en'))
+      : (saving === 0 ? 'Break-even — je wint gemak' : 'Wasclub €' + Math.abs(saving) + ' duurder bij dit gebruik');
+    if (savingYear) savingYear.textContent = saving > 0 ? '→ €' + (saving * 12) + ' per jaar' : '';
+  }
+
+  if (freqSlider) freqSlider.addEventListener('input', function() { freq = parseInt(freqSlider.value); calc(); });
+
+  autosBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      autosBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      aantalAutos = parseInt(btn.dataset.autos);
+      var normaalBtn = document.querySelector('[data-prog="normaal"]');
+      var hint = document.getElementById('autos-hint');
+      if (aantalAutos > 1) {
+        if (hint) hint.style.display = 'block';
+        if (progKey === 'normaal') {
+          progBtns.forEach(function(b) { b.classList.remove('active'); });
+          var intB = document.querySelector('[data-prog="intensief"]');
+          if (intB) intB.classList.add('active');
+          priceLos = 17; priceAbo = 34; progName = 'Intensief'; progKey = 'intensief';
+        }
+        if (normaalBtn) { normaalBtn.disabled = true; normaalBtn.style.opacity = '0.35'; }
+      } else {
+        if (hint) hint.style.display = 'none';
+        if (normaalBtn) { normaalBtn.disabled = false; normaalBtn.style.opacity = '1'; }
+      }
+      var autosDisp = document.getElementById('autos-display');
+      if (autosDisp) autosDisp.innerHTML = '<em>' + aantalAutos + '</em> auto' + (aantalAutos > 1 ? '’s' : '');
+      calc();
+    });
+  });
+
+  progBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (btn.disabled) return;
+      progBtns.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      priceLos = parseInt(btn.dataset.priceLos);
+      priceAbo = parseInt(btn.dataset.priceAbo);
+      progKey  = btn.dataset.prog;
+      progName = progKey.charAt(0).toUpperCase() + progKey.slice(1);
+      var isNormaal = progKey === 'normaal';
+      var intRow = document.querySelector('.toggle-wrap');
+      var hint = document.getElementById('int-hint');
+      if (isNormaal) {
+        if (intToggle) { intToggle.checked = false; interieur = false; }
+        if (intRow) { intRow.style.opacity = '0.35'; intRow.style.pointerEvents = 'none'; }
+        if (hint) hint.style.display = 'inline';
+      } else {
+        if (intRow) { intRow.style.opacity = '1'; intRow.style.pointerEvents = ''; }
+        if (hint) hint.style.display = 'none';
+      }
+      calc();
+    });
+  });
+
+  if (intToggle) intToggle.addEventListener('change', function() { interieur = intToggle.checked; calc(); });
+  calc();
+})();
+
+
+// ════════════════════════════════════════════════
 // BOB FAMILIE STAFFEL
 // ════════════════════════════════════════════════
 var STAFFEL_WAS = {
@@ -1558,16 +1714,14 @@ function closeDrawer() {
 
 
 
-// ── Mobiele calculator iframe resize ──
-(function() {
-  var iframe = document.getElementById('mob-calc-iframe');
-  if (!iframe) return;
-  window.addEventListener('message', function(e) {
-    if (e.data && e.data.type === 'calcHeight') {
-      iframe.style.minHeight = (e.data.height + 20) + 'px';
-    }
-  });
-})();
+
+// ── Iframe hoogte aanpassing ──
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'calcHeight') {
+    var iframe = document.getElementById('mob-calc-iframe');
+    if (iframe) iframe.height = e.data.height + 10;
+  }
+});
 
 </script>
 </body>

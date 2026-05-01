@@ -709,6 +709,13 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
 
 
+
+/* ── Mobiele calculator iframe ── */
+.mob-calc-iframe { display: none; width: 100%; border: none; }
+@media (max-width: 768px) {
+  .mob-calc-iframe { display: block; }
+  .calculator { display: none; }
+}
 </style>
 </head>
 <body>
@@ -934,6 +941,11 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
     </div>
 
     </div>
+
+    <iframe class="mob-calc-iframe" id="mob-calc-iframe"
+      src="BOB_Calculator_Test.html"
+      height="820"
+      scrolling="no" title="Wasclub Calculator"></iframe>
 
   </div>
 </section>
@@ -1701,6 +1713,15 @@ function closeDrawer() {
 
 
 
+
+
+// ── Iframe hoogte aanpassing ──
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'calcHeight') {
+    var iframe = document.getElementById('mob-calc-iframe');
+    if (iframe) iframe.height = e.data.height + 10;
+  }
+});
 
 </script>
 </body>

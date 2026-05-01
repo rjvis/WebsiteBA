@@ -356,18 +356,7 @@ input[type="range"].main-slider:active::-webkit-slider-thumb {
 
 
 
-/* ── DESKTOP: zij aan zij ── */
-@media (min-width: 900px) {
-  body { padding: 40px; align-items: flex-start; justify-content: center; }
-  .calc-card { max-width: 900px; display: grid; grid-template-columns: 1fr 1fr; }
-  
-  .calc-header { grid-column: 1/-1; border-bottom: none; border-right: 1px solid var(--border); }
-  .steps-bar { grid-column: 1; border-bottom: 1px solid var(--border); }
-  .step-panels { grid-column: 1; }
-  .step-nav { grid-column: 1; border-right: 1px solid var(--border); }
-  .result-panel { grid-column: 2; grid-row: 2/6; border-top: none; border-left: 1px solid var(--border); }
-  .progress-dots { display: none; }
-}
+
 </style>
 </head>
 <body>
@@ -791,6 +780,16 @@ var _origGoStep = window.goStep;
 window.addEventListener('load', sendHeight);
 setInterval(sendHeight, 500);
 
+
+// Hoogte doorgeven aan parent (iframe aanpassing)
+function notifyHeight() {
+  var h = document.documentElement.scrollHeight;
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: 'calcHeight', height: h }, '*');
+  }
+}
+setInterval(notifyHeight, 300);
+window.addEventListener('load', notifyHeight);
 </script>
 </body>
 </html>
