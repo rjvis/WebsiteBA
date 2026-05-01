@@ -709,11 +709,11 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
 
 /* ── Mobiele calculator iframe ── */
-.mob-calc-iframe-wrap { display: none; width: 100%; }
+.mob-calc-iframe-wrap { display: none !important; width: 100%; }
 .mob-calc-iframe-wrap iframe { width: 100%; border: none; min-height: 900px; display: block; }
 @media (max-width: 768px) {
-  .mob-calc-iframe-wrap { display: block; }
-  .desktop-calc-wrap { display: none; }
+  .mob-calc-iframe-wrap { display: block !important; }
+  .desktop-calc-wrap { display: none !important; }
 }
 
 </style>
