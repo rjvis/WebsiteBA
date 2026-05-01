@@ -781,15 +781,17 @@ window.addEventListener('load', sendHeight);
 setInterval(sendHeight, 500);
 
 
-// Hoogte doorgeven aan parent (iframe aanpassing)
+// Hoogte doorgeven aan parent (iframe aanpassing) - eenmalig na laden
 function notifyHeight() {
   var h = document.documentElement.scrollHeight;
   if (window.parent !== window) {
     window.parent.postMessage({ type: 'calcHeight', height: h }, '*');
   }
 }
-setInterval(notifyHeight, 300);
-window.addEventListener('load', notifyHeight);
+window.addEventListener('load', function() {
+  setTimeout(notifyHeight, 100);
+  setTimeout(notifyHeight, 500);
+});
 </script>
 </body>
 </html>

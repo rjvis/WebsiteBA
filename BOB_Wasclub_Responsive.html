@@ -711,13 +711,11 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
 
 /* ── Mobiele calculator iframe ── */
-.mob-calc-iframe { display: none; width: 100%; border: none; }
+.mob-calc-iframe-wrap { display: none; }
+.mob-calc-iframe { width: 100%; border: none; display: block; }
 @media (max-width: 768px) {
-  .mob-calc-iframe { display: block; }
-  .calculator { display: none !important; }
-  .calc-section { padding: 0 !important; background: var(--dark); }
-  .calc-head { display: none !important; }
-  .calc-inner { padding: 0 !important; }
+  .calc-section { display: none !important; }
+  .mob-calc-iframe-wrap { display: block; }
 }
 </style>
 </head>
@@ -945,13 +943,13 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
     </div>
 
-    <iframe class="mob-calc-iframe" id="mob-calc-iframe"
-      src="BOB_Calculator_Test.html"
-      height="820"
-      scrolling="no" title="Wasclub Calculator"></iframe>
-
   </div>
 </section>
+
+<!-- MOB CALCULATOR -->
+<div class="mob-calc-iframe-wrap">
+  <iframe class="mob-calc-iframe" id="mob-calc-iframe" src="BOB_Calculator_Test.html" height="820" scrolling="no" title="Wasclub Calculator"></iframe>
+</div>
 
 <!-- TIERS -->
 <section class="tiers-section" id="tiers">
