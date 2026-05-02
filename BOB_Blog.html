@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — BOB Autowas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+:root {
+  --red: #E30613;
+  --red-dark: #a3040d;
+  --red-glow: rgba(227,6,19,0.22);
+  --black: #0a0a0a;
+  --dark: #111111;
+  --mid: #1c1c1c;
+  --panel: #161616;
+  --border: rgba(255,255,255,0.07);
+  --text: #ffffff;
+  --muted: rgba(255,255,255,0.55);
+  --subtle: rgba(255,255,255,0.15);
+  --font-d: 'Inter Tight', sans-serif;
+  --font-b: 'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--text); font-family: var(--font-b, "Inter", sans-serif); }
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 72px;
+  background: rgba(10,10,10,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.logo-mark { display: grid; grid-template-columns: repeat(4,8px); grid-template-rows: repeat(4,8px); gap: 3px; }
+.logo-mark span { background: #444; border-radius: 1.5px; transition: all 0.5s cubic-bezier(.34,1.56,.64,1); }
+.logo-mark span:nth-child(2),.logo-mark span:nth-child(4),
+.logo-mark span:nth-child(11),.logo-mark span:nth-child(13) { background: #666; }
+.logo-mark span:nth-child(6) { background: var(--red); }
+.nav-logo:hover .logo-mark span:nth-child(6) { transform: scale(1.4); box-shadow: 0 0 12px var(--red-glow); }
+.logo-text { background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 900; font-size: 26px; letter-spacing: 3px; padding: 5px 14px 3px; line-height: 1; clip-path: polygon(0 0,calc(100% - 8px) 0,100% 100%,0 100%); }
+.nav-menu { display: flex; gap: 36px; list-style: none; }
+.nav-menu a { font-family: var(--font-d); font-weight: 700; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; position: relative; padding-bottom: 2px; }
+.nav-menu a::after { content:''; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+.nav-menu a:hover { color: var(--text); }
+.nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+.nav-menu a.active { color: var(--text); }
+.nav-cta { background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px 24px 9px; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); transition: all 0.2s; }
+.nav-cta:hover { box-shadow: 0 8px 32px var(--red-glow); transform: translateY(-1px); }
+
+/* ─── HERO WASCLUB ─── */
+
+/* ── BLOG HERO ── */
+.blog-hero {
+  padding: 140px 0 80px;
+  position: relative; overflow: hidden;
+  background: var(--black);
+}
+.blog-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(227,6,19,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.blog-hero-inner {
+  max-width: 1100px; margin: 0 auto; padding: 0 48px;
+}
+.blog-hero-label {
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 800;
+  font-size: 11px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--red); display: block; margin-bottom: 14px;
+}
+.blog-hero-h1 {
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 900;
+  font-size: clamp(44px, 7vw, 80px); text-transform: uppercase;
+  letter-spacing: -2px; line-height: 0.92; margin-bottom: 24px;
+}
+.blog-hero-h1 em { font-style: normal; color: var(--red); }
+.blog-hero-sub {
+  font-size: 17px; color: var(--muted); max-width: 520px; line-height: 1.6;
+}
+
+/* ── FILTER TABS ── */
+.blog-filter {
+  max-width: 1100px; margin: 0 auto; padding: 0 48px 48px;
+  display: flex; gap: 8px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border);
+}
+.filter-tab {
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 700;
+  font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 8px 16px; border: 1px solid var(--border);
+  color: var(--muted); cursor: pointer; transition: all 0.2s;
+  background: none;
+}
+.filter-tab:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.filter-tab.active {
+  background: var(--red); border-color: var(--red); color: #fff;
+}
+
+/* ── BLOG GRID ── */
+.blog-grid-wrap {
+  max-width: 1100px; margin: 0 auto; padding: 56px 48px 100px;
+}
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+}
+
+/* ── BLOG KAART ── */
+.blog-card {
+  background: var(--dark); position: relative; overflow: hidden;
+  cursor: pointer; display: flex; flex-direction: column;
+  transition: background 0.3s;
+  border: 1px solid var(--border);
+}
+.blog-card:hover { background: var(--mid); }
+.blog-card:hover .blog-card-img-inner { transform: scale(1.04); }
+.blog-card:hover .blog-read-more { color: var(--text); gap: 12px; }
+
+/* Uitgelichte kaart: eerste kaart breed */
+.blog-card.featured {
+  grid-column: 1 / -1;
+  flex-direction: row;
+}
+.blog-card.featured .blog-card-imgs {
+  width: 55%; flex-shrink: 0;
+}
+.blog-card.featured .blog-card-body {
+  padding: 48px 40px;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.blog-card.featured .blog-card-title {
+  font-size: clamp(22px, 3vw, 34px);
+}
+
+/* Foto container */
+.blog-card-imgs {
+  position: relative; overflow: hidden;
+  aspect-ratio: 16/9;
+}
+.blog-card.featured .blog-card-imgs {
+  aspect-ratio: unset; height: 100%; min-height: 320px;
+}
+.blog-card-img-inner {
+  position: absolute; inset: 0;
+  transition: transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+.blog-card-img-main {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+}
+/* Tweede foto: zweeft rechtsonder */
+.blog-card-img-secondary {
+  position: absolute; bottom: 12px; right: 12px;
+  width: 38%; aspect-ratio: 4/3; object-fit: cover;
+  border: 2px solid var(--black);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.blog-card:hover .blog-card-img-secondary {
+  transform: translate(-4px, -4px) scale(1.03);
+}
+/* Placeholder als geen foto beschikbaar */
+.blog-img-placeholder {
+  width: 100%; height: 100%;
+  background: var(--mid);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 28px;
+}
+.blog-img-placeholder-sm {
+  position: absolute; bottom: 12px; right: 12px;
+  width: 38%; aspect-ratio: 4/3;
+  background: rgba(255,255,255,0.04);
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 18px;
+}
+
+/* Rode balk categorie */
+.blog-cat {
+  position: absolute; top: 16px; left: 16px; z-index: 2;
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 800;
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--red); color: #fff; padding: 4px 10px;
+}
+
+/* Kaart body */
+.blog-card-body {
+  padding: 24px 28px 28px;
+  flex: 1; display: flex; flex-direction: column; gap: 10px;
+}
+.blog-card-meta {
+  display: flex; align-items: center; gap: 12px;
+  font-size: 11px; color: var(--muted);
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.blog-card-meta-dot {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--muted); flex-shrink: 0;
+}
+.blog-card-title {
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 900;
+  font-size: clamp(17px, 2vw, 22px); text-transform: uppercase;
+  letter-spacing: -0.3px; line-height: 1.1; color: var(--text);
+}
+.blog-card-excerpt {
+  font-size: 14px; color: var(--muted); line-height: 1.6; flex: 1;
+}
+.blog-read-more {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 800;
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--red); text-decoration: none;
+  transition: gap 0.2s, color 0.2s; margin-top: 4px;
+}
+
+/* ── BLOG DETAIL PAGINA (verborgen, toont via JS) ── */
+.blog-detail {
+  display: none; max-width: 780px; margin: 0 auto; padding: 100px 48px 80px;
+}
+.blog-detail.open { display: block; }
+.blog-detail-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 700;
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted); text-decoration: none; margin-bottom: 40px;
+  cursor: pointer; transition: color 0.2s; background: none; border: none;
+}
+.blog-detail-back:hover { color: var(--text); }
+.blog-detail-cat {
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 800;
+  font-size: 10px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--red); margin-bottom: 12px; display: block;
+}
+.blog-detail-title {
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 900;
+  font-size: clamp(28px, 5vw, 52px); text-transform: uppercase;
+  letter-spacing: -1px; line-height: 0.95; margin-bottom: 20px;
+}
+.blog-detail-meta {
+  font-size: 13px; color: var(--muted); margin-bottom: 36px;
+  display: flex; gap: 16px; align-items: center;
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 700;
+}
+.blog-detail-imgs {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 40px;
+}
+.blog-detail-img {
+  width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+}
+.blog-detail-img-placeholder {
+  width: 100%; aspect-ratio: 4/3; background: var(--mid);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 36px;
+}
+.blog-detail-body {
+  font-size: 17px; line-height: 1.75; color: rgba(255,255,255,0.8);
+}
+.blog-detail-body h2 {
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 900;
+  font-size: 22px; text-transform: uppercase; letter-spacing: -0.3px;
+  color: var(--text); margin: 36px 0 14px;
+}
+.blog-detail-body h3 {
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 800;
+  font-size: 17px; text-transform: uppercase; color: var(--text); margin: 28px 0 10px;
+}
+.blog-detail-body p { margin-bottom: 20px; }
+.blog-detail-body strong { color: var(--text); font-weight: 600; }
+.blog-detail-body em { font-style: italic; color: var(--muted); }
+.blog-detail-body ul, .blog-detail-body ol {
+  padding-left: 20px; margin-bottom: 20px;
+}
+.blog-detail-body li { margin-bottom: 8px; }
+.blog-detail-body blockquote {
+  border-left: 3px solid var(--red); padding: 16px 24px; margin: 28px 0;
+  background: var(--dark); color: var(--muted); font-size: 18px; font-style: italic;
+}
+
+/* CTA onderaan detail */
+.blog-detail-cta {
+  margin-top: 56px; padding: 32px; background: var(--dark);
+  border: 1px solid var(--border); text-align: center;
+}
+.blog-detail-cta p {
+  font-size: 14px; color: var(--muted); margin-bottom: 18px;
+}
+.btn-red {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 32px; background: var(--red); color: #fff;
+  font-family: var(--font-d, "Inter Tight", sans-serif); font-weight: 800;
+  font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+  text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+  transition: box-shadow 0.2s;
+}
+.btn-red:hover { box-shadow: 0 8px 24px rgba(227,6,19,0.35); }
+
+/* ── GEEN BLOGS ── */
+.no-blogs {
+  text-align: center; padding: 80px 24px; color: var(--muted);
+  font-size: 15px; display: none;
+}
+.no-blogs.show { display: block; }
+
+/* ── REVEAL ANIMATIES ── */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.6s, transform 0.6s; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .blog-card.featured { flex-direction: column; }
+  .blog-card.featured .blog-card-imgs { width: 100%; height: auto; min-height: auto; aspect-ratio: 16/9; }
+  .blog-card.featured .blog-card-body { padding: 24px 28px 28px; }
+  .blog-card.featured .blog-card-title { font-size: 22px; }
+}
+@media (max-width: 768px) {
+  .nav { padding: 0 20px; height: 56px; }
+  .nav-menu, .nav-cta { display: none; }
+  .nav-hamburger { display: flex; }
+  .mobile-sticky-cta { display: block; }
+  .blog-hero { padding: 100px 0 48px; }
+  .blog-hero-inner, .blog-filter, .blog-grid-wrap { padding-left: 20px; padding-right: 20px; }
+  .blog-grid { grid-template-columns: 1fr; gap: 2px; }
+  .blog-card.featured { grid-column: 1; }
+  .blog-detail { padding: 90px 20px 60px; }
+  .blog-detail-imgs { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .blog-hero-h1 { font-size: 40px; }
+  .blog-card-body { padding: 18px 20px 22px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="BOB_Homepage_Responsive.html" class="nav-logo">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNjAgMTMwIiB3aWR0aD0iMzYwIiBoZWlnaHQ9IjEzMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImNocm9tZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiAgIHN0b3AtY29sb3I9IiM4YThhOGEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxOCUiICBzdG9wLWNvbG9yPSIjY2VjZWNlIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMzglIiAgc3RvcC1jb2xvcj0iI2Y4ZjhmOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjUyJSIgIHN0b3AtY29sb3I9IiNmZmZmZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI2NSUiICBzdG9wLWNvbG9yPSIjZDBkMGQwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iODIlIiAgc3RvcC1jb2xvcj0iIzlhOWE5YSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiOGI4YjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdsb3NzIiB4MT0iMCIgeTE9IjAiIHgyPSIwLjQiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuNTUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC4xIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KCiAgPCEtLSBHcmlqcyB2aWVya2FudCB2bGFrIDEzMMOXMTMwIC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMzAiIGhlaWdodD0iMTMwIiBmaWxsPSIjNTU1NTU1Ii8+CgogIDwhLS0gIjI1IiBjaHJvb20gLS0+CiAgPHRleHQgeD0iNjUiIHk9IjEwMCIKICAgIGZvbnQtZmFtaWx5PSInQXJpYWwgQmxhY2snLCAnQXJpYWwnLCBzYW5zLXNlcmlmIgogICAgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI5OCIKICAgIGZpbGw9InVybCgjY2hyb21lKSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9Ii0yIj4yNTwvdGV4dD4KICA8dGV4dCB4PSI2NSIgeT0iMTAwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCcsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9Ijk4IgogICAgZmlsbD0idXJsKCNnbG9zcykiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSItMiI+MjU8L3RleHQ+CgogIDwhLS0gUm9vZCB2bGFrIC0tPgogIDxyZWN0IHg9IjEzMCIgeT0iMCIgd2lkdGg9IjIzMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiNFMzA2MTMiIHJ4PSIxNiIgcnk9IjE2Ii8+CiAgPHJlY3QgeD0iMTMwIiB5PSIwIiB3aWR0aD0iMjAiICBoZWlnaHQ9IjEzMCIgZmlsbD0iI0UzMDYxMyIvPgoKICA8IS0tICJCT0IiIOKAlCBBcmlhbCBCbGFjaywgYnJlZWQgZW4gb3BlbiAtLT4KICA8dGV4dCB4PSIyNDUiIHk9IjgwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCBCb2xkJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjY4IgogICAgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjYiPkJPQjwvdGV4dD4KCiAgPCEtLSAiQVVUT1dBUyIg4oCUIEFyaWFsIEJvbGQsIHJ1aW0gZW4gbGVlc2JhYXIgLS0+CiAgPHRleHQgeD0iMjQ1IiB5PSIxMTAiCiAgICBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjE5IgogICAgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjkyKSIKICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSI2Ij5BVVRPV0FTPC90ZXh0Pgo8L3N2Zz4=" alt="BOB Autowas" style="height:36px;width:auto;display:block;">
+  </a>
+  <ul class="nav-menu">
+    <li><a href="BOB_Wasclub_Responsive.html">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html">Wasprogramma's</a></li>
+    <li><a href="BOB_Blog.html" class="active">Blog</a></li>
+    <li><a href="BOB_Vestigingen.html">Vestigingen</a></li>
+    <li><a href="BOB_Zakelijk_Aanvraag.html">Zakelijk</a></li>
+    <li><a href="BOB_Werken_Bij.html">Werken bij</a></li>
+  </ul>
+  <a href="BOB_Aanmelden.html" class="nav-cta">Wordt lid van onze Wasclub →</a>
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-overlay" id="nav-overlay" onclick="closeDrawer()"></div>
+<div class="nav-drawer" id="nav-drawer">
+  <ul>
+    <li><a href="BOB_Homepage_Responsive.html" onclick="closeDrawer()">Home</a></li>
+    <li><a href="BOB_Wasclub_Responsive.html" class="active" onclick="closeDrawer()">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html" onclick="closeDrawer()">Wasprogramma's</a></li>
+    <li><a href="BOB_Blog.html" onclick="closeDrawer()">Blog</a></li>
+    <li><a href="BOB_Vestigingen.html" onclick="closeDrawer()">Vestigingen</a></li>
+    <li><a href="BOB_Zakelijk_Aanvraag.html" onclick="closeDrawer()">Zakelijk</a></li>
+    <li><a href="BOB_Werken_Bij.html" onclick="closeDrawer()">Werken bij</a></li>
+  </ul>
+  <a href="BOB_Aanmelden.html" class="nav-drawer-cta" onclick="closeDrawer()">Wordt lid van onze Wasclub →</a>
+</div>
+<nav class="nav">
+  <a href="BOB_Homepage_Responsive.html" class="nav-logo">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNjAgMTMwIiB3aWR0aD0iMzYwIiBoZWlnaHQ9IjEzMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImNocm9tZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiAgIHN0b3AtY29sb3I9IiM4YThhOGEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxOCUiICBzdG9wLWNvbG9yPSIjY2VjZWNlIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMzglIiAgc3RvcC1jb2xvcj0iI2Y4ZjhmOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjUyJSIgIHN0b3AtY29sb3I9IiNmZmZmZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI2NSUiICBzdG9wLWNvbG9yPSIjZDBkMGQwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iODIlIiAgc3RvcC1jb2xvcj0iIzlhOWE5YSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiOGI4YjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdsb3NzIiB4MT0iMCIgeTE9IjAiIHgyPSIwLjQiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuNTUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC4xIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KCiAgPCEtLSBHcmlqcyB2aWVya2FudCB2bGFrIDEzMMOXMTMwIC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMzAiIGhlaWdodD0iMTMwIiBmaWxsPSIjNTU1NTU1Ii8+CgogIDwhLS0gIjI1IiBjaHJvb20gLS0+CiAgPHRleHQgeD0iNjUiIHk9IjEwMCIKICAgIGZvbnQtZmFtaWx5PSInQXJpYWwgQmxhY2snLCAnQXJpYWwnLCBzYW5zLXNlcmlmIgogICAgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI5OCIKICAgIGZpbGw9InVybCgjY2hyb21lKSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9Ii0yIj4yNTwvdGV4dD4KICA8dGV4dCB4PSI2NSIgeT0iMTAwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCcsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9Ijk4IgogICAgZmlsbD0idXJsKCNnbG9zcykiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSItMiI+MjU8L3RleHQ+CgogIDwhLS0gUm9vZCB2bGFrIC0tPgogIDxyZWN0IHg9IjEzMCIgeT0iMCIgd2lkdGg9IjIzMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiNFMzA2MTMiIHJ4PSIxNiIgcnk9IjE2Ii8+CiAgPHJlY3QgeD0iMTMwIiB5PSIwIiB3aWR0aD0iMjAiICBoZWlnaHQ9IjEzMCIgZmlsbD0iI0UzMDYxMyIvPgoKICA8IS0tICJCT0IiIOKAlCBBcmlhbCBCbGFjaywgYnJlZWQgZW4gb3BlbiAtLT4KICA8dGV4dCB4PSIyNDUiIHk9IjgwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCBCb2xkJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjY4IgogICAgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjYiPkJPQjwvdGV4dD4KCiAgPCEtLSAiQVVUT1dBUyIg4oCUIEFyaWFsIEJvbGQsIHJ1aW0gZW4gbGVlc2JhYXIgLS0+CiAgPHRleHQgeD0iMjQ1IiB5PSIxMTAiCiAgICBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjE5IgogICAgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjkyKSIKICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSI2Ij5BVVRPV0FTPC90ZXh0Pgo8L3N2Zz4=" alt="BOB Autowas" style="height:36px;width:auto;display:block;">
+  </a>
+  <ul class="nav-menu">
+    <li><a href="BOB_Wasclub_Responsive.html" class="active">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html">Wasprogramma's</a></li>
+    <li><a href="BOB_Blog.html" onclick="closeDrawer()">Blog</a></li>
+    <li><a href="BOB_Vestigingen.html">Vestigingen</a></li>
+    <li><a href="BOB_Zakelijk_Aanvraag.html">Zakelijk</a></li>
+    <li><a href="BOB_Werken_Bij.html">Werken bij</a></li>
+  </ul>
+  <a href="BOB_Aanmelden.html" class="nav-cta">Wordt lid van onze Wasclub →</a>
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- BLOG OVERZICHT -->
+<div id="blog-overzicht">
+
+  <div class="blog-hero">
+    <div class="blog-hero-inner">
+      <span class="blog-hero-label">Nieuws & Tips</span>
+      <h1 class="blog-hero-h1">BOB<br><em>Blog</em></h1>
+      <p class="blog-hero-sub">Nieuws, tips en verhalen uit de wasstraat. Over auto-onderhoud, de Wasclub en wat er speelt bij BOB Autowas.</p>
+    </div>
+  </div>
+
+  <div class="blog-filter" id="blog-filter">
+    <button class="filter-tab active" data-cat="alle" onclick="filterBlogs(this)">Alle blogs</button>
+    <button class="filter-tab" data-cat="tips" onclick="filterBlogs(this)">Tips & Advies</button>
+    <button class="filter-tab" data-cat="wasclub" onclick="filterBlogs(this)">Wasclub</button>
+    <button class="filter-tab" data-cat="nieuws" onclick="filterBlogs(this)">Nieuws</button>
+    <button class="filter-tab" data-cat="onderhoud" onclick="filterBlogs(this)">Onderhoud</button>
+  </div>
+
+  <div class="blog-grid-wrap">
+    <div class="blog-grid" id="blog-grid">
+      <!-- Gevuld via JS vanuit BLOGS array -->
+    </div>
+    <div class="no-blogs" id="no-blogs">Geen blogs gevonden in deze categorie.</div>
+  </div>
+
+</div>
+
+<!-- BLOG DETAIL (verborgen) -->
+<div id="blog-detail" class="blog-detail">
+  <button class="blog-detail-back" onclick="sluitDetail()">← Terug naar overzicht</button>
+  <span class="blog-detail-cat" id="det-cat"></span>
+  <h1 class="blog-detail-title" id="det-titel"></h1>
+  <div class="blog-detail-meta">
+    <span id="det-datum"></span>
+    <span>·</span>
+    <span id="det-leestijd"></span>
+  </div>
+  <div class="blog-detail-imgs" id="det-imgs"></div>
+  <div class="blog-detail-body" id="det-body"></div>
+  <div class="blog-detail-cta">
+    <p>Wil jij ook zorgeloos en onbeperkt rijden met een schone auto?</p>
+    <a href="BOB_Aanmelden.html" class="btn-red">Wordt lid van onze Wasclub →</a>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNjAgMTMwIiB3aWR0aD0iMzYwIiBoZWlnaHQ9IjEzMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImNocm9tZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiAgIHN0b3AtY29sb3I9IiM4YThhOGEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxOCUiICBzdG9wLWNvbG9yPSIjY2VjZWNlIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMzglIiAgc3RvcC1jb2xvcj0iI2Y4ZjhmOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjUyJSIgIHN0b3AtY29sb3I9IiNmZmZmZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI2NSUiICBzdG9wLWNvbG9yPSIjZDBkMGQwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iODIlIiAgc3RvcC1jb2xvcj0iIzlhOWE5YSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiOGI4YjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdsb3NzIiB4MT0iMCIgeTE9IjAiIHgyPSIwLjQiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuNTUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC4xIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KCiAgPCEtLSBHcmlqcyB2aWVya2FudCB2bGFrIDEzMMOXMTMwIC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMzAiIGhlaWdodD0iMTMwIiBmaWxsPSIjNTU1NTU1Ii8+CgogIDwhLS0gIjI1IiBjaHJvb20gLS0+CiAgPHRleHQgeD0iNjUiIHk9IjEwMCIKICAgIGZvbnQtZmFtaWx5PSInQXJpYWwgQmxhY2snLCAnQXJpYWwnLCBzYW5zLXNlcmlmIgogICAgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI5OCIKICAgIGZpbGw9InVybCgjY2hyb21lKSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9Ii0yIj4yNTwvdGV4dD4KICA8dGV4dCB4PSI2NSIgeT0iMTAwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCcsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9Ijk4IgogICAgZmlsbD0idXJsKCNnbG9zcykiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSItMiI+MjU8L3RleHQ+CgogIDwhLS0gUm9vZCB2bGFrIC0tPgogIDxyZWN0IHg9IjEzMCIgeT0iMCIgd2lkdGg9IjIzMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiNFMzA2MTMiIHJ4PSIxNiIgcnk9IjE2Ii8+CiAgPHJlY3QgeD0iMTMwIiB5PSIwIiB3aWR0aD0iMjAiICBoZWlnaHQ9IjEzMCIgZmlsbD0iI0UzMDYxMyIvPgoKICA8IS0tICJCT0IiIOKAlCBBcmlhbCBCbGFjaywgYnJlZWQgZW4gb3BlbiAtLT4KICA8dGV4dCB4PSIyNDUiIHk9IjgwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCBCb2xkJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjY4IgogICAgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjYiPkJPQjwvdGV4dD4KCiAgPCEtLSAiQVVUT1dBUyIg4oCUIEFyaWFsIEJvbGQsIHJ1aW0gZW4gbGVlc2JhYXIgLS0+CiAgPHRleHQgeD0iMjQ1IiB5PSIxMTAiCiAgICBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjE5IgogICAgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjkyKSIKICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSI2Ij5BVVRPV0FTPC90ZXh0Pgo8L3N2Zz4=" alt="BOB Autowas" style="height:40px;width:auto;display:block;margin-bottom:16px;">
+      <p class="footer-brand-text">Feel the Shine — al 25 jaar de meest vertrouwde autowasketen van Nederland. Onbeperkt wassen, altijd een schone auto.</p>
+    </div>
+    <div>
+      <h4>Diensten</h4>
+      <ul>
+        <li><a href="BOB_Aanmelden.html">Wasstraat</a></li>
+        <li><a href="BOB_Aanmelden.html">Proteqt</a></li>
+        <li><a href="BOB_Aanmelden.html">Interieurband</a></li>
+        <li><a href="BOB_Aanmelden.html">Stofzuigplein</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Voordeel</h4>
+      <ul>
+        <li><a href="BOB_Aanmelden.html">De Wasclub</a></li>
+        <li><a href="BOB_Aanmelden.html">Waspas</a></li>
+        <li><a href="BOB_Aanmelden.html">BOB Zakelijk</a></li>
+        <li><a href="BOB_Aanmelden.html">Acties</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>BOB</h4>
+      <ul>
+        <li><a href="BOB_Aanmelden.html">Vestigingen</a></li>
+        <li><a href="BOB_Aanmelden.html">Over ons</a></li>
+        <li><a href="BOB_Werken_Bij.html">Werken bij BOB</a></li>
+        <li><a href="BOB_Aanmelden.html">FAQ & Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 BOB Autowas · Feel the Shine</div>
+    <div><a href="BOB_Aanmelden.html">Privacy</a> · <a href="BOB_Aanmelden.html">Cookies</a> · <a href="BOB_Aanmelden.html">info@bobautowas.nl</a></div>
+  </div>
+</footer>
+
+<script>
+var BLOGS = [
+  {
+    id: 'wasclub-voordelen',
+    titel: 'Waarom een Wasclub-abonnement slimmer is dan los betalen',
+    excerpt: 'Bereken zelf hoe snel een Wasclub-abonnement zichzelf terugverdient en waarom steeds meer automobilisten overstappen.',
+    categorie: 'wasclub',
+    datum: '12 mei 2025',
+    leestijd: '4 min',
+    foto1: 'Blogs/wasclub-voordelen/foto1.jpg',
+    foto2: 'Blogs/wasclub-voordelen/foto2.jpg',
+    inhoud: '<p>Veel mensen betalen per wasbeurt zonder te beseffen hoeveel dat op jaarbasis kost. Een Wasclub-abonnement biedt een vast maandbedrag.</p><h2>Rekenen maar</h2><p>Stel: je wast drie keer per maand het Intensief-programma a &#8364;17 per keer. Dat is &#8364;51 per maand. Met de Wasclub betaal je &#8364;34 per maand &#8212; besparing: <strong>&#8364;204 per jaar</strong>.</p><h2>Meer dan alleen prijs</h2><p>Naast het financiele voordeel biedt de Wasclub ook gemak: geen gedoe met betalen bij de slagboom. Jouw kenteken wordt automatisch herkend.</p><blockquote>Ik wist niet eens hoe vaak ik waste tot ik de rekening zag. Nu betaal ik gewoon een vast bedrag. &#8212; Wasclub-lid, Rotterdam</blockquote><h2>Maandelijks opzegbaar</h2><p>Geen verplichtingen, geen aansluitkosten, geen verborgen kosten. Gewoon elke maand opzegbaar.</p>'
+  },
+  {
+    id: 'lak-beschermen',
+    titel: 'Zo bescherm je de lak van je auto het hele jaar door',
+    excerpt: 'Zon, zout, regen en smog tasten je autolak aan. Met de juiste aanpak houd je je auto er jaren langer als nieuw uit.',
+    categorie: 'onderhoud',
+    datum: '28 april 2025',
+    leestijd: '5 min',
+    foto1: 'Blogs/lak-beschermen/foto1.jpg',
+    foto2: 'Blogs/lak-beschermen/foto2.jpg',
+    inhoud: '<p>Je autolak heeft het zwaar. Zomerhitte, winterzout, zure regen en fijnstof zijn dagelijkse vijanden.</p><h2>Regelmatig wassen</h2><p>De basis van lakbescherming is simpel: was je auto regelmatig. Vuil en vogelpoep tasten de lak aan als ze te lang blijven zitten. Minimaal twee keer per maand is het advies.</p><h2>Proteqt: extra beschermlaag</h2><p>Ons Proteqt-wasprogramma brengt bij elke wasbeurt een hydrofobe beschermlaag op de lak aan. Water parelt er letterlijk af.</p><h3>Tips voor de winter</h3><ul><li>Was vaker in wintermaanden vanwege strooizout</li><li>Vergeet de onderkant van de auto niet</li><li>Gebruik geen ijskrabber direct op de lak</li></ul>'
+  },
+  {
+    id: 'interieur-tips',
+    titel: '5 tips voor een schoon interieur dat ook echt schoon blijft',
+    excerpt: 'Een schoon interieur is meer dan vacuumzuigen. Ontdek hoe je met de juiste aanpak je auto vanbinnen fris houdt.',
+    categorie: 'tips',
+    datum: '14 april 2025',
+    leestijd: '3 min',
+    foto1: 'Blogs/interieur-tips/foto1.jpg',
+    foto2: 'Blogs/interieur-tips/foto2.jpg',
+    inhoud: '<p>Het interieur van je auto is de plek waar je dagelijks in zit. Met deze vijf tips hou je het vanbinnen net zo fris als vanbuiten.</p><h2>1. Regelmatig uitzuigen</h2><p>Stof en zandkorrels werken zich diep in de stoelbekleding. Wacht niet te lang.</p><h2>2. Dashboard afnemen</h2><p>Gebruik een vochtige microvezeldoek. Vermijd alcoholhoudende middelen.</p><h2>3. Ruiten van binnenuit reinigen</h2><p>Vettige ruiten zorgen voor gevaarlijke verblinding bij tegenlicht.</p><h2>4. Ventilatierooster niet vergeten</h2><p>Een kwastje werkt uitstekend om de lamellen schoon te krijgen.</p><h2>5. Professionele interieurreiniging</h2><p>Onze Interieurband bij de Wasclub zorgt voor een grondige binnenreiniging bij elke wasbeurt.</p>'
+  },
+  {
+    id: 'nieuwe-vestiging',
+    titel: 'BOB Autowas opent deuren in Dordrecht',
+    excerpt: 'Onze nieuwste vestiging in Dordrecht is open. Modern, snel en met alle vertrouwde BOB-kwaliteit.',
+    categorie: 'nieuws',
+    datum: '3 april 2025',
+    leestijd: '2 min',
+    foto1: 'Blogs/nieuwe-vestiging/foto1.jpg',
+    foto2: 'Blogs/nieuwe-vestiging/foto2.jpg',
+    inhoud: '<p>We zijn trots om aan te kondigen dat onze 22e vestiging in Nederland haar deuren heeft geopend in Dordrecht.</p><h2>Wat je kunt verwachten</h2><p>De nieuwe locatie beschikt over zes wasstraten, een interieurband en automatische kentekenherkenning voor Wasclub-leden.</p><h2>Openingsaanbieding</h2><p>De eerste twee weken krijgen nieuwe Wasclub-leden die zich aanmelden in Dordrecht de eerste maand gratis.</p>'
+  }
+];
+
+var huidigeCat = 'alle';
+var CAT_LABELS = { wasclub: 'Wasclub', tips: 'Tips & Advies', nieuws: 'Nieuws', onderhoud: 'Onderhoud' };
+
+function renderBlogs() {
+  var grid = document.getElementById('blog-grid');
+  var noBlogsEl = document.getElementById('no-blogs');
+  var gefilterd = huidigeCat === 'alle'
+    ? BLOGS
+    : BLOGS.filter(function(b) { return b.categorie === huidigeCat; });
+
+  if (gefilterd.length === 0) {
+    grid.innerHTML = '';
+    noBlogsEl.classList.add('show');
+    return;
+  }
+  noBlogsEl.classList.remove('show');
+  grid.innerHTML = '';
+
+  gefilterd.forEach(function(blog, i) {
+    var article = document.createElement('article');
+    article.className = 'blog-card' + (i === 0 ? ' featured' : '');
+    article.onclick = (function(id) { return function() { openBlog(id); }; })(blog.id);
+
+    var catLabel = CAT_LABELS[blog.categorie] || blog.categorie;
+
+    var imgsDiv = document.createElement('div');
+    imgsDiv.className = 'blog-card-imgs';
+    var innerDiv = document.createElement('div');
+    innerDiv.className = 'blog-card-img-inner';
+
+    var img1 = document.createElement('img');
+    img1.src = blog.foto1;
+    img1.className = 'blog-card-img-main';
+    img1.alt = blog.titel;
+    img1.onerror = function() {
+      var ph = document.createElement('div');
+      ph.className = 'blog-img-placeholder';
+      ph.textContent = '[foto]';
+      this.parentNode.replaceChild(ph, this);
+    };
+    innerDiv.appendChild(img1);
+
+    var img2 = document.createElement('img');
+    img2.src = blog.foto2;
+    img2.className = 'blog-card-img-secondary';
+    img2.alt = blog.titel;
+    img2.onerror = function() { this.remove(); };
+    innerDiv.appendChild(img2);
+
+    imgsDiv.appendChild(innerDiv);
+
+    var catSpan = document.createElement('span');
+    catSpan.className = 'blog-cat';
+    catSpan.textContent = catLabel;
+    imgsDiv.appendChild(catSpan);
+    article.appendChild(imgsDiv);
+
+    var body = document.createElement('div');
+    body.className = 'blog-card-body';
+    body.innerHTML =
+      '<div class="blog-card-meta"><span>' + blog.datum + '</span>'
+      + '<span class="blog-card-meta-dot"></span>'
+      + '<span>' + blog.leestijd + ' lezen</span></div>'
+      + '<h2 class="blog-card-title">' + blog.titel + '</h2>'
+      + '<p class="blog-card-excerpt">' + blog.excerpt + '</p>'
+      + '<span class="blog-read-more">Lees verder &#8594;</span>';
+    article.appendChild(body);
+    grid.appendChild(article);
+  });
+}
+
+function filterBlogs(btn) {
+  document.querySelectorAll('.filter-tab').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+  huidigeCat = btn.dataset.cat;
+  renderBlogs();
+}
+
+function openBlog(id) {
+  var blog = BLOGS.find(function(b) { return b.id === id; });
+  if (!blog) return;
+  var catLabel = CAT_LABELS[blog.categorie] || blog.categorie;
+  document.getElementById('det-cat').textContent = catLabel;
+  document.getElementById('det-titel').textContent = blog.titel;
+  document.getElementById('det-datum').textContent = blog.datum;
+  document.getElementById('det-leestijd').textContent = blog.leestijd + ' lezen';
+
+  var imgsEl = document.getElementById('det-imgs');
+  imgsEl.innerHTML = '';
+  [blog.foto1, blog.foto2].forEach(function(src) {
+    var img = document.createElement('img');
+    img.src = src;
+    img.className = 'blog-detail-img';
+    img.alt = blog.titel;
+    img.onerror = function() {
+      var ph = document.createElement('div');
+      ph.className = 'blog-detail-img-placeholder';
+      ph.textContent = '[foto]';
+      this.parentNode.replaceChild(ph, this);
+    };
+    imgsEl.appendChild(img);
+  });
+
+  document.getElementById('det-body').innerHTML = blog.inhoud;
+  document.getElementById('blog-overzicht').style.display = 'none';
+  document.getElementById('blog-detail').classList.add('open');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function sluitDetail() {
+  document.getElementById('blog-detail').classList.remove('open');
+  document.getElementById('blog-overzicht').style.display = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleDrawer() {
+  var d = document.getElementById('nav-drawer');
+  var o = document.getElementById('nav-overlay');
+  var h = document.getElementById('nav-hamburger');
+  if (!d) return;
+  var open = d.classList.toggle('open');
+  if (o) o.classList.toggle('open', open);
+  if (h) h.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeDrawer() {
+  var d = document.getElementById('nav-drawer');
+  var o = document.getElementById('nav-overlay');
+  var h = document.getElementById('nav-hamburger');
+  if (d) d.classList.remove('open');
+  if (o) o.classList.remove('open');
+  if (h) h.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+(function() {
+  var nav = document.querySelector('.nav');
+  if (!nav) return;
+  window.addEventListener('scroll', function() {
+    nav.style.background = window.scrollY > 80 ? 'rgba(10,10,10,0.98)' : 'rgba(10,10,10,0.92)';
+  });
+})();
+
+renderBlogs();
+</script>
+</body>
+</html>
