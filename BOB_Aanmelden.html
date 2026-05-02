@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Wasclub-lid — BOB Autowas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E30613;
+  --red-dim: rgba(227,6,19,0.12);
+  --red-glow: rgba(227,6,19,0.25);
+  --black: #0a0a0a;
+  --dark: #111;
+  --mid: #1a1a1a;
+  --panel: #161616;
+  --card: #141414;
+  --border: rgba(255,255,255,0.08);
+  --border-act: rgba(227,6,19,0.4);
+  --text: #fff;
+  --muted: rgba(255,255,255,0.45);
+  --subtle: rgba(255,255,255,0.08);
+  --green: #22c55e;
+  --gold: #e8c85a;
+  --silver: #b8c4cc;
+  --bronze: #cd8a5a;
+  --fd: 'Inter Tight', sans-serif;
+  --fb: 'Inter', sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--dark); color: var(--text); font-family: var(--fb); min-height: 100vh; }
+
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 60px; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; background: rgba(10,10,10,0.95);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.nav-logo img { height: 38px; }
+.nav-back {
+  font-family: var(--fd); font-weight: 700; font-size: 12px;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+  text-decoration: none; display: flex; align-items: center; gap: 6px;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--text); }
+
+/* ── HERO STRIP ── */
+.form-hero {
+  padding: 100px 24px 48px; text-align: center;
+  background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(227,6,19,0.08) 0%, transparent 70%);
+}
+.form-label {
+  font-family: var(--fd); font-weight: 800; font-size: 11px;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--red);
+  display: block; margin-bottom: 12px;
+}
+.form-hero h1 {
+  font-family: var(--fd); font-weight: 900; font-size: clamp(36px, 8vw, 64px);
+  text-transform: uppercase; letter-spacing: -1px; line-height: 0.95;
+  margin-bottom: 16px;
+}
+.form-hero h1 em { font-style: normal; color: var(--red); }
+.form-hero p { font-size: 16px; color: var(--muted); max-width: 480px; margin: 0 auto; }
+
+/* ── LAYOUT ── */
+.form-layout {
+  max-width: 1060px; margin: 0 auto; padding: 0 24px 80px;
+  display: grid; grid-template-columns: 1fr 340px; gap: 24px; align-items: start;
+}
+
+/* ── STAPPEN SIDEBAR RECHTS ── */
+.price-sidebar {
+  position: sticky; top: 80px;
+}
+.price-card {
+  background: var(--card); border: 1px solid var(--border);
+  overflow: hidden;
+}
+.price-card-header {
+  background: var(--red); padding: 16px 20px;
+  font-family: var(--fd); font-weight: 800; font-size: 11px;
+  letter-spacing: 2.5px; text-transform: uppercase; color: #fff;
+}
+.price-lines { padding: 0; }
+.price-line {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 20px; border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.price-line:last-child { border-bottom: none; }
+.price-line-label { color: var(--muted); }
+.price-line-val { font-family: var(--fd); font-weight: 700; font-size: 14px; }
+.price-total-row {
+  padding: 20px; background: rgba(227,6,19,0.06);
+  border-top: 1px solid var(--border-act);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.price-total-label {
+  font-family: var(--fd); font-weight: 700; font-size: 11px;
+  letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+}
+.price-total-amount {
+  font-family: var(--fd); font-weight: 900; font-size: 40px;
+  letter-spacing: -1px; color: var(--red); line-height: 1;
+}
+.price-total-sub { font-size: 11px; color: var(--muted); margin-top: 2px; text-align: right; }
+.price-note {
+  padding: 14px 20px; font-size: 11px; color: var(--muted);
+  border-top: 1px solid var(--border); line-height: 1.6;
+  text-align: center;
+}
+
+/* Samenvattingsregel per auto */
+.auto-price-row {
+  padding: 10px 20px; border-bottom: 1px solid var(--border);
+  font-size: 12px; display: flex; justify-content: space-between;
+}
+.auto-price-row .auto-label { color: var(--muted); }
+.auto-price-row .auto-val { font-family: var(--fd); font-weight: 700; }
+
+/* ── FORMULIER LINKS ── */
+.form-left {}
+
+/* Sectie blok */
+.form-section {
+  background: var(--card); border: 1px solid var(--border);
+  margin-bottom: 16px; overflow: hidden;
+}
+.form-section-head {
+  padding: 18px 24px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px;
+  background: var(--panel);
+}
+.step-badge {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--red); color: #fff;
+  font-family: var(--fd); font-weight: 800; font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.form-section-title {
+  font-family: var(--fd); font-weight: 800; font-size: 15px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.form-section-body { padding: 24px; }
+
+/* ── FORM FIELDS ── */
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.field-row.one { grid-template-columns: 1fr; }
+.field-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label {
+  font-family: var(--fd); font-weight: 700; font-size: 10px;
+  letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted);
+}
+.field input, .field select {
+  background: var(--mid); border: 1px solid var(--border);
+  color: var(--text); font-family: var(--fb); font-size: 14px;
+  padding: 12px 14px; outline: none; transition: border-color 0.2s;
+  -webkit-appearance: none; appearance: none; width: 100%;
+}
+.field input::placeholder { color: rgba(255,255,255,0.2); }
+.field input:focus, .field select:focus { border-color: var(--red); }
+.field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; cursor: pointer; }
+.field select option { background: var(--mid); }
+
+/* Kenteken input */
+.kenteken-input {
+  font-family: var(--fd); font-weight: 800; font-size: 20px;
+  letter-spacing: 4px; text-transform: uppercase;
+  background: var(--mid); border: 2px solid var(--border);
+  color: var(--text); padding: 14px 16px; outline: none; width: 100%;
+  transition: border-color 0.2s;
+}
+.kenteken-input:focus { border-color: var(--red); }
+.kenteken-input::placeholder { color: rgba(255,255,255,0.15); font-size: 16px; letter-spacing: 2px; }
+
+/* ── PROGRAMMA KEUZE ── */
+.prog-keuze { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.prog-opt {
+  border: 1.5px solid var(--border); cursor: pointer;
+  padding: 16px 12px; transition: all 0.2s; position: relative;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.prog-opt:hover { border-color: rgba(255,255,255,0.2); }
+.prog-opt.selected { background: var(--red-dim); border-color: var(--border-act); }
+.prog-opt input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+.prog-name {
+  font-family: var(--fd); font-weight: 900; font-size: 15px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.prog-opt.normaal .prog-name { color: var(--bronze); }
+.prog-opt.intensief .prog-name { color: var(--silver); }
+.prog-opt.proteqt .prog-name { background: linear-gradient(135deg,#c8943e,#f5e2a0); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.prog-price-tag { font-size: 11px; color: var(--muted); }
+.prog-opt.selected .prog-price-tag { color: rgba(227,6,19,0.7); }
+.prog-check {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1.5px solid var(--border); margin-top: 6px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.prog-opt.selected .prog-check { background: var(--red); border-color: var(--red); }
+.prog-opt.selected .prog-check::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+
+/* ── AUTO'S ── */
+.auto-blokken { display: flex; flex-direction: column; gap: 12px; }
+.auto-blok {
+  border: 1px solid var(--border); padding: 18px;
+  display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: start;
+}
+.auto-nummer {
+  font-family: var(--fd); font-weight: 900; font-size: 22px;
+  color: var(--red); line-height: 1; padding-top: 4px;
+}
+.auto-fields { display: flex; flex-direction: column; gap: 10px; }
+.auto-fields .field-row { margin-bottom: 0; }
+.auto-verwijder {
+  background: none; border: 1px solid var(--border); cursor: pointer;
+  color: var(--muted); font-size: 16px; width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s; flex-shrink: 0;
+}
+.auto-verwijder:hover { border-color: var(--red); color: var(--red); }
+
+.btn-add-auto {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; padding: 13px 16px; margin-top: 10px;
+  background: none; border: 1px dashed rgba(255,255,255,0.15);
+  color: var(--muted); cursor: pointer; font-family: var(--fd);
+  font-weight: 700; font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase;
+  transition: all 0.2s;
+}
+.btn-add-auto:hover { border-color: var(--red); color: var(--red); }
+
+/* ── INTERIEUR TOGGLE ── */
+.interieur-opt {
+  border: 1.5px solid var(--border); padding: 16px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; transition: all 0.2s; user-select: none;
+}
+.interieur-opt.on { background: var(--red-dim); border-color: var(--border-act); }
+.interieur-opt.disabled { opacity: 0.3; pointer-events: none; }
+.int-left {}
+.int-name { font-family: var(--fd); font-weight: 800; font-size: 15px; margin-bottom: 4px; }
+.int-desc { font-size: 12px; color: var(--muted); }
+.interieur-opt.on .int-desc { color: rgba(227,6,19,0.7); }
+.toggle-sw {
+  width: 48px; height: 26px; border-radius: 13px;
+  background: var(--mid); border: 1px solid var(--border);
+  position: relative; flex-shrink: 0; transition: background 0.3s;
+}
+.interieur-opt.on .toggle-sw { background: var(--red); border-color: var(--red); }
+.toggle-knob {
+  position: absolute; width: 20px; height: 20px; border-radius: 50%;
+  top: 3px; left: 3px; background: rgba(255,255,255,0.4);
+  transition: left 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.interieur-opt.on .toggle-knob { left: 25px; background: #fff; }
+
+/* ── STARTDATUM ── */
+.datum-opties { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.datum-opt {
+  border: 1.5px solid var(--border); cursor: pointer;
+  padding: 14px 12px; transition: all 0.2s; text-align: center;
+}
+.datum-opt:hover { border-color: rgba(255,255,255,0.2); }
+.datum-opt.selected { background: var(--red-dim); border-color: var(--border-act); }
+.datum-opt input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+.datum-main { font-family: var(--fd); font-weight: 800; font-size: 14px; margin-bottom: 3px; }
+.datum-sub { font-size: 11px; color: var(--muted); }
+.datum-opt.selected .datum-sub { color: rgba(227,6,19,0.7); }
+
+.datum-eigen { margin-top: 10px; display: none; }
+.datum-eigen.show { display: block; }
+
+/* ── AKKOORD ── */
+.akkoord-rij {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 14px; border: 1px solid var(--border); cursor: pointer;
+  transition: border-color 0.2s; margin-bottom: 10px;
+}
+.akkoord-rij:hover { border-color: rgba(255,255,255,0.15); }
+.akkoord-box {
+  width: 20px; height: 20px; border: 1.5px solid var(--border);
+  flex-shrink: 0; margin-top: 1px; display: flex; align-items: center;
+  justify-content: center; transition: all 0.2s;
+}
+.akkoord-rij.checked .akkoord-box { background: var(--red); border-color: var(--red); }
+.akkoord-rij.checked .akkoord-box::after { content: '✓'; font-size: 11px; color: #fff; font-weight: 700; }
+.akkoord-tekst { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.akkoord-tekst a { color: var(--text); }
+
+/* ── SUBMIT ── */
+.submit-wrap { margin-top: 8px; }
+.btn-submit {
+  width: 100%; padding: 20px 24px; background: var(--red); color: #fff;
+  font-family: var(--fd); font-weight: 800; font-size: 15px;
+  letter-spacing: 2px; text-transform: uppercase; border: none; cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 100%, 14px 100%);
+  transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 12px;
+}
+.btn-submit:hover { box-shadow: 0 12px 36px var(--red-glow); transform: translateY(-1px); }
+.btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+.submit-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; line-height: 1.6; }
+
+/* ── SUCCES SCHERM ── */
+.succes-screen {
+  display: none; text-align: center; padding: 80px 24px;
+  max-width: 560px; margin: 0 auto;
+}
+.succes-screen.show { display: block; }
+.succes-icon {
+  width: 72px; height: 72px; border-radius: 50%; background: rgba(34,197,94,0.15);
+  border: 2px solid var(--green); display: flex; align-items: center;
+  justify-content: center; margin: 0 auto 24px; font-size: 32px;
+}
+.succes-screen h2 { font-family: var(--fd); font-weight: 900; font-size: 36px; margin-bottom: 12px; }
+.succes-screen p { color: var(--muted); font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
+.btn-terug {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 28px; border: 1px solid var(--border); color: var(--text);
+  font-family: var(--fd); font-weight: 700; font-size: 13px;
+  letter-spacing: 1.5px; text-transform: uppercase; text-decoration: none;
+  transition: all 0.2s;
+}
+.btn-terug:hover { border-color: var(--red); color: var(--red); }
+
+/* ── FOUT MELDING ── */
+.field.error input, .field.error select, .field.error .kenteken-input { border-color: var(--red) !important; }
+.field-err { font-size: 11px; color: var(--red); margin-top: 4px; display: none; }
+.field.error .field-err { display: block; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 860px) {
+  .form-layout { grid-template-columns: 1fr; }
+  .price-sidebar { position: static; }
+  .form-hero { padding: 90px 20px 36px; }
+}
+@media (max-width: 600px) {
+  .field-row { grid-template-columns: 1fr; }
+  .field-row.three { grid-template-columns: 1fr; }
+  .prog-keuze { grid-template-columns: 1fr; }
+  .datum-opties { grid-template-columns: 1fr; }
+  .form-section-body { padding: 18px; }
+  .nav { padding: 0 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="BOB_Wasclub_Responsive.html" class="nav-logo">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNjAgMTMwIj48cmVjdCB3aWR0aD0iMTMwIiBoZWlnaHQ9IjEzMCIgZmlsbD0iIzJhMmEyYSIvPjx0ZXh0IHg9IjY1IiB5PSI3NiIgZm9udC1mYW1pbHk9IkFyaWFsIEJsYWNrIiBmb250LXNpemU9IjY4IiBmb250LXdlaWdodD0iOTAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJub25lIiBzdHJva2U9IiNiOGM0Y2MiIHN0cm9rZS13aWR0aD0iMiI+MjU8L3RleHQ+PHJlY3QgeD0iMTMwIiB3aWR0aD0iMTMwIiBoZWlnaHQ9IjEzMCIgZmlsbD0iI0UzMDYxMyIvPjx0ZXh0IHg9IjE5NSIgeT0iNTIiIGZvbnQtZmFtaWx5PSJBcmlhbCBCbGFjayIgZm9udC1zaXplPSIzMCIgZm9udC13ZWlnaHQ9IjkwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iI2ZmZiIgbGV0dGVyLXNwYWNpbmc9IjYiPkJPQjwvdGV4dD48dGV4dCB4PSIxOTUiIHk9Ijg4IiBmb250LWZhbWlseT0iQXJpYWwgQmxhY2siIGZvbnQtc2l6ZT0iMTgiIGZvbnQtd2VpZ2h0PSI5MDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmZmYiIGxldHRlci1zcGFjaW5nPSI2Ij5BVVRPVzwvdGV4dD48L3N2Zz4=" alt="BOB Autowas">
+  </a>
+  <a href="BOB_Wasclub_Responsive.html" class="nav-back">← Terug naar Wasclub</a>
+</nav>
+
+<div id="form-wrapper">
+
+<!-- HERO -->
+<div class="form-hero">
+  <span class="form-label">Word lid</span>
+  <h1>Meld je aan<br>voor de <em>Wasclub</em></h1>
+  <p>Vul je gegevens in en kies je abonnement. Je maandbedrag wordt direct berekend.</p>
+</div>
+
+<!-- LAYOUT -->
+<div class="form-layout">
+
+  <!-- LINKS: FORMULIER -->
+  <div class="form-left">
+
+    <!-- 1. PERSOONSGEGEVENS -->
+    <div class="form-section">
+      <div class="form-section-head">
+        <div class="step-badge">1</div>
+        <div class="form-section-title">Jouw gegevens</div>
+      </div>
+      <div class="form-section-body">
+        <div class="field-row">
+          <div class="field" id="f-voornaam">
+            <label>Voornaam</label>
+            <input type="text" placeholder="Jan" id="voornaam" autocomplete="given-name">
+            <span class="field-err">Verplicht veld</span>
+          </div>
+          <div class="field" id="f-achternaam">
+            <label>Achternaam</label>
+            <input type="text" placeholder="de Vries" id="achternaam" autocomplete="family-name">
+            <span class="field-err">Verplicht veld</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field" id="f-email">
+            <label>E-mailadres</label>
+            <input type="email" placeholder="jan@voorbeeld.nl" id="email" autocomplete="email">
+            <span class="field-err">Geldig e-mailadres verplicht</span>
+          </div>
+          <div class="field" id="f-telefoon">
+            <label>Telefoonnummer</label>
+            <input type="tel" placeholder="06 12345678" id="telefoon" autocomplete="tel">
+            <span class="field-err">Verplicht veld</span>
+          </div>
+        </div>
+        <div class="field-row three">
+          <div class="field" id="f-straat">
+            <label>Straat</label>
+            <input type="text" placeholder="Hoofdstraat" id="straat" autocomplete="address-line1">
+            <span class="field-err">Verplicht</span>
+          </div>
+          <div class="field" id="f-huisnr">
+            <label>Huisnr.</label>
+            <input type="text" placeholder="12A" id="huisnr" autocomplete="address-line2">
+            <span class="field-err">Verplicht</span>
+          </div>
+          <div class="field" id="f-postcode">
+            <label>Postcode</label>
+            <input type="text" placeholder="1234 AB" id="postcode" maxlength="7" autocomplete="postal-code">
+            <span class="field-err">Verplicht</span>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field" id="f-woonplaats">
+            <label>Woonplaats</label>
+            <input type="text" placeholder="Amsterdam" id="woonplaats" autocomplete="address-level2">
+            <span class="field-err">Verplicht</span>
+          </div>
+          <div class="field">
+            <label>Vestiging voorkeur</label>
+            <select id="vestiging">
+              <option value="">— Kies vestiging —</option>
+              <optgroup label="Noord-Holland">
+                <option>Amsterdam Noord</option>
+                <option>Amsterdam Oost</option>
+                <option>Amsterdam West</option>
+                <option>Haarlem</option>
+                <option>Zaandam</option>
+              </optgroup>
+              <optgroup label="Zuid-Holland">
+                <option>Rotterdam Noord</option>
+                <option>Rotterdam Zuid</option>
+                <option>Den Haag</option>
+                <option>Delft</option>
+                <option>Dordrecht</option>
+              </optgroup>
+              <optgroup label="Utrecht">
+                <option>Utrecht Centrum</option>
+                <option>Utrecht West</option>
+                <option>Nieuwegein</option>
+              </optgroup>
+              <optgroup label="Gelderland">
+                <option>Arnhem</option>
+                <option>Nijmegen</option>
+                <option>Apeldoorn</option>
+              </optgroup>
+              <optgroup label="Noord-Brabant">
+                <option>Eindhoven</option>
+                <option>Tilburg</option>
+                <option>Breda</option>
+              </optgroup>
+              <optgroup label="Curaçao">
+                <option>Willemstad Noord</option>
+                <option>Willemstad Zuid</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. ABONNEMENT -->
+    <div class="form-section">
+      <div class="form-section-head">
+        <div class="step-badge">2</div>
+        <div class="form-section-title">Kies je abonnement</div>
+      </div>
+      <div class="form-section-body">
+        <div style="font-family:var(--fd);font-weight:700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Wasprogramma</div>
+        <div class="prog-keuze" id="prog-keuze">
+          <label class="prog-opt normaal" onclick="selectProg(this,'normaal',13,28)">
+            <input type="radio" name="programma" value="normaal">
+            <span class="prog-name">Normaal</span>
+            <span class="prog-price-tag">€13 los / <strong>€28</strong>/mnd</span>
+            <div class="prog-check"></div>
+          </label>
+          <label class="prog-opt intensief selected" onclick="selectProg(this,'intensief',17,34)">
+            <input type="radio" name="programma" value="intensief" checked>
+            <span class="prog-name">Intensief</span>
+            <span class="prog-price-tag">€17 los / <strong>€34</strong>/mnd</span>
+            <div class="prog-check"></div>
+          </label>
+          <label class="prog-opt proteqt" onclick="selectProg(this,'proteqt',21,39)">
+            <input type="radio" name="programma" value="proteqt">
+            <span class="prog-name">Proteqt</span>
+            <span class="prog-price-tag">€21 los / <strong>€39</strong>/mnd</span>
+            <div class="prog-check"></div>
+          </label>
+        </div>
+
+        <div style="font-family:var(--fd);font-weight:700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:18px 0 10px;">Extra</div>
+        <div class="interieur-opt" id="int-opt" onclick="toggleInt()">
+          <div class="int-left">
+            <div class="int-name">+ Interieurband</div>
+            <div class="int-desc" id="int-desc">Binnenreiniging erbij — prijs afhankelijk van programma</div>
+          </div>
+          <div class="toggle-sw"><div class="toggle-knob"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. AUTO'S & KENTEKENS -->
+    <div class="form-section">
+      <div class="form-section-head">
+        <div class="step-badge">3</div>
+        <div class="form-section-title">Auto's & kentekens</div>
+      </div>
+      <div class="form-section-body">
+        <div class="auto-blokken" id="auto-blokken">
+          <!-- Auto 1 (altijd aanwezig) -->
+          <div class="auto-blok" data-auto="1">
+            <div class="auto-nummer">1</div>
+            <div class="auto-fields">
+              <div class="field-row">
+                <div class="field" id="f-kt-1">
+                  <label>Kenteken</label>
+                  <input type="text" class="kenteken-input" placeholder="XX-000-X" id="kenteken-1" maxlength="8" oninput="fmtKenteken(this)">
+                  <span class="field-err">Kenteken verplicht</span>
+                </div>
+                <div class="field">
+                  <label>Merk / model (optioneel)</label>
+                  <input type="text" placeholder="bijv. Volkswagen Golf" id="merk-1">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn-add-auto" id="btn-add-auto" onclick="addAuto()">
+          + Nog een auto toevoegen
+        </button>
+        <div style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.5;" id="familie-hint" style="display:none;">
+          Bij 2+ auto's geldt het familietarief — je betaalt minder per auto.
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. STARTDATUM -->
+    <div class="form-section">
+      <div class="form-section-head">
+        <div class="step-badge">4</div>
+        <div class="form-section-title">Startdatum abonnement</div>
+      </div>
+      <div class="form-section-body">
+        <div class="datum-opties" id="datum-opties">
+          <label class="datum-opt selected" onclick="selectDatum(this,'vandaag')">
+            <input type="radio" name="startdatum" value="vandaag" checked>
+            <div class="datum-main" id="datum-vandaag">Vandaag</div>
+            <div class="datum-sub">Direct actief</div>
+          </label>
+          <label class="datum-opt" onclick="selectDatum(this,'volgendemaand')">
+            <input type="radio" name="startdatum" value="volgendemaand">
+            <div class="datum-main" id="datum-vm">1 juni 2025</div>
+            <div class="datum-sub">Begin volgende maand</div>
+          </label>
+          <label class="datum-opt" onclick="selectDatum(this,'eigen')">
+            <input type="radio" name="startdatum" value="eigen">
+            <div class="datum-main">Eigen datum</div>
+            <div class="datum-sub">Kies zelf een datum</div>
+          </label>
+        </div>
+        <div class="datum-eigen" id="datum-eigen">
+          <div class="field">
+            <label>Gewenste startdatum</label>
+            <input type="date" id="eigen-datum">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. AKKOORD & VERZENDEN -->
+    <div class="form-section">
+      <div class="form-section-head">
+        <div class="step-badge">5</div>
+        <div class="form-section-title">Bevestiging</div>
+      </div>
+      <div class="form-section-body">
+        <div class="akkoord-rij" id="akk-1" onclick="toggleAkk('akk-1')">
+          <div class="akkoord-box"></div>
+          <div class="akkoord-tekst">Ik ga akkoord met de <a href="#">algemene voorwaarden</a> van BOB Autowas Wasclub. Het abonnement is maandelijks opzegbaar zonder aansluitkosten.</div>
+        </div>
+        <div class="akkoord-rij" id="akk-2" onclick="toggleAkk('akk-2')">
+          <div class="akkoord-box"></div>
+          <div class="akkoord-tekst">Ik geef toestemming voor automatische incasso van het maandelijkse abonnementsbedrag via kentekenincheck bij de slagboom.</div>
+        </div>
+        <div class="submit-wrap">
+          <button class="btn-submit" id="btn-submit" onclick="submitForm()" disabled>
+            Aanmelden voor de Wasclub →
+          </button>
+          <div class="submit-note">
+            Na aanmelding ontvang je een bevestiging per e-mail.<br>
+            Jouw kenteken wordt geactiveerd op de gekozen startdatum.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /form-left -->
+
+  <!-- RECHTS: PRIJS SIDEBAR -->
+  <div class="price-sidebar">
+    <div class="price-card">
+      <div class="price-card-header">Jouw maandbedrag</div>
+      <div class="price-lines" id="price-lines">
+        <!-- Gevuld via JS -->
+      </div>
+      <div class="price-total-row">
+        <div>
+          <div class="price-total-label">Totaal per maand</div>
+          <div class="price-total-sub" id="price-sub">1 auto · Intensief</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="price-total-amount" id="price-total">€34</div>
+          <div class="price-total-sub">/maand</div>
+        </div>
+      </div>
+      <div class="price-note" id="price-note">
+        Maandelijks opzegbaar · geen aansluitkosten · direct actief
+      </div>
+    </div>
+  </div>
+
+</div><!-- /form-layout -->
+</div><!-- /form-wrapper -->
+
+<!-- SUCCES SCHERM -->
+<div class="succes-screen" id="succes-screen">
+  <div class="succes-icon">✓</div>
+  <h2>Aanmelding ontvangen!</h2>
+  <p>Bedankt voor je aanmelding bij de BOB Wasclub. Je ontvangt binnen enkele minuten een bevestiging op <strong id="succes-email"></strong>.<br><br>Je kenteken(s) worden geactiveerd op de gekozen startdatum.</p>
+  <a href="BOB_Wasclub_Responsive.html" class="btn-terug">← Terug naar de Wasclub</a>
+</div>
+
+<script>
+// ── PRIJSTABELLEN ──────────────────────────────────────────────
+var WAS_ABO = {
+  normaal:   [28, 28, 28, 28], // normaal heeft geen familietarief
+  intensief: [34, 25, 22, 21],
+  proteqt:   [39, 29, 26, 24]
+};
+var INT_ABO = {
+  intensief: [20, 18, 15, 12],
+  proteqt:   [18, 16, 13, 10]
+};
+
+// ── STATE ─────────────────────────────────────────────────────
+var state = {
+  prog: 'intensief',
+  progAbo: 34,
+  interieur: false,
+  aantalAutos: 1,
+  akk1: false,
+  akk2: false
+};
+
+// ── DATUMS INVULLEN ───────────────────────────────────────────
+(function() {
+  var now = new Date();
+  var opties = { day: 'numeric', month: 'long', year: 'numeric' };
+  document.getElementById('datum-vandaag').textContent = now.toLocaleDateString('nl-NL', opties);
+  var vm = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  document.getElementById('datum-vm').textContent = '1 ' + vm.toLocaleDateString('nl-NL', { month: 'long', year: 'numeric' });
+  // Min datum voor eigen datum = morgen
+  var morgen = new Date(now); morgen.setDate(morgen.getDate() + 1);
+  document.getElementById('eigen-datum').min = morgen.toISOString().split('T')[0];
+  document.getElementById('eigen-datum').value = vm.toISOString().split('T')[0];
+})();
+
+// ── PROGRAMMA SELECTIE ────────────────────────────────────────
+function selectProg(el, key, los, abo) {
+  document.querySelectorAll('.prog-opt').forEach(function(o) { o.classList.remove('selected'); });
+  el.classList.add('selected');
+  state.prog = key;
+  state.progAbo = abo;
+  // Normaal: interieur niet beschikbaar
+  var intOpt = document.getElementById('int-opt');
+  if (key === 'normaal') {
+    intOpt.classList.add('disabled');
+    if (state.interieur) { state.interieur = false; intOpt.classList.remove('on'); }
+  } else {
+    intOpt.classList.remove('disabled');
+  }
+  updatePrijs();
+}
+
+// ── INTERIEUR TOGGLE ─────────────────────────────────────────
+function toggleInt() {
+  if (state.prog === 'normaal') return;
+  state.interieur = !state.interieur;
+  document.getElementById('int-opt').classList.toggle('on', state.interieur);
+  updatePrijs();
+}
+
+// ── AUTO'S TOEVOEGEN/VERWIJDEREN ─────────────────────────────
+var autoCount = 1;
+
+function addAuto() {
+  if (autoCount >= 4) return;
+  autoCount++;
+  state.aantalAutos = autoCount;
+
+  var blok = document.createElement('div');
+  blok.className = 'auto-blok';
+  blok.dataset.auto = autoCount;
+  blok.innerHTML =
+    '<div class="auto-nummer">' + autoCount + '</div>' +
+    '<div class="auto-fields">' +
+      '<div class="field-row">' +
+        '<div class="field" id="f-kt-' + autoCount + '">' +
+          '<label>Kenteken</label>' +
+          '<input type="text" class="kenteken-input" placeholder="XX-000-X" id="kenteken-' + autoCount + '" maxlength="8" oninput="fmtKenteken(this)">' +
+          '<span class="field-err">Kenteken verplicht</span>' +
+        '</div>' +
+        '<div class="field">' +
+          '<label>Merk / model (optioneel)</label>' +
+          '<input type="text" placeholder="bijv. Volkswagen Golf" id="merk-' + autoCount + '">' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<button type="button" class="auto-verwijder" onclick="removeAuto(' + autoCount + ')">✕</button>';
+
+  document.getElementById('auto-blokken').appendChild(blok);
+  if (autoCount >= 4) document.getElementById('btn-add-auto').style.display = 'none';
+  document.getElementById('familie-hint').style.display = autoCount > 1 ? 'block' : 'none';
+  updatePrijs();
+}
+
+function removeAuto(n) {
+  var blok = document.querySelector('[data-auto="' + n + '"]');
+  if (blok) blok.remove();
+  autoCount--;
+  state.aantalAutos = autoCount;
+  // Hernummer
+  document.querySelectorAll('.auto-blok').forEach(function(b, i) {
+    b.dataset.auto = i + 1;
+    b.querySelector('.auto-nummer').textContent = i + 1;
+  });
+  document.getElementById('btn-add-auto').style.display = autoCount < 4 ? 'flex' : 'none';
+  document.getElementById('familie-hint').style.display = autoCount > 1 ? 'block' : 'none';
+  updatePrijs();
+}
+
+// ── KENTEKEN FORMAT ───────────────────────────────────────────
+function fmtKenteken(el) {
+  var v = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  el.value = v;
+}
+
+// ── DATUM SELECTIE ────────────────────────────────────────────
+function selectDatum(el, val) {
+  document.querySelectorAll('.datum-opt').forEach(function(o) { o.classList.remove('selected'); });
+  el.classList.add('selected');
+  var eigenWrap = document.getElementById('datum-eigen');
+  eigenWrap.classList.toggle('show', val === 'eigen');
+}
+
+// ── AKKOORD CHECKBOXES ────────────────────────────────────────
+function toggleAkk(id) {
+  var el = document.getElementById(id);
+  el.classList.toggle('checked');
+  state[id.replace('-', '')] = el.classList.contains('checked');
+  checkSubmit();
+}
+
+function checkSubmit() {
+  var ok = state.akk1 && state.akk2;
+  document.getElementById('btn-submit').disabled = !ok;
+}
+
+// ── PRIJSBEREKENING ───────────────────────────────────────────
+function updatePrijs() {
+  var n = Math.min(state.aantalAutos, 4);
+  var prog = state.prog;
+  var wasPA = WAS_ABO[prog][n - 1];
+  var intPA = (state.interieur && prog !== 'normaal') ? INT_ABO[prog][n - 1] : 0;
+  var aboPA = wasPA + intPA;
+  var totaal = aboPA * n;
+
+  // Bouw price lines
+  var lines = '';
+  if (n === 1) {
+    lines += priceLine('Was (' + capitalize(prog) + ')', '€' + wasPA + '/mnd');
+    if (intPA) lines += priceLine('Interieurband', '+€' + intPA + '/mnd');
+  } else {
+    for (var i = 0; i < n; i++) {
+      lines += '<div class="auto-price-row"><span class="auto-label">Auto ' + (i+1) + ' — ' + capitalize(prog) + (intPA ? ' + int.' : '') + '</span><span class="auto-val">€' + aboPA + '/mnd</span></div>';
+    }
+    lines += priceLine('Prijs per auto', '€' + aboPA + '/mnd');
+  }
+
+  document.getElementById('price-lines').innerHTML = lines;
+  document.getElementById('price-total').textContent = '€' + totaal;
+  document.getElementById('price-sub').textContent =
+    n + ' auto' + (n > 1 ? '\'s' : '') + ' · ' + capitalize(prog) + (state.interieur ? ' + Interieur' : '');
+
+  if (n > 1 && prog !== 'normaal') {
+    document.getElementById('price-note').textContent =
+      'Familietarief — prijs per auto daalt bij meer auto\'s. Maandelijks opzegbaar.';
+  } else {
+    document.getElementById('price-note').textContent =
+      'Maandelijks opzegbaar · geen aansluitkosten · direct actief';
+  }
+}
+
+function priceLine(label, val) {
+  return '<div class="price-line"><span class="price-line-label">' + label + '</span><span class="price-line-val">' + val + '</span></div>';
+}
+
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+// ── FORMULIER VALIDATIE & SUBMIT ─────────────────────────────
+function submitForm() {
+  var valid = true;
+  var velden = [
+    { id: 'voornaam', f: 'f-voornaam' },
+    { id: 'achternaam', f: 'f-achternaam' },
+    { id: 'email', f: 'f-email', type: 'email' },
+    { id: 'telefoon', f: 'f-telefoon' },
+    { id: 'straat', f: 'f-straat' },
+    { id: 'huisnr', f: 'f-huisnr' },
+    { id: 'postcode', f: 'f-postcode' },
+    { id: 'woonplaats', f: 'f-woonplaats' }
+  ];
+
+  velden.forEach(function(v) {
+    var el = document.getElementById(v.id);
+    var fw = document.getElementById(v.f);
+    if (!el || !fw) return;
+    var ok = el.value.trim().length > 0;
+    if (v.type === 'email') ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim());
+    fw.classList.toggle('error', !ok);
+    if (!ok) valid = false;
+  });
+
+  // Kentekens valideren
+  for (var i = 1; i <= autoCount; i++) {
+    var kt = document.getElementById('kenteken-' + i);
+    var kf = document.getElementById('f-kt-' + i);
+    if (kt && kf) {
+      var ok = kt.value.trim().length >= 5;
+      kf.classList.toggle('error', !ok);
+      if (!ok) valid = false;
+    }
+  }
+
+  if (!valid) {
+    document.querySelector('.field.error input, .field.error .kenteken-input').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // Toon succes
+  document.getElementById('succes-email').textContent = document.getElementById('email').value;
+  document.getElementById('form-wrapper').style.display = 'none';
+  document.getElementById('succes-screen').classList.add('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── INIT ─────────────────────────────────────────────────────
+updatePrijs();
+</script>
+</body>
+</html>
