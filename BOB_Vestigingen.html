@@ -21,13 +21,7 @@ body { background: var(--black); color: var(--text); font-family: var(--fb); }
 
 /* NAV */
 /* ─── NAV ─── */
-.nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px; height: 72px;
-  background: rgba(10,10,10,0.92); backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
+
 .nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .nav-menu { display: flex; gap: 36px; list-style: none; }
 .nav-menu a { font-family: var(--fd); font-weight: 700; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; position: relative; padding-bottom: 2px; }
@@ -146,6 +140,22 @@ body { background: var(--black); color: var(--text); font-family: var(--fb); }
   .mobile-cta { display: block; }
   .hero-stats { gap: 16px; }
 }
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 72px;
+  background: rgba(10,10,10,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-menu { display: flex; gap: 36px; list-style: none; }
+.nav-menu a { font-family: var(--fd); font-weight: 700; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; position: relative; padding-bottom: 2px; }
+.nav-menu a::after { content:''; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+.nav-menu a:hover { color: var(--text); }
+.nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+.nav-menu a.active { color: var(--text); }
+.nav-cta { background: var(--red); color: #fff; font-family: var(--fd); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px 24px 9px; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); transition: all 0.2s; }
+.nav-cta:hover { box-shadow: 0 8px 32px rgba(227,6,19,0.4); transform: translateY(-1px); }
 </style>
 </head>
 <body>
@@ -164,7 +174,9 @@ body { background: var(--black); color: var(--text); font-family: var(--fb); }
 </div>
 
 <nav class="nav">
-  <a href="BOB_Homepage_Responsive.html" class="nav-logo"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNjAgMTMwIiB3aWR0aD0iMzYwIiBoZWlnaHQ9IjEzMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImNocm9tZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiAgIHN0b3AtY29sb3I9IiM4YThhOGEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxOCUiICBzdG9wLWNvbG9yPSIjY2VjZWNlIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMzglIiAgc3RvcC1jb2xvcj0iI2Y4ZjhmOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjUyJSIgIHN0b3AtY29sb3I9IiNmZmZmZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI2NSUiICBzdG9wLWNvbG9yPSIjZDBkMGQwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iODIlIiAgc3RvcC1jb2xvcj0iIzlhOWE5YSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiOGI4YjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdsb3NzIiB4MT0iMCIgeTE9IjAiIHgyPSIwLjQiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuNTUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC4xIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KCiAgPCEtLSBHcmlqcyB2aWVya2FudCB2bGFrIDEzMMOXMTMwIC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMzAiIGhlaWdodD0iMTMwIiBmaWxsPSIjNTU1NTU1Ii8+CgogIDwhLS0gIjI1IiBjaHJvb20gLS0+CiAgPHRleHQgeD0iNjUiIHk9IjEwMCIKICAgIGZvbnQtZmFtaWx5PSInQXJpYWwgQmxhY2snLCAnQXJpYWwnLCBzYW5zLXNlcmlmIgogICAgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI5OCIKICAgIGZpbGw9InVybCgjY2hyb21lKSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9Ii0yIj4yNTwvdGV4dD4KICA8dGV4dCB4PSI2NSIgeT0iMTAwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCcsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9Ijk4IgogICAgZmlsbD0idXJsKCNnbG9zcykiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSItMiI+MjU8L3RleHQ+CgogIDwhLS0gUm9vZCB2bGFrIC0tPgogIDxyZWN0IHg9IjEzMCIgeT0iMCIgd2lkdGg9IjIzMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiNFMzA2MTMiIHJ4PSIxNiIgcnk9IjE2Ii8+CiAgPHJlY3QgeD0iMTMwIiB5PSIwIiB3aWR0aD0iMjAiICBoZWlnaHQ9IjEzMCIgZmlsbD0iI0UzMDYxMyIvPgoKICA8IS0tICJCT0IiIOKAlCBBcmlhbCBCbGFjaywgYnJlZWQgZW4gb3BlbiAtLT4KICA8dGV4dCB4PSIyNDUiIHk9IjgwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCBCb2xkJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjY4IgogICAgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjYiPkJPQjwvdGV4dD4KCiAgPCEtLSAiQVVUT1dBUyIg4oCUIEFyaWFsIEJvbGQsIHJ1aW0gZW4gbGVlc2JhYXIgLS0+CiAgPHRleHQgeD0iMjQ1IiB5PSIxMTAiCiAgICBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjE5IgogICAgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjkyKSIKICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSI2Ij5BVVRPV0FTPC90ZXh0Pgo8L3N2Zz4=" alt="BOB Autowas"></a>
+  <a href="BOB_Homepage_Responsive.html" class="nav-logo">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNjAgMTMwIiB3aWR0aD0iMzYwIiBoZWlnaHQ9IjEzMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImNocm9tZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiAgIHN0b3AtY29sb3I9IiM4YThhOGEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxOCUiICBzdG9wLWNvbG9yPSIjY2VjZWNlIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMzglIiAgc3RvcC1jb2xvcj0iI2Y4ZjhmOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjUyJSIgIHN0b3AtY29sb3I9IiNmZmZmZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI2NSUiICBzdG9wLWNvbG9yPSIjZDBkMGQwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iODIlIiAgc3RvcC1jb2xvcj0iIzlhOWE5YSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiOGI4YjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdsb3NzIiB4MT0iMCIgeTE9IjAiIHgyPSIwLjQiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuNTUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC4xIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KCiAgPCEtLSBHcmlqcyB2aWVya2FudCB2bGFrIDEzMMOXMTMwIC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMzAiIGhlaWdodD0iMTMwIiBmaWxsPSIjNTU1NTU1Ii8+CgogIDwhLS0gIjI1IiBjaHJvb20gLS0+CiAgPHRleHQgeD0iNjUiIHk9IjEwMCIKICAgIGZvbnQtZmFtaWx5PSInQXJpYWwgQmxhY2snLCAnQXJpYWwnLCBzYW5zLXNlcmlmIgogICAgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI5OCIKICAgIGZpbGw9InVybCgjY2hyb21lKSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9Ii0yIj4yNTwvdGV4dD4KICA8dGV4dCB4PSI2NSIgeT0iMTAwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCcsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9Ijk4IgogICAgZmlsbD0idXJsKCNnbG9zcykiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSItMiI+MjU8L3RleHQ+CgogIDwhLS0gUm9vZCB2bGFrIC0tPgogIDxyZWN0IHg9IjEzMCIgeT0iMCIgd2lkdGg9IjIzMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiNFMzA2MTMiIHJ4PSIxNiIgcnk9IjE2Ii8+CiAgPHJlY3QgeD0iMTMwIiB5PSIwIiB3aWR0aD0iMjAiICBoZWlnaHQ9IjEzMCIgZmlsbD0iI0UzMDYxMyIvPgoKICA8IS0tICJCT0IiIOKAlCBBcmlhbCBCbGFjaywgYnJlZWQgZW4gb3BlbiAtLT4KICA8dGV4dCB4PSIyNDUiIHk9IjgwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCBCb2xkJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjY4IgogICAgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjYiPkJPQjwvdGV4dD4KCiAgPCEtLSAiQVVUT1dBUyIg4oCUIEFyaWFsIEJvbGQsIHJ1aW0gZW4gbGVlc2JhYXIgLS0+CiAgPHRleHQgeD0iMjQ1IiB5PSIxMTAiCiAgICBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjE5IgogICAgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjkyKSIKICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSI2Ij5BVVRPV0FTPC90ZXh0Pgo8L3N2Zz4=" alt="BOB Autowas" style="height:36px;width:auto;display:block;">
+  </a>
   <ul class="nav-menu">
     <li><a href="BOB_Wasclub_Responsive.html">Wasclub</a></li>
     <li><a href="BOB_Wasprogrammas.html">Wasprogramma's</a></li>
