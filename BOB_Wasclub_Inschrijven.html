@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word lid van de BOB Wasclub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --red: #E30613;
+  --red-dark: #b80510;
+  --dark: #141414;
+  --dark2: #1e1e1e;
+  --dark3: #252525;
+  --border: rgba(255,255,255,0.08);
+  --border-active: rgba(227,6,19,0.5);
+  --muted: rgba(255,255,255,0.45);
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Barlow', sans-serif;
+  --radius: 10px;
+  --transition: 0.2s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--dark);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(20,20,20,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 64px;
+}
+.nav-logo {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 900;
+  letter-spacing: -0.5px;
+  color: #fff; text-decoration: none;
+}
+.nav-logo span { color: var(--red); }
+.nav-back {
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  display: flex; align-items: center; gap: 8px;
+  transition: color var(--transition);
+}
+.nav-back:hover { color: #fff; }
+.nav-back::before { content: '←'; font-size: 16px; }
+
+/* ── HERO STRIP ── */
+.hero-strip {
+  background: var(--red);
+  padding: 48px 32px 52px;
+  text-align: center;
+  position: relative; overflow: hidden;
+}
+.hero-strip::before {
+  content: '';
+  position: absolute; bottom: -1px; left: 0; right: 0; height: 40px;
+  background: var(--dark);
+  clip-path: ellipse(55% 100% at 50% 100%);
+}
+.hero-strip h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 6vw, 60px);
+  font-weight: 900; letter-spacing: -1px;
+  line-height: 1; text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.hero-strip p {
+  font-size: 16px; color: rgba(255,255,255,0.85);
+  max-width: 480px; margin: 0 auto;
+}
+
+/* ── LAYOUT ── */
+.page-wrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 32px;
+  align-items: start;
+}
+
+/* ── FORM SECTIONS ── */
+.form-section {
+  background: var(--dark2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.section-label {
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: var(--red); margin-bottom: 20px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--border);
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: -0.3px;
+  margin-bottom: 20px; color: #fff;
+}
+
+/* ── FIELD GROUPS ── */
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.field-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.field-row.full { grid-template-columns: 1fr; }
+
+.field {
+  display: flex; flex-direction: column; gap: 6px;
+}
+.field label {
+  font-size: 12px; font-weight: 600;
+  letter-spacing: 0.8px; text-transform: uppercase;
+  color: var(--muted);
+}
+.field input, .field select {
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color var(--transition), background var(--transition);
+  width: 100%;
+  appearance: none;
+}
+.field input::placeholder { color: rgba(255,255,255,0.2); }
+.field input:focus, .field select:focus {
+  border-color: var(--red);
+  background: rgba(227,6,19,0.06);
+}
+.field select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+.field select option { background: #222; }
+
+/* ── VOERTUIG BLOK ── */
+.vehicle-blocks { display: flex; flex-direction: column; gap: 14px; }
+.vehicle-block {
+  background: var(--dark3);
+  border: 1px solid var(--border);
+  border-radius: 8px; padding: 18px;
+  position: relative;
+}
+.vehicle-block .block-num {
+  position: absolute; top: -1px; left: 18px;
+  background: var(--red);
+  font-family: var(--font-display);
+  font-size: 10px; font-weight: 800;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 0 0 6px 6px;
+  color: #fff;
+}
+.vehicle-block .block-inner {
+  margin-top: 14px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+.remove-vehicle {
+  position: absolute; top: 12px; right: 14px;
+  background: none; border: none;
+  color: rgba(255,255,255,0.25);
+  cursor: pointer; font-size: 18px; line-height: 1;
+  transition: color var(--transition);
+}
+.remove-vehicle:hover { color: var(--red); }
+
+.add-vehicle-btn {
+  display: flex; align-items: center; gap: 8px;
+  background: none;
+  border: 1px dashed rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: var(--muted);
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-size: 14px; font-weight: 500;
+  padding: 14px 18px;
+  transition: all var(--transition);
+  width: 100%; text-align: left;
+}
+.add-vehicle-btn:hover {
+  border-color: rgba(227,6,19,0.4);
+  color: #fff;
+  background: rgba(227,6,19,0.05);
+}
+.add-vehicle-btn .plus {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: rgba(227,6,19,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; color: var(--red); font-weight: 300;
+  transition: background var(--transition);
+}
+.add-vehicle-btn:hover .plus { background: rgba(227,6,19,0.25); }
+
+.multi-note {
+  font-size: 12px; color: var(--muted);
+  background: rgba(255,255,255,0.04);
+  border-left: 2px solid var(--red);
+  padding: 10px 14px; border-radius: 4px;
+  margin-top: 12px; line-height: 1.5;
+}
+
+/* ── ABONNEMENT SELECTOR ── */
+.abo-cards { display: flex; flex-direction: column; gap: 10px; }
+.abo-card {
+  background: var(--dark3);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+  overflow: hidden;
+}
+.abo-card:hover { border-color: rgba(227,6,19,0.35); }
+.abo-card.selected {
+  border-color: var(--red);
+  background: rgba(227,6,19,0.07);
+}
+.abo-card input[type="radio"] { display: none; }
+.abo-card-inner {
+  padding: 16px 18px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px; align-items: center;
+}
+.abo-radio {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color var(--transition);
+  flex-shrink: 0;
+}
+.abo-card.selected .abo-radio { border-color: var(--red); }
+.abo-radio-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+.abo-card.selected .abo-radio-dot { opacity: 1; }
+.abo-info { min-width: 0; }
+.abo-name {
+  font-family: var(--font-display);
+  font-size: 17px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.2px;
+}
+.abo-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.abo-price-col { text-align: right; }
+.abo-price {
+  font-family: var(--font-display);
+  font-size: 22px; font-weight: 900;
+  color: #fff;
+}
+.abo-price .cur { font-size: 14px; font-weight: 600; opacity: 0.7; vertical-align: super; }
+.abo-per { font-size: 11px; color: var(--muted); }
+
+.abo-badge {
+  display: inline-block;
+  background: var(--red);
+  font-family: var(--font-display);
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 3px; color: #fff;
+  margin-left: 8px; vertical-align: middle;
+}
+
+/* ── INTERIEUR ADDON ── */
+.addon-row {
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--dark3);
+  border: 2px solid var(--border);
+  border-radius: 8px; padding: 14px 18px;
+  cursor: pointer;
+  transition: border-color var(--transition);
+  margin-top: 10px;
+}
+.addon-row:hover { border-color: rgba(227,6,19,0.35); }
+.addon-row.selected { border-color: var(--red); background: rgba(227,6,19,0.07); }
+.addon-row input[type="checkbox"] { display: none; }
+.addon-left { display: flex; align-items: center; gap: 12px; }
+.addon-check {
+  width: 20px; height: 20px;
+  border-radius: 4px;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+.addon-row.selected .addon-check {
+  border-color: var(--red);
+  background: var(--red);
+}
+.addon-check-mark { font-size: 12px; color: #fff; opacity: 0; transition: opacity var(--transition); }
+.addon-row.selected .addon-check-mark { opacity: 1; }
+.addon-text {}
+.addon-name { font-family: var(--font-display); font-size: 16px; font-weight: 700; text-transform: uppercase; }
+.addon-desc { font-size: 12px; color: var(--muted); }
+.addon-price { font-family: var(--font-display); font-size: 18px; font-weight: 900; }
+
+/* ── INGANGSDATUM ── */
+.date-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.date-option {
+  background: var(--dark3);
+  border: 2px solid var(--border);
+  border-radius: 8px; padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition);
+  text-align: center;
+}
+.date-option:hover { border-color: rgba(227,6,19,0.35); }
+.date-option.selected { border-color: var(--red); background: rgba(227,6,19,0.07); }
+.date-option input[type="radio"] { display: none; }
+.date-label {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.2px;
+  display: block; margin-bottom: 3px;
+}
+.date-sub { font-size: 12px; color: var(--muted); }
+
+.custom-date-wrap {
+  margin-top: 12px;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+}
+.custom-date-wrap.open {
+  max-height: 80px;
+  opacity: 1;
+}
+
+/* ── BETAALINFO ── */
+.iban-note {
+  font-size: 12px; color: var(--muted);
+  margin-top: 6px; display: flex; align-items: center; gap: 6px;
+}
+.iban-note svg { flex-shrink: 0; opacity: 0.5; }
+
+/* ── AKKOORD ── */
+.consent-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  cursor: pointer; padding: 4px 0;
+}
+.consent-check {
+  width: 20px; height: 20px; flex-shrink: 0;
+  border-radius: 4px; margin-top: 1px;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition);
+}
+.consent-row.checked .consent-check {
+  border-color: var(--red); background: var(--red);
+}
+.consent-mark { font-size: 12px; color: #fff; opacity: 0; transition: opacity var(--transition); }
+.consent-row.checked .consent-mark { opacity: 1; }
+.consent-text { font-size: 13px; color: var(--muted); line-height: 1.55; }
+.consent-text a { color: rgba(227,6,19,0.9); }
+.consent-row input { display: none; }
+
+/* ── STICKY SAMENVATTING ── */
+.summary-panel {
+  position: sticky; top: 80px;
+  background: var(--dark2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.summary-top {
+  background: var(--red);
+  padding: 20px 22px 22px;
+}
+.summary-top-label {
+  font-family: var(--font-display);
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 6px;
+}
+.summary-total {
+  font-family: var(--font-display);
+  font-size: 52px; font-weight: 900;
+  line-height: 1; letter-spacing: -1px;
+  transition: all 0.3s ease;
+}
+.summary-total .cur { font-size: 26px; vertical-align: super; margin-right: 2px; font-weight: 700; }
+.summary-total .per { font-size: 16px; font-weight: 600; opacity: 0.8; }
+.summary-subtitle { font-size: 13px; color: rgba(255,255,255,0.7); margin-top: 4px; }
+
+.summary-body { padding: 20px 22px; }
+.summary-line {
+  display: flex; justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.summary-line:last-of-type { border-bottom: none; }
+.summary-line .lbl { color: var(--muted); }
+.summary-line .val { font-weight: 600; }
+.summary-line .val.red { color: var(--red); }
+
+.summary-vehicles { margin: 12px 0; }
+.sv-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 10px;
+  background: var(--dark3); border-radius: 6px;
+  margin-bottom: 6px; font-size: 13px;
+}
+.sv-badge {
+  background: var(--red); color: #fff;
+  font-family: var(--font-display);
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 3px;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+.empty-state {
+  text-align: center; padding: 24px 0;
+  color: var(--muted); font-size: 13px;
+}
+.empty-state .icon { font-size: 28px; margin-bottom: 8px; opacity: 0.4; }
+
+/* ── SUBMIT BUTTON ── */
+.submit-btn {
+  display: block; width: 100%;
+  background: var(--red);
+  border: none; border-radius: 8px;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 18px; font-weight: 800;
+  letter-spacing: 1px; text-transform: uppercase;
+  padding: 18px 24px;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.1s ease;
+  margin-top: 20px;
+}
+.submit-btn:hover { background: var(--red-dark); }
+.submit-btn:active { transform: scale(0.99); }
+.submit-btn:disabled {
+  opacity: 0.4; cursor: not-allowed; transform: none;
+}
+.submit-note {
+  font-size: 11px; color: var(--muted);
+  text-align: center; margin-top: 10px; line-height: 1.5;
+}
+.submit-note a { color: rgba(227,6,19,0.8); }
+
+/* ── VALIDATION ── */
+.field input.error, .field select.error { border-color: #ff4444; }
+.field .error-msg { font-size: 11px; color: #ff6666; margin-top: 3px; display: none; }
+.field input.error + .error-msg,
+.field select.error + .error-msg { display: block; }
+
+/* ── SUCCESS ── */
+.success-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 200;
+  align-items: center; justify-content: center;
+}
+.success-overlay.show { display: flex; }
+.success-card {
+  background: var(--dark2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px 40px;
+  max-width: 440px; width: 90%;
+  text-align: center;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes popIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.success-icon {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--red), #ff6b6b);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 20px;
+}
+.success-card h2 {
+  font-family: var(--font-display);
+  font-size: 30px; font-weight: 900;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.success-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+.success-card .name-highlight { color: #fff; font-weight: 600; }
+.success-card .back-btn {
+  display: inline-block; margin-top: 24px;
+  background: var(--red); color: #fff;
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 700; letter-spacing: 1px;
+  text-transform: uppercase; text-decoration: none;
+  padding: 14px 28px; border-radius: 7px;
+  border: none; cursor: pointer;
+  transition: background var(--transition);
+}
+.success-card .back-btn:hover { background: var(--red-dark); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 760px) {
+  .page-wrap {
+    grid-template-columns: 1fr;
+    padding: 24px 16px 100px;
+  }
+  .summary-panel {
+    position: static;
+    order: -1;
+  }
+  .nav { padding: 0 16px; }
+  .hero-strip { padding: 36px 16px 48px; }
+  .form-section { padding: 20px 16px; }
+  .field-row { grid-template-columns: 1fr; }
+  .field-row.three { grid-template-columns: 1fr 1fr; }
+  .date-grid { grid-template-columns: 1fr; }
+  .vehicle-block .block-inner { grid-template-columns: 1fr; }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.form-section {
+  opacity: 0;
+  animation: fadeUp 0.5s ease forwards;
+}
+.form-section:nth-child(1) { animation-delay: 0.1s; }
+.form-section:nth-child(2) { animation-delay: 0.2s; }
+.form-section:nth-child(3) { animation-delay: 0.3s; }
+.form-section:nth-child(4) { animation-delay: 0.4s; }
+.form-section:nth-child(5) { animation-delay: 0.5s; }
+.form-section:nth-child(6) { animation-delay: 0.6s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-logo" href="BOB_Wasclub_Responsive.html"><span>BOB</span> Wasclub</a>
+  <a class="nav-back" href="BOB_Wasclub_Responsive.html">Terug naar de Wasclub</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero-strip">
+  <h1>Word lid van de Wasclub</h1>
+  <p>Vul je gegevens in en kies je abonnement — je maandbedrag zie je meteen rechts.</p>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="page-wrap">
+
+  <!-- LEFT: FORM -->
+  <div id="formLeft">
+
+    <!-- 1. NAW -->
+    <div class="form-section">
+      <div class="section-label">Stap 1 — Persoonlijke gegevens</div>
+      <div class="field-row">
+        <div class="field">
+          <label for="voornaam">Voornaam</label>
+          <input type="text" id="voornaam" placeholder="Jan" autocomplete="given-name">
+          <span class="error-msg">Vul je voornaam in</span>
+        </div>
+        <div class="field">
+          <label for="achternaam">Achternaam</label>
+          <input type="text" id="achternaam" placeholder="de Vries" autocomplete="family-name">
+          <span class="error-msg">Vul je achternaam in</span>
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label for="straat">Straat + huisnummer</label>
+          <input type="text" id="straat" placeholder="Hoofdstraat 12" autocomplete="street-address">
+          <span class="error-msg">Vul je adres in</span>
+        </div>
+      </div>
+      <div class="field-row three">
+        <div class="field">
+          <label for="postcode">Postcode</label>
+          <input type="text" id="postcode" placeholder="1234 AB" maxlength="7" autocomplete="postal-code">
+          <span class="error-msg">Voer een geldige postcode in</span>
+        </div>
+        <div class="field" style="grid-column: span 2;">
+          <label for="woonplaats">Woonplaats</label>
+          <input type="text" id="woonplaats" placeholder="Amsterdam" autocomplete="address-level2">
+          <span class="error-msg">Vul je woonplaats in</span>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="email">E-mailadres</label>
+          <input type="email" id="email" placeholder="jan@voorbeeld.nl" autocomplete="email">
+          <span class="error-msg">Voer een geldig e-mailadres in</span>
+        </div>
+        <div class="field">
+          <label for="telefoon">Telefoonnummer</label>
+          <input type="tel" id="telefoon" placeholder="06-12345678" autocomplete="tel">
+          <span class="error-msg">Vul je telefoonnummer in</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. VOERTUIGEN -->
+    <div class="form-section">
+      <div class="section-label">Stap 2 — Jouw voertuig(en)</div>
+      <div class="vehicle-blocks" id="vehicleBlocks">
+        <!-- Auto 1 (niet verwijderbaar) -->
+        <div class="vehicle-block" data-idx="0">
+          <div class="block-num">Auto 1</div>
+          <div class="block-inner">
+            <div class="field">
+              <label>Kenteken</label>
+              <input type="text" class="kenteken-input" placeholder="AB-123-C" maxlength="9"
+                     oninput="formatKenteken(this)" style="text-transform:uppercase; letter-spacing:1px;">
+              <span class="error-msg">Vul een geldig kenteken in</span>
+            </div>
+            <div class="field">
+              <label>Merk & Model</label>
+              <input type="text" class="model-input" placeholder="VW Golf">
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="add-vehicle-btn" type="button" onclick="addVehicle()" id="addVehicleBtn">
+        <span class="plus">+</span>
+        Tweede auto toevoegen (zelfde huishouden)
+      </button>
+      <div class="multi-note" id="multiNote" style="display:none;">
+        Elke extra auto krijgt hetzelfde abonnement. Het maandbedrag geldt per auto.
+        Kortingsregeling: 2e auto 10% korting · 3e of meer 15% korting.
+      </div>
+    </div>
+
+    <!-- 3. ABONNEMENT -->
+    <div class="form-section">
+      <div class="section-label">Stap 3 — Kies je abonnement</div>
+      <div class="abo-cards">
+
+        <label class="abo-card" id="abo-beter">
+          <input type="radio" name="abonnement" value="beter" data-price="28" onchange="updateSummary()">
+          <div class="abo-card-inner">
+            <div class="abo-radio"><div class="abo-radio-dot"></div></div>
+            <div class="abo-info">
+              <div class="abo-name">BOB Beter<span class="abo-badge">Populair</span></div>
+              <div class="abo-desc">Buitenwas + velgenreiniging · Onbeperkt wassen</div>
+            </div>
+            <div class="abo-price-col">
+              <div class="abo-price"><span class="cur">€</span>28</div>
+              <div class="abo-per">per auto/mnd</div>
+            </div>
+          </div>
+        </label>
+
+        <label class="abo-card" id="abo-best">
+          <input type="radio" name="abonnement" value="best" data-price="34" onchange="updateSummary()">
+          <div class="abo-card-inner">
+            <div class="abo-radio"><div class="abo-radio-dot"></div></div>
+            <div class="abo-info">
+              <div class="abo-name">BOB Best</div>
+              <div class="abo-desc">Alles van Beter + hogedruk voorreiniging · Onbeperkt</div>
+            </div>
+            <div class="abo-price-col">
+              <div class="abo-price"><span class="cur">€</span>34</div>
+              <div class="abo-per">per auto/mnd</div>
+            </div>
+          </div>
+        </label>
+
+        <label class="abo-card" id="abo-proteqt">
+          <input type="radio" name="abonnement" value="proteqt" data-price="39" onchange="updateSummary()">
+          <div class="abo-card-inner">
+            <div class="abo-radio"><div class="abo-radio-dot"></div></div>
+            <div class="abo-info">
+              <div class="abo-name">BOB Proteqt</div>
+              <div class="abo-desc">Alles van Best + laagbeschermend wax · Premium</div>
+            </div>
+            <div class="abo-price-col">
+              <div class="abo-price"><span class="cur">€</span>39</div>
+              <div class="abo-per">per auto/mnd</div>
+            </div>
+          </div>
+        </label>
+
+      </div>
+
+      <!-- INTERIEUR ADDON -->
+      <label class="addon-row" id="addon-interieur" onclick="toggleAddon(this)">
+        <input type="checkbox" id="interieurCheck" value="9" onchange="updateSummary()">
+        <div class="addon-left">
+          <div class="addon-check"><span class="addon-check-mark">✓</span></div>
+          <div class="addon-text">
+            <div class="addon-name">+ Interieurverzorging</div>
+            <div class="addon-desc">Maandelijks stofzuigen & dashboard reinigen</div>
+          </div>
+        </div>
+        <div class="addon-price"><span style="font-size:14px;opacity:0.6;">€</span>9 <span style="font-size:12px;opacity:0.5;">/mnd</span></div>
+      </label>
+    </div>
+
+    <!-- 4. INGANGSDATUM -->
+    <div class="form-section">
+      <div class="section-label">Stap 4 — Ingangsdatum</div>
+      <div class="date-grid" id="dateGrid">
+
+        <label class="date-option selected" id="date-zsm">
+          <input type="radio" name="ingangsdatum" value="zsm" checked onchange="dateChanged('zsm')">
+          <span class="date-label">Zo snel mogelijk</span>
+          <span class="date-sub" id="date-zsm-label">Actief per <strong id="dateZSM"></strong></span>
+        </label>
+
+        <label class="date-option" id="date-1ste">
+          <input type="radio" name="ingangsdatum" value="1ste" onchange="dateChanged('1ste')">
+          <span class="date-label">1e van volgende maand</span>
+          <span class="date-sub" id="date-1ste-label">Actief per <strong id="date1ste"></strong></span>
+        </label>
+
+        <label class="date-option" id="date-15de">
+          <input type="radio" name="ingangsdatum" value="15de" onchange="dateChanged('15de')">
+          <span class="date-label">15e van volgende maand</span>
+          <span class="date-sub" id="date-15de-label">Actief per <strong id="date15de"></strong></span>
+        </label>
+
+        <label class="date-option" id="date-custom">
+          <input type="radio" name="ingangsdatum" value="custom" onchange="dateChanged('custom')">
+          <span class="date-label">Kies zelf een datum</span>
+          <span class="date-sub">Selecteer een datum</span>
+        </label>
+
+      </div>
+      <div class="custom-date-wrap" id="customDateWrap">
+        <div class="field" style="margin-top:14px;">
+          <label for="customDate">Gewenste ingangsdatum</label>
+          <input type="date" id="customDate" oninput="updateSummary()">
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. BETAALGEGEVENS -->
+    <div class="form-section">
+      <div class="section-label">Stap 5 — Betaalgegevens (SEPA Incasso)</div>
+      <div class="field-row full">
+        <div class="field">
+          <label for="tenNameVan">Ten name van (rekeninghouder)</label>
+          <input type="text" id="tenNameVan" placeholder="J.P. de Vries" autocomplete="name">
+          <span class="error-msg">Vul de naam van de rekeninghouder in</span>
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label for="iban">IBAN rekeningnummer</label>
+          <input type="text" id="iban" placeholder="NL00 BANK 0123 4567 89" maxlength="27"
+                 oninput="formatIBAN(this)">
+          <span class="error-msg">Voer een geldig IBAN in</span>
+          <div class="iban-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            Je machtigt BOB Wasclub om het maandbedrag via automatische incasso te innen.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. AKKOORD -->
+    <div class="form-section">
+      <div class="section-label">Stap 6 — Bevestiging</div>
+
+      <div class="consent-row" id="consent1" onclick="toggleConsent('consent1')">
+        <input type="checkbox" id="check1">
+        <div class="consent-check"><span class="consent-mark">✓</span></div>
+        <div class="consent-text">
+          Ik ga akkoord met de <a href="#">Algemene Voorwaarden</a> van BOB Wasclub en machtig BOB Wasclub tot het maandelijkse incasso van het verschuldigde abonnementsbedrag.
+        </div>
+      </div>
+
+      <div class="consent-row" style="margin-top:12px;" id="consent2" onclick="toggleConsent('consent2')">
+        <input type="checkbox" id="check2">
+        <div class="consent-check"><span class="consent-mark">✓</span></div>
+        <div class="consent-text">
+          Ik bevestig dat alle opgegeven voertuigen tot mijn huishouden behoren. Ik begrijp dat bij misbruik het abonnement per direct beëindigd kan worden.
+        </div>
+      </div>
+
+      <button class="submit-btn" type="button" id="submitBtn" onclick="submitForm()">
+        Schrijf me in →
+      </button>
+      <div class="submit-note">
+        Na inschrijving ontvang je een bevestiging per e-mail.
+        Opzegging is altijd mogelijk per e-mail of balie, met één maand opzegtermijn.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: SUMMARY PANEL -->
+  <div class="summary-panel" id="summaryPanel">
+    <div class="summary-top">
+      <div class="summary-top-label">Jouw maandbedrag</div>
+      <div class="summary-total" id="summaryTotal">
+        <span class="cur">€</span><span id="totalAmount">—</span>
+      </div>
+      <div class="summary-subtitle" id="summarySubtitle">Kies een abonnement om te beginnen</div>
+    </div>
+    <div class="summary-body">
+
+      <div id="summaryEmpty" class="empty-state">
+        <div class="icon">🚗</div>
+        <div>Kies een abonnement<br>om je berekening te zien</div>
+      </div>
+
+      <div id="summaryContent" style="display:none;">
+        <div class="summary-line">
+          <span class="lbl">Abonnement</span>
+          <span class="val" id="sumAboName">—</span>
+        </div>
+        <div class="summary-line" id="sumIntRow" style="display:none;">
+          <span class="lbl">Interieurverzorging</span>
+          <span class="val">+ €9</span>
+        </div>
+        <div class="summary-line" id="sumCarsRow">
+          <span class="lbl">Aantal auto's</span>
+          <span class="val" id="sumCarsCount">1</span>
+        </div>
+        <div class="summary-line" id="sumDiscountRow" style="display:none;">
+          <span class="lbl">Kortingsregeling</span>
+          <span class="val red" id="sumDiscount">—</span>
+        </div>
+        <div class="summary-line">
+          <span class="lbl">Ingangsdatum</span>
+          <span class="val" id="sumStartDate">—</span>
+        </div>
+
+        <div class="summary-vehicles" id="summaryVehicles"></div>
+
+        <div style="border-top:1px solid var(--border); padding-top:14px; margin-top:4px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="font-size:13px;color:var(--muted);">Totaal per maand</span>
+            <span style="font-family:var(--font-display);font-size:26px;font-weight:900;" id="sumFinalTotal">€—</span>
+          </div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Onbeperkt wassen voor al je auto's</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-card">
+    <div class="success-icon">✓</div>
+    <h2>Welkom bij de Wasclub!</h2>
+    <p>
+      Goed nieuws, <span class="name-highlight" id="successName">je</span>! Je inschrijving is ontvangen.<br>
+      Je ontvangt binnen enkele minuten een bevestiging op <span class="name-highlight" id="successEmail">je e-mailadres</span>.<br><br>
+      <strong>Je abonnement gaat in op <span id="successDate">de gekozen datum</span>.</strong><br>
+      Breng bij je eerste wasbeurt gewoon je kenteken mee — we herkennen je.
+    </p>
+    <button class="back-btn" onclick="document.getElementById('successOverlay').classList.remove('show');">
+      Sluiten
+    </button>
+  </div>
+</div>
+
+<script>
+// ── DATUMS INSTELLEN ──────────────────────────────────────────────
+const monthNames = ['jan','feb','mrt','apr','mei','jun','jul','aug','sep','okt','nov','dec'];
+const monthNamesFull = ['januari','februari','maart','april','mei','juni','juli','augustus','september','oktober','november','december'];
+
+function formatDate(d) {
+  return `${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+}
+function formatDateFull(d) {
+  return `${d.getDate()} ${monthNamesFull[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function initDates() {
+  const now = new Date();
+  const tomorrow = new Date(now); tomorrow.setDate(now.getDate() + 1);
+  const first1 = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  const first15 = new Date(now.getFullYear(), now.getMonth() + 1, 15);
+
+  document.getElementById('dateZSM').textContent = formatDate(tomorrow);
+  document.getElementById('date1ste').textContent = formatDate(first1);
+  document.getElementById('date15de').textContent = formatDate(first15);
+
+  // Custom date: min = tomorrow
+  const tStr = tomorrow.toISOString().split('T')[0];
+  document.getElementById('customDate').min = tStr;
+  document.getElementById('customDate').value = tStr;
+
+  updateSummary();
+}
+
+function dateChanged(val) {
+  document.querySelectorAll('.date-option').forEach(el => el.classList.remove('selected'));
+  document.getElementById('date-'+val).classList.add('selected');
+  const wrap = document.getElementById('customDateWrap');
+  if (val === 'custom') {
+    wrap.classList.add('open');
+  } else {
+    wrap.classList.remove('open');
+  }
+  updateSummary();
+}
+
+function getSelectedDate() {
+  const val = document.querySelector('input[name="ingangsdatum"]:checked')?.value;
+  const now = new Date();
+  if (val === 'zsm') {
+    const d = new Date(now); d.setDate(d.getDate()+1);
+    return { short: formatDate(d), full: formatDateFull(d) };
+  } else if (val === '1ste') {
+    const d = new Date(now.getFullYear(), now.getMonth()+1, 1);
+    return { short: formatDate(d), full: formatDateFull(d) };
+  } else if (val === '15de') {
+    const d = new Date(now.getFullYear(), now.getMonth()+1, 15);
+    return { short: formatDate(d), full: formatDateFull(d) };
+  } else if (val === 'custom') {
+    const v = document.getElementById('customDate').value;
+    if (v) {
+      const d = new Date(v+'T12:00:00');
+      return { short: formatDate(d), full: formatDateFull(d) };
+    }
+  }
+  return { short: '—', full: '—' };
+}
+
+// ── VOERTUIGEN ────────────────────────────────────────────────────
+let vehicleCount = 1;
+const MAX_VEHICLES = 4;
+
+function addVehicle() {
+  if (vehicleCount >= MAX_VEHICLES) return;
+  vehicleCount++;
+  const block = document.createElement('div');
+  block.className = 'vehicle-block';
+  block.dataset.idx = vehicleCount - 1;
+  block.innerHTML = `
+    <div class="block-num">Auto ${vehicleCount}</div>
+    <button class="remove-vehicle" type="button" onclick="removeVehicle(this)" title="Verwijder">×</button>
+    <div class="block-inner">
+      <div class="field">
+        <label>Kenteken</label>
+        <input type="text" class="kenteken-input" placeholder="AB-123-C" maxlength="9"
+               oninput="formatKenteken(this)" style="text-transform:uppercase; letter-spacing:1px;">
+      </div>
+      <div class="field">
+        <label>Merk & Model</label>
+        <input type="text" class="model-input" placeholder="VW Golf">
+      </div>
+    </div>`;
+  document.getElementById('vehicleBlocks').appendChild(block);
+  updateVehicleUI();
+  updateSummary();
+}
+
+function removeVehicle(btn) {
+  btn.closest('.vehicle-block').remove();
+  vehicleCount--;
+  // renumber
+  document.querySelectorAll('.vehicle-block').forEach((b, i) => {
+    b.dataset.idx = i;
+    b.querySelector('.block-num').textContent = `Auto ${i+1}`;
+  });
+  updateVehicleUI();
+  updateSummary();
+}
+
+function updateVehicleUI() {
+  const btn = document.getElementById('addVehicleBtn');
+  const note = document.getElementById('multiNote');
+  btn.style.display = vehicleCount >= MAX_VEHICLES ? 'none' : 'flex';
+  note.style.display = vehicleCount > 1 ? 'block' : 'none';
+  // update btn text
+  const labels = ['Tweede', 'Derde', 'Vierde'];
+  if (vehicleCount < MAX_VEHICLES) {
+    btn.querySelector('span:last-child').textContent =
+      `${labels[vehicleCount-1] || 'Nog een'} auto toevoegen (zelfde huishouden)`;
+  }
+}
+
+// ── FORMAT HELPERS ────────────────────────────────────────────────
+function formatKenteken(input) {
+  let v = input.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+  // Simpele format: XX-999-X of 99-XXX-9 etc — we tonen dashes na 2 en 5 chars
+  if (v.length > 2) v = v.slice(0,2) + '-' + v.slice(2);
+  if (v.length > 6) v = v.slice(0,6) + '-' + v.slice(6);
+  input.value = v;
+  updateSummary();
+}
+
+function formatIBAN(input) {
+  let v = input.value.replace(/\s/g,'').toUpperCase();
+  let formatted = v.replace(/(.{4})/g, '$1 ').trim();
+  input.value = formatted;
+}
+
+// ── SUMMARY BEREKENING ────────────────────────────────────────────
+function updateSummary() {
+  const aboChecked = document.querySelector('input[name="abonnement"]:checked');
+  const intChecked = document.getElementById('interieurCheck').checked;
+  const dateInfo = getSelectedDate();
+
+  // Update abo card visuals
+  document.querySelectorAll('.abo-card').forEach(c => c.classList.remove('selected'));
+  if (aboChecked) aboChecked.closest('.abo-card').classList.add('selected');
+
+  // Update addon visual
+  const addonRow = document.getElementById('addon-interieur');
+  addonRow.classList.toggle('selected', intChecked);
+
+  if (!aboChecked) {
+    document.getElementById('summaryEmpty').style.display = 'block';
+    document.getElementById('summaryContent').style.display = 'none';
+    document.getElementById('totalAmount').textContent = '—';
+    document.getElementById('summarySubtitle').textContent = 'Kies een abonnement om te beginnen';
+    return;
+  }
+
+  const basePrice = parseInt(aboChecked.dataset.price);
+  const intPrice = intChecked ? 9 : 0;
+  const cars = vehicleCount;
+
+  // Korting
+  let discount = 0;
+  let discountLabel = '';
+  if (cars === 2) { discount = 0.10; discountLabel = '10% korting 2e auto'; }
+  else if (cars >= 3) { discount = 0.15; discountLabel = '15% korting 3e+ auto'; }
+
+  // Bereken per auto
+  let totalMonthly = 0;
+  for (let i = 0; i < cars; i++) {
+    const carBase = basePrice + intPrice;
+    const carPrice = i === 0 ? carBase : carBase * (1 - discount);
+    totalMonthly += carPrice;
+  }
+  totalMonthly = Math.round(totalMonthly * 100) / 100;
+
+  const aboNames = { beter: 'BOB Beter', best: 'BOB Best', proteqt: 'BOB Proteqt' };
+  const aboName = aboNames[aboChecked.value] || '';
+
+  // Update UI
+  document.getElementById('summaryEmpty').style.display = 'none';
+  document.getElementById('summaryContent').style.display = 'block';
+
+  document.getElementById('totalAmount').textContent = totalMonthly.toFixed(2).replace('.', ',');
+  document.getElementById('summarySubtitle').textContent =
+    `${cars} auto${cars > 1 ? "'s" : ''} · ${aboName}${intChecked ? ' + Interieur' : ''}`;
+
+  document.getElementById('sumAboName').textContent = aboName + ` (€${basePrice}/mnd)`;
+  document.getElementById('sumIntRow').style.display = intChecked ? 'flex' : 'none';
+  document.getElementById('sumCarsCount').textContent = cars;
+  document.getElementById('sumStartDate').textContent = dateInfo.short;
+  document.getElementById('sumFinalTotal').textContent = `€${totalMonthly.toFixed(2).replace('.',',')}`;
+
+  // Korting row
+  const discRow = document.getElementById('sumDiscountRow');
+  if (discount > 0) {
+    discRow.style.display = 'flex';
+    document.getElementById('sumDiscount').textContent = discountLabel;
+  } else {
+    discRow.style.display = 'none';
+  }
+
+  // Voertuigen
+  const svEl = document.getElementById('summaryVehicles');
+  const kBlocks = document.querySelectorAll('.kenteken-input');
+  let svHtml = '';
+  kBlocks.forEach((k, i) => {
+    const kt = k.value.trim() || '—';
+    const model = document.querySelectorAll('.model-input')[i]?.value.trim() || '';
+    const priceThis = i === 0 ? basePrice + intPrice : Math.round((basePrice + intPrice) * (1 - discount));
+    svHtml += `<div class="sv-item">
+      <span class="sv-badge">Auto ${i+1}</span>
+      <span style="flex:1;">${kt}${model ? ' · '+model : ''}</span>
+      <span style="font-family:var(--font-display);font-size:15px;font-weight:700;">€${priceThis}</span>
+    </div>`;
+  });
+  svEl.innerHTML = svHtml || '';
+}
+
+// ── ADDON TOGGLE ──────────────────────────────────────────────────
+function toggleAddon(row) {
+  const cb = row.querySelector('input[type="checkbox"]');
+  cb.checked = !cb.checked;
+  updateSummary();
+}
+
+// ── CONSENT ──────────────────────────────────────────────────────
+function toggleConsent(id) {
+  const row = document.getElementById(id);
+  const cb = row.querySelector('input[type="checkbox"]');
+  cb.checked = !cb.checked;
+  row.classList.toggle('checked', cb.checked);
+}
+
+// ── VALIDATION ───────────────────────────────────────────────────
+function validateIBAN(iban) {
+  const cleaned = iban.replace(/\s/g, '').toUpperCase();
+  if (cleaned.length < 15 || cleaned.length > 34) return false;
+  if (!/^[A-Z]{2}[0-9]{2}[A-Z0-9]+$/.test(cleaned)) return false;
+  return true;
+}
+
+function validatePostcode(pc) {
+  return /^[1-9][0-9]{3}\s?[A-Za-z]{2}$/.test(pc.trim());
+}
+
+function validateEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function setFieldError(id, hasError) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  input.classList.toggle('error', hasError);
+}
+
+// ── SUBMIT ───────────────────────────────────────────────────────
+function submitForm() {
+  let valid = true;
+
+  // Required fields
+  const requiredFields = [
+    { id: 'voornaam', check: v => v.trim().length >= 2 },
+    { id: 'achternaam', check: v => v.trim().length >= 2 },
+    { id: 'straat', check: v => v.trim().length >= 5 },
+    { id: 'postcode', check: v => validatePostcode(v) },
+    { id: 'woonplaats', check: v => v.trim().length >= 2 },
+    { id: 'email', check: v => validateEmail(v) },
+    { id: 'telefoon', check: v => v.trim().length >= 9 },
+    { id: 'tenNameVan', check: v => v.trim().length >= 3 },
+    { id: 'iban', check: v => validateIBAN(v) },
+  ];
+
+  requiredFields.forEach(f => {
+    const input = document.getElementById(f.id);
+    const ok = f.check(input.value);
+    input.classList.toggle('error', !ok);
+    if (!ok) { valid = false; }
+  });
+
+  // Kenteken 1
+  const k1 = document.querySelector('.kenteken-input');
+  if (!k1 || k1.value.trim().length < 6) {
+    k1 && k1.classList.add('error');
+    valid = false;
+  } else {
+    k1.classList.remove('error');
+  }
+
+  // Abonnement
+  if (!document.querySelector('input[name="abonnement"]:checked')) {
+    document.querySelector('.abo-cards').style.outline = '2px solid #ff4444';
+    valid = false;
+  }
+
+  // Consents
+  if (!document.getElementById('check1').checked) {
+    document.getElementById('consent1').style.outline = '1px solid #ff4444';
+    valid = false;
+  }
+  if (!document.getElementById('check2').checked) {
+    document.getElementById('consent2').style.outline = '1px solid #ff4444';
+    valid = false;
+  }
+
+  if (!valid) {
+    // Scroll naar eerste fout
+    const firstError = document.querySelector('.error, [style*="outline: 2px"], [style*="outline: 1px"]');
+    if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // SUCCESS
+  const name = document.getElementById('voornaam').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const dateInfo = getSelectedDate();
+
+  document.getElementById('successName').textContent = name;
+  document.getElementById('successEmail').textContent = email;
+  document.getElementById('successDate').textContent = dateInfo.full;
+  document.getElementById('successOverlay').classList.add('show');
+}
+
+// ── ABO CARD CLICKS (visual only) ────────────────────────────────
+document.querySelectorAll('.abo-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.abo-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    // unset outline if any
+    document.querySelector('.abo-cards').style.outline = '';
+  });
+});
+
+// Consent outline reset
+document.getElementById('consent1').addEventListener('click', () => {
+  document.getElementById('consent1').style.outline = '';
+});
+document.getElementById('consent2').addEventListener('click', () => {
+  document.getElementById('consent2').style.outline = '';
+});
+
+// ── INIT ─────────────────────────────────────────────────────────
+initDates();
+</script>
+</body>
+</html>
