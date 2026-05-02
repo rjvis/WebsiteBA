@@ -620,4 +620,625 @@ window.addEventListener('scroll', function(){
 });
 </script>
 </body>
+</html>/* ─── NAV ─── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 72px;
+  background: rgba(10,10,10,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-menu { display: flex; gap: 36px; list-style: none; }
+.nav-menu a { font-family: var(--fd); font-weight: 700; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; position: relative; padding-bottom: 2px; }
+.nav-menu a::after { content:''; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
+.nav-menu a:hover { color: var(--text); }
+.nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+.nav-menu a.active { color: var(--text); }
+.nav-cta { background: var(--red); color: #fff; font-family: var(--fd); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px 24px 9px; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); transition: all 0.2s; }
+.nav-cta:hover { box-shadow: 0 8px 32px rgba(227,6,19,0.4); transform: translateY(-1px); }
+
+
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:68px;background:rgba(10,10,10,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{display:flex;align-items:center;text-decoration:none;}
+.nav-logo img{height:34px;width:auto;display:block;}
+.nav-menu{display:flex;gap:32px;list-style:none;}
+.nav-menu a{font-family:var(--fd);font-weight:700;font-size:14px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-menu a:hover{color:var(--text);}
+.nav-menu a.active{color:var(--text);}
+.nav-menu a.active::after{content:'';display:block;width:100%;height:2px;background:var(--red);margin-top:2px;}
+.nav-cta{background:var(--red);color:#fff;font-family:var(--fd);font-weight:800;font-size:13px;letter-spacing:2px;text-transform:uppercase;padding:10px 22px 8px;text-decoration:none;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);transition:all .2s;}
+.nav-cta:hover{box-shadow:0 8px 24px var(--red-glow);}
+.nav-hamburger{display:none;flex-direction:column;gap:5px;background:transparent;border:none;cursor:pointer;padding:8px;}
+.nav-hamburger span{display:block;width:22px;height:2px;background:var(--text);transition:all .3s;}
+.nav-hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px);}
+.nav-hamburger.open span:nth-child(2){opacity:0;}
+.nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px);}
+.nav-overlay{position:fixed;inset:0;z-index:98;background:transparent;pointer-events:none;transition:background .3s;}
+.nav-overlay.open{background:rgba(0,0,0,0.7);pointer-events:all;}
+.nav-drawer{position:fixed;top:0;right:-300px;bottom:0;width:280px;background:var(--dark);z-index:99;border-left:1px solid var(--border);transition:right .35s cubic-bezier(.16,1,.3,1);padding:80px 32px 40px;display:flex;flex-direction:column;}
+.nav-drawer.open{right:0;}
+.nav-drawer ul{list-style:none;display:grid;gap:4px;}
+.nav-drawer ul a{display:block;padding:13px 0;font-family:var(--fd);font-weight:800;font-size:21px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);text-decoration:none;border-bottom:1px solid var(--border);transition:color .2s;}
+.nav-drawer ul a:hover,.nav-drawer ul a.active{color:var(--red);}
+.nav-drawer-cta{margin-top:28px;display:block;background:var(--red);color:#fff;font-family:var(--fd);font-weight:800;font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:14px 20px 12px;text-align:center;text-decoration:none;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);}
+
+/* ── HERO ── */
+.hero{background:var(--dark);padding:72px 0 56px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(227,6,19,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(227,6,19,.03) 1px,transparent 1px);background-size:44px 44px;mask-image:radial-gradient(ellipse 80% 90% at 50% 50%,black,transparent 80%);}
+.hero-inner{max-width:1280px;margin:0 auto;padding:0 48px;position:relative;z-index:2;display:grid;grid-template-columns:1fr 420px;gap:64px;align-items:center;}
+.hero-label{font-family:var(--fd);font-weight:800;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:16px;display:block;}
+.hero h1{font-family:var(--fd);font-weight:900;font-size:clamp(48px,6vw,80px);text-transform:uppercase;line-height:.9;letter-spacing:-1.5px;margin-bottom:20px;}
+.hero h1 em{font-style:normal;color:var(--red);}
+.hero-sub{font-size:17px;color:var(--muted);line-height:1.7;margin-bottom:32px;max-width:480px;}
+.hero-sub strong{color:var(--text);}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;}
+
+/* Stat blokken in hero */
+.hero-stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.hero-stat-block{background:var(--panel);border:1px solid var(--border);padding:24px;position:relative;overflow:hidden;}
+.hero-stat-block::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--red);}
+.hsb-num{font-family:var(--fd);font-weight:900;font-size:40px;line-height:1;letter-spacing:-1px;margin-bottom:6px;}
+.hsb-num em{color:var(--red);font-style:normal;}
+.hsb-label{font-size:12px;color:var(--muted);line-height:1.4;}
+
+/* ── MARQUEE ── */
+.marquee{background:var(--red);overflow:hidden;white-space:nowrap;padding:12px 0;}
+.marquee-track{display:inline-flex;animation:marqueeScroll 28s linear infinite;}
+.marquee-item{font-family:var(--fd);font-weight:800;font-size:12px;letter-spacing:2.5px;text-transform:uppercase;padding:0 24px;display:inline-flex;align-items:center;gap:16px;}
+.marquee-item::after{content:'◆';font-size:7px;opacity:.5;}
+@keyframes marqueeScroll{to{transform:translateX(-50%);}}
+
+/* ── BUTTONS ── */
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--red);color:#fff;font-family:var(--fd);font-weight:800;font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:14px 28px 12px;text-decoration:none;border:none;cursor:pointer;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);transition:all .2s;}
+.btn-primary:hover{box-shadow:0 12px 32px var(--red-glow);transform:translateY(-1px);}
+.btn-ghost{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--muted);font-family:var(--fd);font-weight:700;font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:13px 28px 11px;text-decoration:none;border:1px solid var(--subtle);clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);transition:all .2s;}
+.btn-ghost:hover{border-color:rgba(255,255,255,.4);color:var(--text);}
+
+/* ── WAAROM BOB ── */
+.waarom{padding:80px 0;background:var(--black);}
+.section-inner{max-width:1280px;margin:0 auto;padding:0 48px;}
+.section-label{font-family:var(--fd);font-weight:800;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:14px;display:block;}
+.section-h2{font-family:var(--fd);font-weight:900;font-size:clamp(40px,5vw,64px);text-transform:uppercase;line-height:.9;letter-spacing:-1px;margin-bottom:48px;}
+.section-h2 em{font-style:normal;color:var(--red);}
+
+.waarom-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;}
+.waarom-card{background:var(--panel);border:1px solid var(--border);padding:36px 32px;position:relative;overflow:hidden;transition:border-color .2s,background .2s;}
+.waarom-card:hover{border-color:rgba(255,255,255,.15);background:var(--mid);}
+.wc-icon{font-size:32px;margin-bottom:20px;display:block;}
+.wc-title{font-family:var(--fd);font-weight:900;font-size:22px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.wc-body{font-size:14px;color:var(--muted);line-height:1.7;}
+.wc-num{position:absolute;right:-8px;top:-12px;font-family:var(--fd);font-weight:900;font-size:120px;color:rgba(255,255,255,.02);line-height:1;pointer-events:none;}
+
+/* ── HOE WERKT HET AANMELDEN ── */
+.stappenplan{padding:80px 0;background:var(--dark);}
+.stappen-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+.stappen-grid::before{content:'';position:absolute;top:28px;left:48px;right:48px;height:2px;background:linear-gradient(90deg,var(--red),rgba(227,6,19,.2));z-index:0;}
+.stap{padding:0 24px;position:relative;z-index:1;}
+.stap-num{width:56px;height:56px;background:var(--red);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-weight:900;font-size:22px;margin-bottom:20px;clip-path:polygon(50% 0%,100% 38%,82% 100%,18% 100%,0% 38%);box-shadow:0 0 20px var(--red-glow);}
+.stap h4{font-family:var(--fd);font-weight:800;font-size:18px;text-transform:uppercase;margin-bottom:8px;}
+.stap p{font-size:13px;color:var(--muted);line-height:1.65;}
+
+/* ── VACATURES ── */
+.vacatures{padding:80px 0;background:var(--black);}
+
+/* Filter bar */
+.vac-filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:36px;align-items:center;}
+.vac-filter-label{font-family:var(--fd);font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);flex-shrink:0;}
+.vac-select{background:var(--mid);border:1px solid var(--border);color:var(--text);font-family:var(--fb);font-size:13px;padding:9px 36px 9px 14px;outline:none;cursor:pointer;transition:border-color .2s;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;}
+.vac-select:focus{border-color:rgba(227,6,19,.4);}
+.vac-count{margin-left:auto;font-family:var(--fd);font-weight:700;font-size:12px;letter-spacing:1px;color:var(--muted);}
+.vac-count span{color:var(--red);}
+
+/* Vacature kaarten */
+.vac-grid{display:grid;gap:2px;}
+.vac-card{background:var(--panel);border:1px solid var(--border);padding:28px 32px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;transition:border-color .2s,background .2s;cursor:pointer;text-decoration:none;color:inherit;position:relative;}
+.vac-card:hover{border-color:rgba(227,6,19,.3);background:var(--mid);}
+.vac-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:background .2s;}
+.vac-card:hover::before{background:var(--red);}
+.vac-card.hidden{display:none;}
+.vac-left{}
+.vac-functie{font-family:var(--fd);font-weight:900;font-size:22px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.vac-meta{display:flex;gap:16px;flex-wrap:wrap;align-items:center;}
+.vac-tag{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--muted);}
+.vac-tag-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.vac-tag-dot.rood{background:var(--red);}
+.vac-tag-dot.groen{background:var(--green);}
+.vac-tag-dot.amber{background:var(--amber);}
+.vac-omschrijving{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.6;max-width:600px;}
+.vac-right{display:flex;flex-direction:column;align-items:flex-end;gap:10px;flex-shrink:0;}
+.vac-badge-type{font-family:var(--fd);font-weight:800;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;padding:5px 12px;white-space:nowrap;}
+.vac-badge-type.ft{background:rgba(227,6,19,.12);border:1px solid rgba(227,6,19,.3);color:var(--red);}
+.vac-badge-type.pt{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);color:var(--amber);}
+.vac-badge-type.flex{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);color:var(--green);}
+.vac-solliciteer{font-family:var(--fd);font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--red);display:flex;align-items:center;gap:5px;}
+
+/* Geen vacatures */
+.geen-vac{display:none;padding:56px 32px;text-align:center;background:var(--panel);border:1px solid var(--border);}
+.geen-vac.show{display:block;}
+.geen-vac p{font-size:15px;color:var(--muted);}
+.geen-vac a{color:var(--red);text-decoration:none;}
+
+/* Open sollicitatie banner */
+.open-sollicitatie{background:var(--mid);border:1px solid var(--border);padding:32px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;margin-top:32px;position:relative;overflow:hidden;}
+.open-sollicitatie::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);}
+.os-title{font-family:var(--fd);font-weight:900;font-size:22px;text-transform:uppercase;margin-bottom:6px;}
+.os-sub{font-size:14px;color:var(--muted);}
+
+/* ── SFEERIMPRESSIE ── */
+.sfeer{padding:80px 0;background:var(--dark);}
+.sfeer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:48px;}
+.sfeer-block{background:var(--panel);border:1px solid var(--border);padding:40px 32px;text-align:center;}
+.sfeer-emoji{font-size:48px;margin-bottom:16px;display:block;}
+.sfeer-title{font-family:var(--fd);font-weight:900;font-size:20px;text-transform:uppercase;margin-bottom:8px;}
+.sfeer-body{font-size:14px;color:var(--muted);line-height:1.7;}
+
+/* ── CTA STRIP ── */
+.cta-strip{background:var(--red);padding:72px 0;text-align:center;position:relative;overflow:hidden;}
+.cta-strip::before{content:'';position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.07) 1px,transparent 0);background-size:22px 22px;}
+.cta-strip-inner{max-width:700px;margin:0 auto;padding:0 48px;position:relative;z-index:2;}
+.cta-strip h2{font-family:var(--fd);font-weight:900;font-size:clamp(44px,7vw,72px);text-transform:uppercase;line-height:.9;letter-spacing:-1px;margin-bottom:18px;}
+.cta-strip p{font-size:17px;opacity:.9;margin-bottom:32px;line-height:1.6;}
+.btn-white{display:inline-flex;align-items:center;gap:10px;background:#fff;color:var(--red);font-family:var(--fd);font-weight:800;font-size:14px;letter-spacing:2px;text-transform:uppercase;padding:14px 28px 12px;text-decoration:none;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%);transition:all .2s;}
+.btn-white:hover{box-shadow:0 12px 32px rgba(0,0,0,.25);transform:translateY(-1px);}
+
+/* ── FOOTER ── */
+.footer{background:var(--black);border-top:1px solid var(--border);padding:56px 0 0;}
+.footer-inner{max-width:1280px;margin:0 auto;padding:0 48px;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;padding-bottom:48px;border-bottom:1px solid var(--border);}
+.footer-logo{height:34px;width:auto;display:block;margin-bottom:14px;}
+.footer-brand{font-size:14px;color:var(--muted);line-height:1.7;}
+.footer h4{font-family:var(--fd);font-weight:800;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:16px;}
+.footer ul{list-style:none;display:grid;gap:10px;}
+.footer li a{font-size:14px;color:var(--muted);text-decoration:none;transition:color .2s;}
+.footer li a:hover{color:var(--text);}
+.footer-bottom{max-width:1280px;margin:0 auto;padding:20px 48px;display:flex;justify-content:space-between;font-size:12px;color:rgba(255,255,255,.2);}
+.footer-bottom a{color:rgba(255,255,255,.2);text-decoration:none;}
+.footer-stripe{height:5px;background:linear-gradient(90deg,var(--red) 0%,var(--red) 40%,#222 40%,#222 70%,#555 70%,#555 100%);}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .hero-inner{grid-template-columns:1fr;gap:40px;}
+  .hero-stats-grid{grid-template-columns:repeat(4,1fr);}
+  .waarom-grid{grid-template-columns:1fr 1fr;}
+  .stappen-grid{grid-template-columns:1fr 1fr;gap:32px;}
+  .stappen-grid::before{display:none;}
+  .sfeer-grid{grid-template-columns:1fr 1fr;}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:32px;}
+  .footer-inner>div:first-child{grid-column:1/-1;}
+}
+@media(max-width:900px){
+  .nav{padding:0 24px;height:60px;}
+  .nav-menu,.nav-cta{display:none;}
+  .nav-hamburger{display:flex;}
+  .section-inner,.hero-inner{padding:0 24px;}
+  .hero{padding:48px 0 40px;}
+}
+@media(max-width:768px){
+  .nav{padding:0 20px;height:56px;}
+  .hero-inner,.section-inner{padding:0 20px;}
+  .hero-stats-grid{grid-template-columns:1fr 1fr;}
+  .vac-card{grid-template-columns:1fr;gap:12px;}
+  .vac-right{flex-direction:row;align-items:center;justify-content:space-between;}
+  .open-sollicitatie{grid-template-columns:1fr;}
+  .waarom-grid{grid-template-columns:1fr;}
+  .stappen-grid{grid-template-columns:1fr;}
+  .sfeer-grid{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr 1fr;gap:24px;padding:0 20px 40px;}
+  .footer-bottom{padding:20px;flex-direction:column;gap:6px;text-align:center;}
+  .cta-strip-inner{padding:0 20px;}
+  .hero-ctas{flex-direction:column;}
+  .hero-ctas .btn-primary,.hero-ctas .btn-ghost{justify-content:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="nav-overlay" id="nav-overlay" onclick="closeDrawer()"></div>
+<div class="nav-drawer" id="nav-drawer">
+  <ul>
+    <li><a href="BOB_Wasclub_Responsive.html" onclick="closeDrawer()">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html" onclick="closeDrawer()">Wasprogramma's</a></li>
+    <li><a href="BOB_Vestigingen.html" onclick="closeDrawer()">Vestigingen</a></li>
+    <li><a href="BOB_Zakelijk_Aanvraag.html" onclick="closeDrawer()">Zakelijk</a></li>
+    <li><a href="BOB_Blog.html" onclick="closeDrawer()">Blog</a></li>
+    <li><a href="BOB_Werken_Bij.html" onclick="closeDrawer()">Werken bij</a></li>
+  </ul>
+  <a href="BOB_Aanmelden.html" class="nav-drawer-cta" onclick="closeDrawer()">Wordt lid van onze Wasclub →</a>
+</div>
+
+<nav class="nav">
+  <a href="BOB_Homepage_Responsive.html" class="nav-logo">
+    <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNjAgMTMwIiB3aWR0aD0iMzYwIiBoZWlnaHQ9IjEzMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImNocm9tZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiAgIHN0b3AtY29sb3I9IiM4YThhOGEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxOCUiICBzdG9wLWNvbG9yPSIjY2VjZWNlIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMzglIiAgc3RvcC1jb2xvcj0iI2Y4ZjhmOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjUyJSIgIHN0b3AtY29sb3I9IiNmZmZmZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI2NSUiICBzdG9wLWNvbG9yPSIjZDBkMGQwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iODIlIiAgc3RvcC1jb2xvcj0iIzlhOWE5YSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiOGI4YjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdsb3NzIiB4MT0iMCIgeTE9IjAiIHgyPSIwLjQiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuNTUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC4xIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KCiAgPCEtLSBHcmlqcyB2aWVya2FudCB2bGFrIDEzMMOXMTMwIC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMzAiIGhlaWdodD0iMTMwIiBmaWxsPSIjNTU1NTU1Ii8+CgogIDwhLS0gIjI1IiBjaHJvb20gLS0+CiAgPHRleHQgeD0iNjUiIHk9IjEwMCIKICAgIGZvbnQtZmFtaWx5PSInQXJpYWwgQmxhY2snLCAnQXJpYWwnLCBzYW5zLXNlcmlmIgogICAgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI5OCIKICAgIGZpbGw9InVybCgjY2hyb21lKSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9Ii0yIj4yNTwvdGV4dD4KICA8dGV4dCB4PSI2NSIgeT0iMTAwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCcsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9Ijk4IgogICAgZmlsbD0idXJsKCNnbG9zcykiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSItMiI+MjU8L3RleHQ+CgogIDwhLS0gUm9vZCB2bGFrIC0tPgogIDxyZWN0IHg9IjEzMCIgeT0iMCIgd2lkdGg9IjIzMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiNFMzA2MTMiIHJ4PSIxNiIgcnk9IjE2Ii8+CiAgPHJlY3QgeD0iMTMwIiB5PSIwIiB3aWR0aD0iMjAiICBoZWlnaHQ9IjEzMCIgZmlsbD0iI0UzMDYxMyIvPgoKICA8IS0tICJCT0IiIOKAlCBBcmlhbCBCbGFjaywgYnJlZWQgZW4gb3BlbiAtLT4KICA8dGV4dCB4PSIyNDUiIHk9IjgwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCBCb2xkJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjY4IgogICAgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjYiPkJPQjwvdGV4dD4KCiAgPCEtLSAiQVVUT1dBUyIg4oCUIEFyaWFsIEJvbGQsIHJ1aW0gZW4gbGVlc2JhYXIgLS0+CiAgPHRleHQgeD0iMjQ1IiB5PSIxMTAiCiAgICBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjE5IgogICAgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjkyKSIKICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSI2Ij5BVVRPV0FTPC90ZXh0Pgo8L3N2Zz4=" alt="BOB Autowas">
+  </a>
+  <ul class="nav-menu">
+    <li><a href="BOB_Wasclub_Responsive.html">Wasclub</a></li>
+    <li><a href="BOB_Wasprogrammas.html">Wasprogramma's</a></li>
+    <li><a href="BOB_Vestigingen.html">Vestigingen</a></li>
+    <li><a href="BOB_Zakelijk_Aanvraag.html">Zakelijk</a></li>
+    <li><a href="BOB_Blog.html">Blog</a></li>
+    <li><a href="BOB_Werken_Bij.html" class="active">Werken bij</a></li>
+  </ul>
+  <a href="BOB_Aanmelden.html" class="nav-cta">Wordt lid van onze Wasclub →</a>
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <span class="hero-label">Werken bij BOB Autowas</span>
+      <h1>Voel de <em>energie.</em><br>Maak het <em>verschil.</em></h1>
+      <p class="hero-sub">BOB Autowas groeit hard. We zoeken enthousiaste mensen die trots zijn op hun werk, graag in een team werken en van aanpakken weten. Van wasstraat tot management — er is ruimte voor jou.</p>
+      <div class="hero-ctas">
+        <a href="#vacatures" class="btn-primary">Bekijk openstaande vacatures →</a>
+        <a href="#solliciteer" class="btn-ghost">Open sollicitatie</a>
+      </div>
+    </div>
+    <div class="hero-stats-grid">
+      <div class="hero-stat-block">
+        <div class="hsb-num">22</div>
+        <div class="hsb-label">vestigingen door heel Nederland</div>
+      </div>
+      <div class="hero-stat-block">
+        <div class="hsb-num"><em>300</em><span style="font-size:24px;color:var(--muted)">+</span></div>
+        <div class="hsb-label">collega's landelijk</div>
+      </div>
+      <div class="hero-stat-block">
+        <div class="hsb-num"><em>25</em></div>
+        <div class="hsb-label">jaar ervaring in de markt</div>
+      </div>
+      <div class="hero-stat-block">
+        <div class="hsb-num"><em>↑</em></div>
+        <div class="hsb-label">groeiende organisatie met kansen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee"><div class="marquee-track">
+  <span class="marquee-item">Feel the Shine</span><span class="marquee-item">Teamwork</span><span class="marquee-item">Doorgroeien</span><span class="marquee-item">Trots op je werk</span><span class="marquee-item">22 Vestigingen</span><span class="marquee-item">Goede sfeer</span><span class="marquee-item">Elke dag anders</span><span class="marquee-item">Feel the Shine</span><span class="marquee-item">Teamwork</span><span class="marquee-item">Doorgroeien</span><span class="marquee-item">Trots op je werk</span><span class="marquee-item">22 Vestigingen</span><span class="marquee-item">Goede sfeer</span><span class="marquee-item">Elke dag anders</span>
+</div></div>
+
+<!-- WAAROM BOB -->
+<section class="waarom">
+  <div class="section-inner">
+    <span class="section-label">Waarom BOB?</span>
+    <h2 class="section-h2">Meer dan een <em>baan</em></h2>
+    <div class="waarom-grid">
+      <div class="waarom-card">
+        <div class="wc-num">1</div>
+        <span class="wc-icon">🚀</span>
+        <div class="wc-title">Groeimogelijkheden</div>
+        <p class="wc-body">BOB Autowas groeit gestaag en daarmee groeien de kansen. Van medewerker wasstraat naar teamleider, vestigingsmanager of een positie op ons hoofdkantoor — we kijken liever intern dan extern.</p>
+      </div>
+      <div class="waarom-card">
+        <div class="wc-num">2</div>
+        <span class="wc-icon">🤝</span>
+        <div class="wc-title">Sterk team</div>
+        <p class="wc-body">Bij BOB werk je met een hecht team. We helpen elkaar, we lachen met elkaar en we zijn trots op wat we samen neerzetten. De sfeer op de vestigingen is familiair en betrokken.</p>
+      </div>
+      <div class="waarom-card">
+        <div class="wc-num">3</div>
+        <span class="wc-icon">⏰</span>
+        <div class="wc-title">Flexibele roosters</div>
+        <p class="wc-body">Of je nu fulltime wilt werken, parttime of als bijbaan — we kijken graag naar wat bij jou past. We werken in handige diensten en plannen zoveel mogelijk rekening met jouw wensen.</p>
+      </div>
+      <div class="waarom-card">
+        <div class="wc-num">4</div>
+        <span class="wc-icon">💰</span>
+        <div class="wc-title">Marktconform salaris</div>
+        <p class="wc-body">We betalen een eerlijk, marktconform salaris en kijken jaarlijks naar de hoogte hiervan. Daarbovenop profiteer je van personeelskorting op wasprogramma's en andere voordelen.</p>
+      </div>
+      <div class="waarom-card">
+        <div class="wc-num">5</div>
+        <span class="wc-icon">🎓</span>
+        <div class="wc-title">Opleiding & training</div>
+        <p class="wc-body">We investeren in onze mensen. Via ons interne opleidingsprogramma leer je alles over de wasprocessen, klantvriendelijkheid en techniek. Ook externe cursussen en trainingen behoren tot de mogelijkheden.</p>
+      </div>
+      <div class="waarom-card">
+        <div class="wc-num">6</div>
+        <span class="wc-icon">🏆</span>
+        <div class="wc-title">Trots op je werk</div>
+        <p class="wc-body">Elke dag zie je het resultaat van jouw werk — klanten die blij weggrijden met een sprankelend schone auto. Dat gevoel van trots en voldoening is bij BOB elke dag weer aanwezig.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOE WERKT SOLLICITEREN -->
+<section class="stappenplan">
+  <div class="section-inner">
+    <span class="section-label">Sollicitatieproces</span>
+    <h2 class="section-h2">In 4 stappen<br><em>aan de slag</em></h2>
+    <div class="stappen-grid">
+      <div class="stap">
+        <div class="stap-num">1</div>
+        <h4>Solliciteer online</h4>
+        <p>Stuur je cv en een korte motivatie via het formulier op deze pagina. Duurt niet langer dan 5 minuten.</p>
+      </div>
+      <div class="stap">
+        <div class="stap-num">2</div>
+        <h4>Kennismaking</h4>
+        <p>We nemen binnen 3 werkdagen contact op voor een korte telefonische kennismaking of uitnodiging voor een gesprek.</p>
+      </div>
+      <div class="stap">
+        <div class="stap-num">3</div>
+        <h4>Gesprek op locatie</h4>
+        <p>Je komt langs bij de vestiging, maakt kennis met het team en krijgt een rondleiding. Geen pak nodig.</p>
+      </div>
+      <div class="stap">
+        <div class="stap-num">4</div>
+        <h4>Welkom bij BOB</h4>
+        <p>Na akkoord ontvang je je contract en start je je eerste werkdag. Vanaf dag één sta je er niet alleen voor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VACATURES -->
+<section class="vacatures" id="vacatures">
+  <div class="section-inner">
+    <span class="section-label">Openstaande vacatures</span>
+    <h2 class="section-h2">Vind jouw <em>plek</em></h2>
+
+    <!-- Filter bar -->
+    <div class="vac-filters">
+      <span class="vac-filter-label">Filter:</span>
+      <select class="vac-select" id="filter-functie" onchange="filterVac()">
+        <option value="">Alle functies</option>
+        <option value="wasstraat">Medewerker Wasstraat</option>
+        <option value="interieur">Medewerker Interieurband</option>
+        <option value="teamleider">Teamleider</option>
+        <option value="vestigingsmanager">Vestigingsmanager</option>
+        <option value="technisch">Technisch Medewerker</option>
+        <option value="kantoor">Kantoor / HQ</option>
+      </select>
+      <select class="vac-select" id="filter-dienstverband" onchange="filterVac()">
+        <option value="">Fulltime & parttime</option>
+        <option value="ft">Fulltime</option>
+        <option value="pt">Parttime</option>
+        <option value="flex">Flexibel / Bijbaan</option>
+      </select>
+      <select class="vac-select" id="filter-vestiging" onchange="filterVac()">
+        <option value="">Alle vestigingen</option>
+        <option value="amsterdam">Amsterdam</option>
+        <option value="rotterdam">Rotterdam</option>
+        <option value="schiedam">Schiedam</option>
+        <option value="utrecht">Utrecht</option>
+        <option value="zoetermeer">Zoetermeer</option>
+        <option value="zaandam">Zaandam</option>
+        <option value="apeldoorn">Apeldoorn</option>
+        <option value="berkel">Berkel en Rodenrijs</option>
+        <option value="delft">Delft</option>
+        <option value="dordrecht">Dordrecht</option>
+        <option value="gouda">Gouda</option>
+        <option value="hilversum">Hilversum</option>
+        <option value="nijmegen">Nijmegen</option>
+        <option value="velserbroek">Velserbroek</option>
+        <option value="waddinxveen">Waddinxveen</option>
+        <option value="winschoten">Winschoten</option>
+        <option value="hq">Hoofdkantoor</option>
+      </select>
+      <div class="vac-count">Toont <span id="vac-count">6</span> vacatures</div>
+    </div>
+
+    <!-- Vacature kaarten -->
+    <div class="vac-grid" id="vac-grid">
+
+      <a class="vac-card" href="#solliciteer" data-functie="wasstraat" data-dv="ft" data-vest="amsterdam schiedam rotterdam zoetermeer">
+        <div class="vac-left">
+          <div class="vac-functie">Medewerker Wasstraat</div>
+          <div class="vac-meta">
+            <span class="vac-tag"><span class="vac-tag-dot rood"></span>Meerdere vestigingen</span>
+            <span class="vac-tag"><span class="vac-tag-dot groen"></span>Direct beschikbaar</span>
+          </div>
+          <p class="vac-omschrijving">Jij bent het gezicht van BOB voor onze klanten. Je begeleidt de wasstraat, zorgt voor een vlotte doorstroom en geeft klanten een vriendelijk ontvangst. Ervaring is geen vereiste — enthousiasme wel.</p>
+        </div>
+        <div class="vac-right">
+          <span class="vac-badge-type ft">Fulltime</span>
+          <span class="vac-solliciteer">Solliciteer →</span>
+        </div>
+      </a>
+
+      <a class="vac-card" href="#solliciteer" data-functie="wasstraat" data-dv="pt flex" data-vest="amsterdam utrecht berkel hilversum">
+        <div class="vac-left">
+          <div class="vac-functie">Medewerker Wasstraat (parttime / bijbaan)</div>
+          <div class="vac-meta">
+            <span class="vac-tag"><span class="vac-tag-dot rood"></span>Amsterdam · Utrecht · Hilversum</span>
+            <span class="vac-tag"><span class="vac-tag-dot groen"></span>Direct beschikbaar</span>
+          </div>
+          <p class="vac-omschrijving">Ideaal als bijbaan of voor wie parttime wil werken. Flexibele uren in avond- en weekenddiensten. Minimaal 8 uur per week.</p>
+        </div>
+        <div class="vac-right">
+          <span class="vac-badge-type flex">Bijbaan / flex</span>
+          <span class="vac-solliciteer">Solliciteer →</span>
+        </div>
+      </a>
+
+      <a class="vac-card" href="#solliciteer" data-functie="interieur" data-dv="ft pt" data-vest="amsterdam schiedam zoetermeer rotterdam waddinxveen zaandam">
+        <div class="vac-left">
+          <div class="vac-functie">Medewerker Interieurband</div>
+          <div class="vac-meta">
+            <span class="vac-tag"><span class="vac-tag-dot rood"></span>6 vestigingen met interieurband</span>
+            <span class="vac-tag"><span class="vac-tag-dot groen"></span>Direct beschikbaar</span>
+          </div>
+          <p class="vac-omschrijving">Jij reinigt de binnenkant van onze klanten hun auto's snel en grondig. Oog voor detail en een vlotte werkwijze zijn jouw kracht. Opleiding on the job.</p>
+        </div>
+        <div class="vac-right">
+          <span class="vac-badge-type pt">Parttime</span>
+          <span class="vac-solliciteer">Solliciteer →</span>
+        </div>
+      </a>
+
+      <a class="vac-card" href="#solliciteer" data-functie="teamleider" data-dv="ft" data-vest="amsterdam rotterdam schiedam zoetermeer utrecht">
+        <div class="vac-left">
+          <div class="vac-functie">Teamleider Wasstraat</div>
+          <div class="vac-meta">
+            <span class="vac-tag"><span class="vac-tag-dot amber"></span>Randstad regio</span>
+            <span class="vac-tag"><span class="vac-tag-dot groen"></span>MBO werk- en denkniveau</span>
+          </div>
+          <p class="vac-omschrijving">Je stuurt een team van 4–8 medewerkers aan, bewaakt de kwaliteit en zorgt voor een soepele dagoperatie. Ervaring in een leidinggevende rol is een pré maar geen vereiste.</p>
+        </div>
+        <div class="vac-right">
+          <span class="vac-badge-type ft">Fulltime</span>
+          <span class="vac-solliciteer">Solliciteer →</span>
+        </div>
+      </a>
+
+      <a class="vac-card" href="#solliciteer" data-functie="vestigingsmanager" data-dv="ft" data-vest="amsterdam rotterdam utrecht apeldoorn">
+        <div class="vac-left">
+          <div class="vac-functie">Vestigingsmanager</div>
+          <div class="vac-meta">
+            <span class="vac-tag"><span class="vac-tag-dot amber"></span>Meerdere regio's</span>
+            <span class="vac-tag"><span class="vac-tag-dot amber"></span>HBO / MBO+ niveau</span>
+          </div>
+          <p class="vac-omschrijving">Jij bent eindverantwoordelijk voor de dagelijkse gang van zaken op jouw vestiging. Personeelsplanning, kwaliteitscontrole, klanttevredenheid en resultaten — dat is jouw speelveld.</p>
+        </div>
+        <div class="vac-right">
+          <span class="vac-badge-type ft">Fulltime</span>
+          <span class="vac-solliciteer">Solliciteer →</span>
+        </div>
+      </a>
+
+      <a class="vac-card" href="#solliciteer" data-functie="technisch" data-dv="ft" data-vest="amsterdam rotterdam schiedam zaandam">
+        <div class="vac-left">
+          <div class="vac-functie">Technisch Medewerker Wasinstallaties</div>
+          <div class="vac-meta">
+            <span class="vac-tag"><span class="vac-tag-dot rood"></span>Reizende functie (NL-breed)</span>
+            <span class="vac-tag"><span class="vac-tag-dot amber"></span>MBO Techniek vereist</span>
+          </div>
+          <p class="vac-omschrijving">Je houdt onze wasinstallaties in topconditie. Preventief onderhoud, storingen verhelpen en verbeteringen doorvoeren. Je werkt zelfstandig en reist langs onze vestigingen.</p>
+        </div>
+        <div class="vac-right">
+          <span class="vac-badge-type ft">Fulltime</span>
+          <span class="vac-solliciteer">Solliciteer →</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="geen-vac" id="geen-vac">
+      <p>Geen vacatures gevonden voor deze combinatie.<br>
+      <a href="#solliciteer">Stuur een open sollicitatie →</a></p>
+    </div>
+
+    <!-- Open sollicitatie -->
+    <div class="open-sollicitatie" id="solliciteer">
+      <div>
+        <div class="os-title">Staat jouw functie er niet bij?</div>
+        <p class="os-sub">We ontvangen altijd graag open sollicitaties. Stuur je cv en motivatie naar <a href="mailto:werken@bobautowas.nl" style="color:var(--red);text-decoration:none;">werken@bobautowas.nl</a> of bel ons op <a href="tel:+31850001234" style="color:var(--red);text-decoration:none;">085 000 12 34</a>. We kijken altijd of er een plek is.</p>
+      </div>
+      <a href="mailto:werken@bobautowas.nl" class="btn-primary">Open sollicitatie →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- SFEER -->
+<section class="sfeer">
+  <div class="section-inner">
+    <span class="section-label">Leven bij BOB</span>
+    <h2 class="section-h2">Werken bij BOB is<br><em>meer dan werken</em></h2>
+    <div class="sfeer-grid">
+      <div class="sfeer-block">
+        <span class="sfeer-emoji">☀️</span>
+        <div class="sfeer-title">Buiten werken</div>
+        <p class="sfeer-body">Geen kantoor, geen beeldscherm. Jij werkt buiten, ziet resultaat en spreekt mensen. Elke dag fris en afwisselend.</p>
+      </div>
+      <div class="sfeer-block">
+        <span class="sfeer-emoji">🎉</span>
+        <div class="sfeer-title">Teamuitjes & borrels</div>
+        <p class="sfeer-body">We vieren successen. Vestigingsfeestjes, teamuitjes en een gezamenlijke jaarlijkse BOB-dag voor alle medewerkers.</p>
+      </div>
+      <div class="sfeer-block">
+        <span class="sfeer-emoji">🚗</span>
+        <div class="sfeer-title">Gratis wassen</div>
+        <p class="sfeer-body">Als BOB-medewerker was jij gratis bij elke vestiging. Jouw auto is altijd de schoonste op de parkeerplaats.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="cta-strip">
+  <div class="cta-strip-inner">
+    <h2>Klaar om te<br>solliciteren?</h2>
+    <p>Bekijk de openstaande vacatures of stuur direct een open sollicitatie. We kijken ernaar uit je te ontmoeten.</p>
+    <a href="#vacatures" class="btn-white">Bekijk vacatures →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNjAgMTMwIiB3aWR0aD0iMzYwIiBoZWlnaHQ9IjEzMCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImNocm9tZSIgeDE9IjAiIHkxPSIwIiB4Mj0iMCIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiAgIHN0b3AtY29sb3I9IiM4YThhOGEiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxOCUiICBzdG9wLWNvbG9yPSIjY2VjZWNlIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMzglIiAgc3RvcC1jb2xvcj0iI2Y4ZjhmOCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjUyJSIgIHN0b3AtY29sb3I9IiNmZmZmZmYiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI2NSUiICBzdG9wLWNvbG9yPSIjZDBkMGQwIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iODIlIiAgc3RvcC1jb2xvcj0iIzlhOWE5YSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNiOGI4YjgiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9Imdsb3NzIiB4MT0iMCIgeTE9IjAiIHgyPSIwLjQiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuNTUiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSI0MCUiICBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAuMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMC4xIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KCiAgPCEtLSBHcmlqcyB2aWVya2FudCB2bGFrIDEzMMOXMTMwIC0tPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMzAiIGhlaWdodD0iMTMwIiBmaWxsPSIjNTU1NTU1Ii8+CgogIDwhLS0gIjI1IiBjaHJvb20gLS0+CiAgPHRleHQgeD0iNjUiIHk9IjEwMCIKICAgIGZvbnQtZmFtaWx5PSInQXJpYWwgQmxhY2snLCAnQXJpYWwnLCBzYW5zLXNlcmlmIgogICAgZm9udC13ZWlnaHQ9IjkwMCIgZm9udC1zaXplPSI5OCIKICAgIGZpbGw9InVybCgjY2hyb21lKSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9Ii0yIj4yNTwvdGV4dD4KICA8dGV4dCB4PSI2NSIgeT0iMTAwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCcsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9Ijk4IgogICAgZmlsbD0idXJsKCNnbG9zcykiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSItMiI+MjU8L3RleHQ+CgogIDwhLS0gUm9vZCB2bGFrIC0tPgogIDxyZWN0IHg9IjEzMCIgeT0iMCIgd2lkdGg9IjIzMCIgaGVpZ2h0PSIxMzAiIGZpbGw9IiNFMzA2MTMiIHJ4PSIxNiIgcnk9IjE2Ii8+CiAgPHJlY3QgeD0iMTMwIiB5PSIwIiB3aWR0aD0iMjAiICBoZWlnaHQ9IjEzMCIgZmlsbD0iI0UzMDYxMyIvPgoKICA8IS0tICJCT0IiIOKAlCBBcmlhbCBCbGFjaywgYnJlZWQgZW4gb3BlbiAtLT4KICA8dGV4dCB4PSIyNDUiIHk9IjgwIgogICAgZm9udC1mYW1pbHk9IidBcmlhbCBCbGFjaycsICdBcmlhbCBCb2xkJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iOTAwIiBmb250LXNpemU9IjY4IgogICAgZmlsbD0iI2ZmZmZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgbGV0dGVyLXNwYWNpbmc9IjYiPkJPQjwvdGV4dD4KCiAgPCEtLSAiQVVUT1dBUyIg4oCUIEFyaWFsIEJvbGQsIHJ1aW0gZW4gbGVlc2JhYXIgLS0+CiAgPHRleHQgeD0iMjQ1IiB5PSIxMTAiCiAgICBmb250LWZhbWlseT0iJ0FyaWFsIEJsYWNrJywgQXJpYWwsIHNhbnMtc2VyaWYiCiAgICBmb250LXdlaWdodD0iNzAwIiBmb250LXNpemU9IjE5IgogICAgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjkyKSIKICAgIHRleHQtYW5jaG9yPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSI2Ij5BVVRPV0FTPC90ZXh0Pgo8L3N2Zz4=" alt="BOB Autowas" class="footer-logo">
+      <p class="footer-brand">Feel the Shine — al 25 jaar de meest vertrouwde autowasketen van Nederland.</p>
+    </div>
+    <div>
+      <h4>Werken bij</h4>
+      <ul>
+        <li><a href="#vacatures">Vacatures</a></li>
+        <li><a href="#solliciteer">Open sollicitatie</a></li>
+        <li><a href="mailto:werken@bobautowas.nl">werken@bobautowas.nl</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>BOB</h4>
+      <ul>
+        <li><a href="BOB_Homepage_Responsive.html">Homepage</a></li>
+        <li><a href="BOB_Wasclub_Responsive.html">Wasclub</a></li>
+        <li><a href="BOB_Vestigingen.html">Vestigingen</a></li>
+        <li><a href="BOB_Zakelijk_Aanvraag.html">Zakelijk</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:info@bobautowas.nl">info@bobautowas.nl</a></li>
+        <li><a href="tel:+31850001234">085 000 12 34</a></li>
+        <li><a href="#">Privacy</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div>© 2026 BOB Autowas · Feel the Shine</div>
+    <div><a href="#">Privacy</a> · <a href="#">Cookies</a></div>
+  </div>
+</footer>
+<div class="footer-stripe"></div>
+
+<script>
+function toggleDrawer(){var d=document.getElementById('nav-drawer'),o=document.getElementById('nav-overlay'),h=document.getElementById('nav-hamburger'),open=d.classList.toggle('open');o.classList.toggle('open',open);h.classList.toggle('open',open);document.body.style.overflow=open?'hidden':'';}
+function closeDrawer(){document.getElementById('nav-drawer').classList.remove('open');document.getElementById('nav-overlay').classList.remove('open');document.getElementById('nav-hamburger').classList.remove('open');document.body.style.overflow='';}
+
+function filterVac() {
+  var functie = document.getElementById('filter-functie').value;
+  var dv      = document.getElementById('filter-dienstverband').value;
+  var vest    = document.getElementById('filter-vestiging').value;
+  var cards   = document.querySelectorAll('.vac-card');
+  var n = 0;
+  cards.forEach(function(c) {
+    var mF = !functie   || c.dataset.functie.indexOf(functie) >= 0;
+    var mD = !dv        || c.dataset.dv.indexOf(dv) >= 0;
+    var mV = !vest      || c.dataset.vest.indexOf(vest) >= 0;
+    if (mF && mD && mV) { c.classList.remove('hidden'); n++; }
+    else                 { c.classList.add('hidden'); }
+  });
+  document.getElementById('vac-count').textContent = n;
+  document.getElementById('geen-vac').classList.toggle('show', n === 0);
+}
+
+window.addEventListener('scroll', function(){
+  var nav = document.querySelector('.nav');
+  if(nav) nav.style.background = window.scrollY > 80 ? 'rgba(10,10,10,0.99)' : 'rgba(10,10,10,0.97)';
+});
+</script>
+</body>
 </html>
