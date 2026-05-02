@@ -532,7 +532,7 @@ input[type="range"].main-slider:active::-webkit-slider-thumb {
 
     <!-- CTA -->
     <div class="calc-cta-wrap">
-      <button class="calc-cta" onclick="window.location='BOB_Aanmelden.html'">
+      <button class="calc-cta" onclick="mobGotoAanmelden()">
         Neem direct een abonnement →
       </button>
       <div class="calc-note">Maandelijks opzegbaar · geen aansluitkosten · direct actief</div>
@@ -769,6 +769,17 @@ function updateSummary() {
 calc();
 
 
+
+
+// ── Naar aanmeldformulier met calculator state ──
+function mobGotoAanmelden() {
+  var url = 'BOB_Aanmelden.html?prog=' + S.progKey
+    + '&autos=' + S.autos
+    + '&interieur=' + (S.interieur ? '1' : '0')
+    + '&freq=' + S.freq
+    + '&van=calculator';
+  window.location = url;
+}
 
 </script>
 </body>

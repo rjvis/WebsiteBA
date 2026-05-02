@@ -807,7 +807,7 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 <section class="calc-section" id="calculator">
   <div class="calc-inner">
     <div class="calc-head reveal">
-      <span class="section-label">Bereken jouw voordeel</span>
+      <span class="section-label">De BOB Besparingscalculator</span>
       <h2 class="section-h2">Wat levert de<br><em>Wasclub</em> jou op?</h2>
       <p>Stel je situatie in en zie direct wat je bespaart — ook bij meerdere auto's.</p>
     </div>
@@ -932,7 +932,7 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
             <div class="result-saving-year" id="saving-year">&rarr; &euro;408 per jaar</div>
           </div>
 
-          <button class="result-cta" onclick="window.location='BOB_Aanmelden.html'">
+          <button class="result-cta" onclick="gotoAanmelden()">
             Neem direct een abonnement <span class="arrow">&rarr;</span>
           </button>
           <div class="result-note">Maandelijks opzegbaar &middot; geen aansluitkosten &middot; direct actief</div>
@@ -1487,6 +1487,18 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
   if (freqSlider) freqSlider.addEventListener('input', function() { freq = parseInt(freqSlider.value); calc(); });
 
+  function exportState() {
+    window.calcState = {
+      prog: progKey,
+      autos: aantalAutos,
+      interieur: interieur,
+      freq: freq
+    };
+  }
+
+  var _origCalc = calc;
+  calc = function() { _origCalc(); exportState(); };
+
   autosBtns.forEach(function(btn) {
     btn.addEventListener('click', function() {
       autosBtns.forEach(function(b) { b.classList.remove('active'); });
@@ -1716,6 +1728,18 @@ function closeDrawer() {
 
 
 
+
+
+// ── Naar aanmeldformulier met calculator state ──
+function gotoAanmelden() {
+  var st = window.calcState || { prog: 'intensief', autos: 1, interieur: false, freq: 4 };
+  var url = 'BOB_Aanmelden.html?prog=' + st.prog
+    + '&autos=' + st.autos
+    + '&interieur=' + (st.interieur ? '1' : '0')
+    + '&freq=' + st.freq
+    + '&van=calculator';
+  window.location = url;
+}
 
 </script>
 </body>

@@ -371,6 +371,14 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
   <p>Vul je gegevens in en kies je abonnement. Je maandbedrag wordt direct berekend.</p>
 </div>
 
+
+<!-- Prefill banner (zichtbaar als vanuit calculator) -->
+<div id="prefill-banner" style="display:none; background:rgba(227,6,19,0.08); border-bottom:1px solid rgba(227,6,19,0.2); padding:12px 24px; text-align:center;">
+  <span style="font-family:var(--fd);font-weight:700;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:rgba(227,6,19,0.9);">
+    ✓ Jouw keuzes uit de calculator zijn al ingevuld — controleer en bevestig hieronder
+  </span>
+</div>
+
 <!-- LAYOUT -->
 <div class="form-layout">
 
@@ -871,6 +879,47 @@ function submitForm() {
 
 // ── INIT ─────────────────────────────────────────────────────
 updatePrijs();
+
+// Prefill vanuit calculator URL parameters
+(function() {
+  var params = new URLSearchParams(window.location.search);
+  if (!params.get('van')) return;
+  var banner = document.getElementById('prefill-banner');
+  if (banner) banner.style.display = 'block';
+  var prog = params.get('prog') || 'intensief';
+  var progMap = { normaal: [13,28], intensief: [17,34], proteqt: [21,39] };
+  var prices = progMap[prog] || progMap.intensief;
+  var progEl = document.querySelector('.prog-opt.' + prog);
+  if (progEl) {
+    document.querySelectorAll('.prog-opt').forEach(function(o) { o.classList.remove('selected'); });
+    progEl.classList.add('selected');
+    state.prog = prog;
+    state.progAbo = prices[1];
+  }
+  var intActief = params.get('interieur') === '1' && prog !== 'normaal';
+  if (intActief) {
+    state.interieur = true;
+    var intEl = document.getElementById('int-opt');
+    if (intEl) intEl.classList.add('on');
+    var desc = document.getElementById('int-desc');
+    if (desc) { desc.textContent = 'Actief'; desc.className = 'int-desc on'; }
+  }
+  var autos = parseInt(params.get('autos')) || 1;
+  autos = Math.min(Math.max(autos, 1), 4);
+  for (var i = 2; i <= autos; i++) addAuto();
+  var sections = document.querySelectorAll('.form-section');
+  if (sections[1]) {
+    var head = sections[1].querySelector('.form-section-head');
+    if (head) {
+      var tag = document.createElement('span');
+      tag.style.cssText = 'margin-left:auto;font-size:10px;background:rgba(227,6,19,0.15);border:1px solid rgba(227,6,19,0.3);color:rgba(227,6,19,0.9);padding:3px 8px;font-family:var(--fd);font-weight:700;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;';
+      tag.textContent = 'Uit calculator';
+      head.appendChild(tag);
+    }
+  }
+  updatePrijs();
+})();
+
 </script>
 </body>
 </html>
