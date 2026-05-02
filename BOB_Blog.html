@@ -335,6 +335,49 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b, 
   .blog-hero-h1 { font-size: 40px; }
   .blog-card-body { padding: 18px 20px 22px; }
 }
+
+/* ── Footer & Drawer CSS ── */
+.footer { background: var(--black); border-top: 1px solid var(--border); padding: 64px 0 0; }
+.footer-inner { max-width: 1100px; margin: 0 auto; padding: 0 48px; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 56px; border-bottom: 1px solid var(--border); }
+.footer-logo { font-family: var(--font-d); font-weight: 900; font-size: 32px; letter-spacing: 4px; background: var(--red); color: #fff; display: inline-block; padding: 7px 16px 5px; margin-bottom: 18px; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); }
+.footer-brand-text { font-size: 14px; color: var(--muted); line-height: 1.7; }
+.footer h4 { font-family: var(--font-d); font-weight: 800; font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 18px; }
+.footer ul { list-style: none; display: grid; gap: 10px; }
+.footer li a { font-size: 14px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+.footer li a:hover { color: var(--text); }
+.footer-bottom { max-width: 1100px; margin: 0 auto; padding: 20px 48px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--subtle); }
+.footer-bottom a { color: var(--subtle); text-decoration: none; }
+.footer-stripe { height: 5px; background: linear-gradient(90deg,var(--red) 0%,var(--red) 40%,#222 40%,#222 70%,#555 70%,#555 100%); }
+
+/* ═══ HAMBURGER ═══ */
+.nav-hamburger {
+  display: none; flex-direction: column; gap: 5px;
+  background: transparent; border: none; cursor: pointer; padding: 8px;
+}
+.nav-hamburger span { display: block; width: 22px; height: 2px; background: var(--text); transition: all 0.3s; }
+.nav-hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
+.nav-drawer {
+  position: fixed; top: 0; right: -300px; bottom: 0; width: 280px;
+  background: var(--dark); z-index: 200; border-left: 1px solid var(--border);
+  transition: right 0.35s cubic-bezier(0.16,1,0.3,1);
+  display: flex; flex-direction: column; padding: 80px 32px 40px;
+}
+.nav-drawer.open { right: 0; }
+.nav-overlay { position: fixed; inset: 0; z-index: 199; background: rgba(0,0,0,0); pointer-events: none; transition: background 0.3s; }
+.nav-overlay.open { background: rgba(0,0,0,0.7); pointer-events: all; }
+.nav-drawer ul { list-style: none; display: grid; gap: 4px; }
+.nav-drawer ul a { display: block; padding: 13px 0; font-family: var(--font-d); font-weight: 800; font-size: 22px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+.nav-drawer ul a:hover { color: var(--red); }
+.nav-drawer-cta { margin-top: 32px; display: block; background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 14px 20px 12px; text-align: center; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); }
+
+.mobile-sticky-cta {
+  display: none; position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+  padding: 12px 20px; background: rgba(10,10,10,0.97); border-top: 1px solid var(--border); backdrop-filter: blur(12px);
+}
+.mobile-sticky-cta a { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 15px 20px 13px; background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); }
+
 </style>
 </head>
 <body>
