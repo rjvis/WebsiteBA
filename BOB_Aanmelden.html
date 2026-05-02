@@ -569,6 +569,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
             <input type="radio" name="startdatum" value="vandaag" checked>
             <div class="datum-main" id="datum-vandaag">Vandaag</div>
             <div class="datum-sub">Direct actief</div>
+            <div style="margin-top:6px;font-size:10px;font-family:var(--fd);font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--green);">−€5 korting</div>
           </label>
           <label class="datum-opt" onclick="selectDatum(this,'volgendemaand')">
             <input type="radio" name="startdatum" value="volgendemaand">
@@ -672,7 +673,8 @@ var state = {
   interieur: false,
   aantalAutos: 1,
   akk1: false,
-  akk2: false
+  akk2: false,
+  vandaag: true
 };
 
 // ── DATUMS INVULLEN ───────────────────────────────────────────
@@ -774,6 +776,8 @@ function selectDatum(el, val) {
   el.classList.add('selected');
   var eigenWrap = document.getElementById('datum-eigen');
   eigenWrap.classList.toggle('show', val === 'eigen');
+  state.vandaag = (val === 'vandaag');
+  updatePrijs();
 }
 
 // ── AKKOORD CHECKBOXES ────────────────────────────────────────
@@ -810,14 +814,33 @@ function updatePrijs() {
     lines += priceLine('Prijs per auto', '€' + aboPA + '/mnd');
   }
 
+  // Korting vandaag
+  var korting = state.vandaag ? 5 : 0;
+  var totaalNaKorting = totaal - korting;
+  if (korting) {
+    lines += '<div class="price-line" style="color:var(--green);border-top:1px solid rgba(34,197,94,0.2);">'
+      + '<span class="price-line-label" style="color:rgba(34,197,94,0.8);">✓ Direct activeren — korting</span>'
+      + '<span class="price-line-val" style="color:var(--green);">−€' + korting + '</span></div>';
+  }
+
   document.getElementById('price-lines').innerHTML = lines;
-  document.getElementById('price-total').textContent = '€' + totaal;
+
+  var totalEl = document.getElementById('price-total');
+  if (korting) {
+    totalEl.innerHTML = '<span style="font-size:22px;color:var(--muted);text-decoration:line-through;margin-right:6px;">€' + totaal + '</span>€' + totaalNaKorting;
+  } else {
+    totalEl.textContent = '€' + totaal;
+  }
+
   document.getElementById('price-sub').textContent =
     n + ' auto' + (n > 1 ? '\'s' : '') + ' · ' + capitalize(prog) + (state.interieur ? ' + Interieur' : '');
 
   if (n > 1 && prog !== 'normaal') {
     document.getElementById('price-note').textContent =
       'Familietarief — prijs per auto daalt bij meer auto\'s. Maandelijks opzegbaar.';
+  } else if (korting) {
+    document.getElementById('price-note').innerHTML =
+      '<span style="color:rgba(34,197,94,0.9);font-weight:600;">€5 korting op je eerste maand bij direct activeren</span>';
   } else {
     document.getElementById('price-note').textContent =
       'Maandelijks opzegbaar · geen aansluitkosten · direct actief';

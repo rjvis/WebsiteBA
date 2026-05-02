@@ -60,6 +60,33 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
   position: absolute; inset: 0;
   background: radial-gradient(ellipse 100% 80% at 50% 60%, #1a0203 0%, var(--black) 65%);
 }
+/* Hero achtergrond foto */
+.wc-hero-foto {
+  position: absolute; inset: 0; z-index: 0;
+  background-image: url('Media/wasclub_hero.jpg');
+  background-size: cover; background-position: center;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.wc-hero-foto.loaded { opacity: 1; }
+/* Donkere overlay bovenop de foto zodat tekst leesbaar blijft */
+.wc-hero-foto::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(10,10,10,0.55) 0%,
+    rgba(10,10,10,0.35) 40%,
+    rgba(10,10,10,0.75) 100%
+  );
+}
+/* Als foto geladen is: verberg de gradient achtergrond */
+.wc-hero.has-foto .wc-hero-bg {
+  opacity: 0.3;
+}
+.wc-hero.has-foto .wc-hero-grid {
+  opacity: 0.4;
+}
 .wc-hero-grid {
   position: absolute; inset: 0;
   background-image: linear-gradient(rgba(227,6,19,0.035) 1px,transparent 1px), linear-gradient(90deg,rgba(227,6,19,0.035) 1px,transparent 1px);
@@ -755,6 +782,7 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 <section class="wc-hero">
   <div class="wc-hero-bg"></div>
   <div class="wc-hero-grid"></div>
+  <div class="wc-hero-foto" id="wc-hero-foto"></div>
   
   
 
@@ -1740,6 +1768,22 @@ function gotoAanmelden() {
     + '&van=calculator';
   window.location = url;
 }
+
+
+// ── Wasclub hero achtergrond foto ──────────────────────────────
+(function() {
+  var fotoEl = document.getElementById('wc-hero-foto');
+  if (!fotoEl) return;
+  var img = new Image();
+  img.onload = function() {
+    fotoEl.classList.add('loaded');
+    document.querySelector('.wc-hero').classList.add('has-foto');
+  };
+  img.onerror = function() {
+    // Foto niet gevonden — gradient blijft zichtbaar, geen foutmelding
+  };
+  img.src = 'Media/wasclub_hero.jpg';
+})();
 
 </script>
 </body>
