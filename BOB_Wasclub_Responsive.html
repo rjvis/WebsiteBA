@@ -7,6 +7,78 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* ── NAV ── */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 48px; height: 72px;
+  background: rgba(10,10,10,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.3s;
+}
+
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  display: grid; grid-template-columns: repeat(4,8px);
+  grid-template-rows: repeat(4,8px); gap: 3px;
+}
+.logo-mark span {
+  background: #444; border-radius: 1.5px;
+  transition: all 0.6s cubic-bezier(.34,1.56,.64,1);
+}
+.logo-mark span:nth-child(2),.logo-mark span:nth-child(4),
+.logo-mark span:nth-child(11),.logo-mark span:nth-child(13) { background: #666; }
+.logo-mark span:nth-child(6) { background: var(--red); }
+.nav-logo:hover .logo-mark span:nth-child(6) { transform: scale(1.4); box-shadow: 0 0 12px var(--red-glow); }
+.nav-logo:hover .logo-mark span:nth-child(1) { transform: translate(-2px,-2px); }
+.nav-logo:hover .logo-mark span:nth-child(4) { transform: translate(2px,-2px); }
+.nav-logo:hover .logo-mark span:nth-child(13) { transform: translate(-2px,2px); }
+.nav-logo:hover .logo-mark span:nth-child(16) { transform: translate(2px,2px); }
+
+.logo-text {
+  background: var(--red); color: #fff;
+  font-family: var(--font-display); font-weight: 900;
+  font-size: 26px; letter-spacing: 3px;
+  padding: 5px 14px 3px; line-height: 1;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 100%, 0 100%);
+}
+
+.nav-menu {
+  display: flex; gap: 36px; list-style: none;
+}
+.nav-menu a {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  transition: color 0.2s; position: relative; padding-bottom: 2px;
+}
+.nav-menu a::after {
+  content:''; position: absolute; left: 0; bottom: -2px;
+  width: 0; height: 2px; background: var(--red);
+  transition: width 0.3s cubic-bezier(.34,1.56,.64,1);
+}
+.nav-menu a:hover { color: var(--text); }
+.nav-menu a:hover::after { width: 100%; }
+
+.nav-cta {
+  background: var(--red); color: #fff;
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 14px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 11px 24px 9px; text-decoration: none;
+  clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%);
+  transition: all 0.2s;
+}
+.nav-cta:hover {
+  background: #ff1a26;
+  box-shadow: 0 8px 32px var(--red-glow);
+  transform: translateY(-1px);
+}
+
 :root {
   --red: #E30613;
   --red-dark: #a3040d;
@@ -27,14 +99,8 @@ html { scroll-behavior: smooth; }
 body { background: var(--black); color: var(--text); font-family: var(--font-b); line-height: 1.6; overflow-x: hidden; }
 
 /* ─── NAV ─── */
-.nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 48px; height: 72px;
-  background: rgba(10,10,10,0.92); backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+
+
 .logo-mark { display: grid; grid-template-columns: repeat(4,8px); grid-template-rows: repeat(4,8px); gap: 3px; }
 .logo-mark span { background: #444; border-radius: 1.5px; transition: all 0.5s cubic-bezier(.34,1.56,.64,1); }
 .logo-mark span:nth-child(2),.logo-mark span:nth-child(4),
@@ -42,14 +108,14 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 .logo-mark span:nth-child(6) { background: var(--red); }
 .nav-logo:hover .logo-mark span:nth-child(6) { transform: scale(1.4); box-shadow: 0 0 12px var(--red-glow); }
 .logo-text { background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 900; font-size: 26px; letter-spacing: 3px; padding: 5px 14px 3px; line-height: 1; clip-path: polygon(0 0,calc(100% - 8px) 0,100% 100%,0 100%); }
-.nav-menu { display: flex; gap: 36px; list-style: none; }
-.nav-menu a { font-family: var(--font-d); font-weight: 700; font-size: 15px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; position: relative; padding-bottom: 2px; }
-.nav-menu a::after { content:''; position: absolute; left: 0; bottom: -2px; width: 0; height: 2px; background: var(--red); transition: width 0.3s; }
-.nav-menu a:hover { color: var(--text); }
+
+
+
+
 .nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
-.nav-menu a.active { color: var(--text); }
-.nav-cta { background: var(--red); color: #fff; font-family: var(--font-d); font-weight: 800; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; padding: 11px 24px 9px; text-decoration: none; clip-path: polygon(0 0,calc(100% - 10px) 0,100% 100%,10px 100%); transition: all 0.2s; }
-.nav-cta:hover { box-shadow: 0 8px 32px var(--red-glow); transform: translateY(-1px); }
+
+
+
 
 /* ─── HERO WASCLUB ─── */
 .wc-hero {
@@ -400,7 +466,7 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
 /* ═══ TABLET ≤ 1024px ═══ */
 @media (max-width: 1024px) {
-  .nav { padding: 0 28px; }
+  
   .wc-hero-content { padding: 0 40px; }
   .calc-inner, .tiers-inner, .how-inner, .faq-inner { padding: 0 40px; }
   .zakelijk-inner { padding: 0 40px; }
@@ -412,8 +478,8 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
   .wc-hero-h1 { font-size: clamp(44px,13vw,68px); letter-spacing: -0.5px; }
   .wc-hero-h1 .line-outline { font-size: 13vw; letter-spacing: -1px; -webkit-text-stroke: 1px rgba(255,255,255,0.55); }
   /* NAV */
-  .nav { padding: 0 20px; height: 56px; }
-  .nav-menu, .nav-cta { display: none; }
+  
+  .nav-menu, 
   .nav-hamburger { display: flex; }
   .mobile-sticky-cta { display: block; }
 
@@ -750,9 +816,10 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
 
 <!-- NAV -->
 <div class="nav-overlay" id="nav-overlay" onclick="closeDrawer()"></div>
+<!-- Mobile drawer -->
 <div class="nav-drawer" id="nav-drawer">
   <ul>
-    <li><a href="BOB_Wasclub_Responsive.html" onclick="closeDrawer()">Wasclub</a></li>
+    <li><a href="BOB_Wasclub_Responsive.html" class="active" onclick="closeDrawer()">Wasclub</a></li>
     <li><a href="BOB_Wasprogrammas.html" onclick="closeDrawer()">Wasprogramma's</a></li>
     <li><a href="BOB_Vestigingen.html" onclick="closeDrawer()">Vestigingen</a></li>
     <li><a href="BOB_Zakelijk_Aanvraag.html" onclick="closeDrawer()">Zakelijk</a></li>
@@ -774,7 +841,8 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b);
     <li><a href="BOB_Werken_Bij.html">Werken bij</a></li>
   </ul>
   <a href="BOB_Aanmelden.html" class="nav-cta">Wordt lid van onze Wasclub →</a>
-  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()">
+
+  <button class="nav-hamburger" id="nav-hamburger" onclick="toggleDrawer()" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
 </nav>
