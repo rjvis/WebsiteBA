@@ -1262,23 +1262,7 @@ input[type="range"].autos-range::-webkit-slider-thumb {
               <div class="toggle-knob"></div>
             </div>
           </div>
-          <div id="int-prog-wrap" style="display:none;margin-top:10px;">
-            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Interieurprogramma:</div>
-            <div class="prog-checks" style="grid-template-columns:1fr 1fr;">
-              <div class="prog-check-item">
-                <input type="checkbox" id="int-intensief" value="Intensief">
-                <label class="prog-check-label" for="int-intensief">
-                  <span class="prog-check-naam" style="color:#b8c4cc">Intensief</span>
-                </label>
-              </div>
-              <div class="prog-check-item">
-                <input type="checkbox" id="int-proteqt" value="Proteqt">
-                <label class="prog-check-label" for="int-proteqt">
-                  <span class="prog-check-naam gold">Proteqt</span>
-                </label>
-              </div>
-            </div>
-          </div>
+
         </div>
 
         <!-- Prijsindicatie sidebar -->
@@ -1628,13 +1612,8 @@ function zakelijkCalc() {
   var totaal = wasTotal;
 
   if (zInterieur) {
-    var intIdx = (progIdx === 0) ? 3 : (progIdx === 1 ? 3 : 4);
-    // Normaal -> IntIntensief, Intensief -> IntIntensief, Proteqt -> IntProteqt
-    if (document.getElementById('int-intensief') && document.getElementById('int-intensief').checked) {
-      intIdx = 3;
-    } else if (document.getElementById('int-proteqt') && document.getElementById('int-proteqt').checked) {
-      intIdx = 4;
-    }
+    // Interieur-tarief: Normaal en Intensief gebruiken IntIntensief (idx 3), Proteqt gebruikt IntProteqt (idx 4)
+    var intIdx = (progIdx === 2) ? 4 : 3;
     var intPrijs = staffel[intIdx];
     var intTotal = intPrijs * n;
     totaal += intTotal;
@@ -1680,26 +1659,21 @@ document.querySelectorAll('input[name="programma"]').forEach(function(r) {
   r.addEventListener('change', zakelijkCalc);
 });
 
-// Interieur checkboxes
-['int-intensief','int-proteqt'].forEach(function(id) {
-  var el = document.getElementById(id);
-  if (el) el.addEventListener('change', zakelijkCalc);
-});
+
 
 function toggleInterieur() {
   zInterieur = !zInterieur;
   var row = document.getElementById('int-toggle-row');
   var sw  = document.getElementById('int-toggle-sw');
   var sub = document.getElementById('int-toggle-sub');
-  var wrap = document.getElementById('int-prog-wrap');
   if (row) row.classList.toggle('active', zInterieur);
   if (sw) {
     sw.style.background = zInterieur ? 'var(--red)' : '';
     var knob = sw.querySelector('.toggle-knob');
     if (knob) knob.style.transform = zInterieur ? 'translateX(22px)' : '';
   }
-  if (sub) sub.textContent = zInterieur ? 'Kies het interieurprogramma hieronder' : 'Selecteer indien gewenst';
-  if (wrap) wrap.style.display = zInterieur ? 'block' : 'none';
+  if (sub) sub.textContent = zInterieur ? 'Actief — programma volgt uw keuze hierboven' : 'Selecteer indien gewenst';
+
   zakelijkCalc();
 }
 
