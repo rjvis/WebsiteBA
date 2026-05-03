@@ -1286,7 +1286,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
             <input type="radio" name="startdatum" value="vandaag" checked>
             <div class="datum-main" id="datum-vandaag">Vandaag</div>
             <div class="datum-sub">Direct actief</div>
-            <div style="margin-top:6px;font-size:10px;font-family:var(--fd);font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--green);">−€5 korting</div>
+            <div style="margin-top:6px;font-size:10px;font-family:var(--fd);font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--green);">−€2,50 korting</div>
           </label>
           <label class="datum-opt" onclick="selectDatum(this,'volgendemaand')">
             <input type="radio" name="startdatum" value="volgendemaand">
@@ -1325,7 +1325,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
               <label>Referral-code van een vriend</label>
               <input type="text" id="referral-code" placeholder="Bijv. BOB-JAN-2847"
                      maxlength="16" style="text-transform:uppercase;letter-spacing:2px;font-family:var(--fd);font-weight:700;"
-                     oninput="checkReferralCode(this.value)">
+                     oninput="checkReferralCode(this.value); updatePrijs();">
               <span style="font-size:12px;color:var(--muted);margin-top:6px;display:block;">
                 Een vriend al lid? Vraag zijn of haar code en ontvang €5 korting op je eerste maand.
               </span>
@@ -1555,20 +1555,35 @@ function updatePrijs() {
     lines += priceLine('Prijs per auto', '€' + aboPA + '/mnd');
   }
 
-  // Korting vandaag
-  var korting = state.vandaag ? 5 : 0;
-  var totaalNaKorting = totaal - korting;
-  if (korting) {
+  // Kortingen berekenen
+  var kortingVandaag  = state.vandaag ? 2.50 : 0;
+  var refCode = (document.getElementById('referral-code') ? document.getElementById('referral-code').value.trim() : '');
+  var kortingRef = (refCode.length >= 5) ? 5.00 : 0;
+  var kortingTotaal = kortingVandaag + kortingRef;
+  var totaalNaKorting = Math.max(0, totaal - kortingTotaal);
+
+  // Korting-regels toevoegen
+  if (kortingVandaag > 0) {
     lines += '<div class="price-line" style="color:var(--green);border-top:1px solid rgba(34,197,94,0.2);">'
       + '<span class="price-line-label" style="color:rgba(34,197,94,0.8);">✓ Direct activeren — korting</span>'
-      + '<span class="price-line-val" style="color:var(--green);">−€' + korting + '</span></div>';
+      + '<span class="price-line-val" style="color:var(--green);">−€2,50</span></div>';
+  }
+  if (kortingRef > 0) {
+    lines += '<div class="price-line" style="color:var(--green);">'
+      + '<span class="price-line-label" style="color:rgba(34,197,94,0.8);">✓ Referral-code: ' + refCode.toUpperCase() + '</span>'
+      + '<span class="price-line-val" style="color:var(--green);">−€5,00</span></div>';
+  }
+  if (kortingTotaal > 0) {
+    lines += '<div class="price-line" style="border-top:1px solid rgba(34,197,94,0.3);padding-top:8px;">'
+      + '<span class="price-line-label" style="color:rgba(34,197,94,0.9);font-weight:700;">Totale korting eerste maand</span>'
+      + '<span class="price-line-val" style="color:var(--green);font-size:16px;">−€' + kortingTotaal.toFixed(2).replace('.', ',') + '</span></div>';
   }
 
   document.getElementById('price-lines').innerHTML = lines;
 
   var totalEl = document.getElementById('price-total');
-  if (korting) {
-    totalEl.innerHTML = '<span style="font-size:22px;color:var(--muted);text-decoration:line-through;margin-right:6px;">€' + totaal + '</span>€' + totaalNaKorting;
+  if (kortingTotaal > 0) {
+    totalEl.innerHTML = '<span style="font-size:22px;color:var(--muted);text-decoration:line-through;margin-right:6px;">€' + totaal + '</span>€' + totaalNaKorting.toFixed(2).replace('.', ',');
   } else {
     totalEl.textContent = '€' + totaal;
   }
@@ -1705,12 +1720,55 @@ updatePrijs();
   }
 })();
 
+function isGeldigeReferralCode(code) {
+  // Format: 6 tekens bestaande uit letters en cijfers door elkaar (bijv. AB1234, 12AB34)
+  var clean = (code || '').trim().toUpperCase();
+  return /^[A-Z0-9]{6}$/.test(clean);
+}
+
 function checkReferralCode(code) {
-  var banner = document.getElementById('referral-banner');
+  var banner  = document.getElementById('referral-banner');
+  var hint    = document.getElementById('referral-hint');
+  var inp     = document.getElementById('referral-code');
   if (!banner) return;
-  var clean = (code || '').trim();
-  // Toon de groene banner als er een code is ingevuld
-  banner.style.display = clean.length >= 5 ? 'block' : 'none';
+  var clean = (code || '').trim().toUpperCase();
+
+  if (clean.length === 0) {
+    banner.style.display = 'none';
+    if (hint) hint.style.display = 'none';
+    if (inp) inp.style.borderColor = '';
+    return;
+  }
+
+  if (isGeldigeReferralCode(clean)) {
+    banner.style.display = 'block';
+    if (hint) hint.style.display = 'none';
+    if (inp) inp.style.borderColor = 'var(--green, #22c55e)';
+  } else {
+    banner.style.display = 'none';
+    if (hint) { hint.style.display = 'block'; }
+    if (inp) inp.style.borderColor = clean.length >= 6 ? 'var(--red)' : '';
+  }
+}
+
+
+// ── REFERRAL CODE SIMULATIE ──────────────────────────────────────
+function simuleerReferralCode() {
+  var chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // zonder verwarrende tekens
+  var code = '';
+  for (var i = 0; i < 6; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  var inp = document.getElementById('referral-code');
+  if (inp) {
+    inp.value = code;
+    checkReferralCode(code);
+    updatePrijs();
+    // Kort highlight effect
+    inp.style.borderColor = 'var(--green, #22c55e)';
+    inp.style.background = 'rgba(34,197,94,0.06)';
+    setTimeout(function() { inp.style.background = ''; }, 800);
+  }
 }
 
 </script>
