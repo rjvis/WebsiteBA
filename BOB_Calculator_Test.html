@@ -778,7 +778,12 @@ function mobGotoAanmelden() {
     + '&interieur=' + (S.interieur ? '1' : '0')
     + '&freq=' + S.freq
     + '&van=calculator';
-  window.location = url;
+  // window.top navigeert de hoofdpagina ipv de iframe zelf
+  if (window.top !== window) {
+    window.top.location = url;
+  } else {
+    window.location = url;
+  }
 }
 
 </script>
