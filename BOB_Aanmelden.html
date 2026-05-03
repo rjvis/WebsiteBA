@@ -1594,9 +1594,9 @@ function updatePrijs() {
   if (n > 1 && prog !== 'normaal') {
     document.getElementById('price-note').textContent =
       'Familietarief — prijs per auto daalt bij meer auto\'s. Maandelijks opzegbaar.';
-  } else if (korting) {
+  } else if (kortingTotaal > 0) {
     document.getElementById('price-note').innerHTML =
-      '<span style="color:rgba(34,197,94,0.9);font-weight:600;">€5 korting op je eerste maand bij direct activeren</span>';
+      '<span style="color:rgba(34,197,94,0.9);font-weight:600;">' + (kortingVandaag > 0 ? '€2,50 korting bij direct activeren' : '') + (kortingRef > 0 ? (kortingVandaag > 0 ? ' + €5,00 referral = €7,50 totaal' : '€5,00 referral-korting') : '') + '</span>';
   } else {
     document.getElementById('price-note').textContent =
       'Maandelijks opzegbaar · geen aansluitkosten · direct actief';
