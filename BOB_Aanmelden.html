@@ -1004,19 +1004,143 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
 .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 .submit-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 12px; line-height: 1.6; }
 
-/* ── SUCCES SCHERM ── */
+/* ══ UPSELL BEDANKPAGINA ══════════════════════════════════════════ */
 .succes-screen {
-  display: none; text-align: center; padding: 80px 24px;
-  max-width: 560px; margin: 0 auto;
+  display: none;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 80px 24px 60px;
 }
 .succes-screen.show { display: block; }
-.succes-icon {
-  width: 72px; height: 72px; border-radius: 50%; background: rgba(34,197,94,0.15);
-  border: 2px solid var(--green); display: flex; align-items: center;
-  justify-content: center; margin: 0 auto 24px; font-size: 32px;
+
+/* Bevestigingsblok bovenaan */
+.succes-confirm {
+  text-align: center;
+  padding: 40px 32px 36px;
+  background: rgba(34,197,94,0.06);
+  border: 1px solid rgba(34,197,94,0.2);
+  margin-bottom: 40px;
 }
-.succes-screen h2 { font-family: var(--fd); font-weight: 900; font-size: 36px; margin-bottom: 12px; }
-.succes-screen p { color: var(--muted); font-size: 15px; line-height: 1.6; margin-bottom: 24px; }
+.succes-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: rgba(34,197,94,0.15);
+  border: 2px solid var(--green);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 20px; font-size: 28px;
+}
+.succes-confirm h2 {
+  font-family: var(--fd); font-weight: 900; font-size: 28px;
+  margin-bottom: 10px; text-transform: uppercase; letter-spacing: -0.3px;
+}
+.succes-confirm p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+
+/* Upsell sectie */
+.upsell-section {
+  margin-bottom: 32px;
+}
+.upsell-label {
+  font-family: var(--fd); font-weight: 800; font-size: 10px;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--red);
+  display: block; margin-bottom: 10px;
+}
+.upsell-heading {
+  font-family: var(--fd); font-weight: 900;
+  font-size: clamp(22px, 4vw, 32px); text-transform: uppercase;
+  letter-spacing: -0.5px; line-height: 1.05; margin-bottom: 8px;
+}
+.upsell-heading em { font-style: normal; color: var(--red); }
+.upsell-sub {
+  font-size: 14px; color: var(--muted); line-height: 1.5;
+  margin-bottom: 24px; max-width: 520px;
+}
+
+/* Upsell kaarten */
+.upsell-cards { display: flex; flex-direction: column; gap: 12px; }
+.upsell-card {
+  background: var(--card, #141414);
+  border: 1.5px solid var(--border);
+  padding: 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; cursor: pointer; transition: all 0.2s;
+  position: relative; overflow: hidden;
+}
+.upsell-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: var(--red);
+  transform: scaleY(0); transform-origin: center;
+  transition: transform 0.2s;
+}
+.upsell-card:hover { border-color: rgba(227,6,19,0.4); background: rgba(227,6,19,0.04); }
+.upsell-card:hover::before { transform: scaleY(1); }
+.upsell-card.selected {
+  border-color: rgba(227,6,19,0.5);
+  background: rgba(227,6,19,0.06);
+}
+.upsell-card.selected::before { transform: scaleY(1); }
+.upsell-card-left { flex: 1; }
+.upsell-card-icon {
+  font-size: 24px; margin-bottom: 6px; display: block;
+}
+.upsell-card-title {
+  font-family: var(--fd); font-weight: 900; font-size: 16px;
+  text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 4px;
+}
+.upsell-card-desc { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.upsell-card-right { text-align: right; flex-shrink: 0; }
+.upsell-card-diff {
+  font-family: var(--fd); font-weight: 900; font-size: 22px;
+  color: var(--red); line-height: 1;
+}
+.upsell-card-diff-label {
+  font-size: 11px; color: var(--muted); margin-top: 2px;
+}
+.upsell-check {
+  width: 22px; height: 22px; border: 1.5px solid var(--border);
+  border-radius: 50%; flex-shrink: 0; display: flex;
+  align-items: center; justify-content: center;
+  transition: all 0.2s; margin-left: 12px;
+}
+.upsell-card.selected .upsell-check {
+  background: var(--red); border-color: var(--red);
+}
+.upsell-card.selected .upsell-check::after {
+  content: '✓'; color: #fff; font-size: 12px; font-weight: 700;
+}
+
+/* Upsell CTA */
+.upsell-cta-wrap { margin-top: 20px; }
+.upsell-cta-btn {
+  width: 100%; padding: 18px 24px; background: var(--red); color: #fff;
+  font-family: var(--fd); font-weight: 800; font-size: 14px;
+  letter-spacing: 2px; text-transform: uppercase; border: none;
+  cursor: pointer;
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 100%, 12px 100%);
+  transition: all 0.2s; display: none;
+}
+.upsell-cta-btn.show { display: block; }
+.upsell-cta-btn:hover { box-shadow: 0 10px 32px rgba(227,6,19,0.35); }
+.upsell-skip {
+  display: block; text-align: center; margin-top: 16px;
+  font-size: 13px; color: var(--muted); cursor: pointer;
+  transition: color 0.2s;
+}
+.upsell-skip:hover { color: var(--text); }
+
+/* Geen upsell beschikbaar */
+.upsell-complete {
+  text-align: center;
+  padding: 28px 24px;
+  background: rgba(34,197,94,0.05);
+  border: 1px solid rgba(34,197,94,0.15);
+  margin-bottom: 32px;
+}
+.upsell-complete p {
+  font-size: 14px; color: rgba(34,197,94,0.8);
+  font-family: var(--fd); font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* Terug knop */
 .btn-terug {
   display: inline-flex; align-items: center; gap: 8px;
   padding: 14px 28px; border: 1px solid var(--border); color: var(--text);
@@ -1025,6 +1149,12 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
   transition: all 0.2s;
 }
 .btn-terug:hover { border-color: var(--red); color: var(--red); }
+
+@media (max-width: 600px) {
+  .succes-screen { padding: 60px 16px 40px; }
+  .succes-confirm { padding: 28px 20px; }
+  .upsell-card { flex-wrap: wrap; }
+}
 
 /* ── FOUT MELDING ── */
 .field.error input, .field.error select, .field.error .kenteken-input { border-color: var(--red) !important; }
@@ -1389,10 +1519,24 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
 
 <!-- SUCCES SCHERM -->
 <div class="succes-screen" id="succes-screen">
-  <div class="succes-icon">✓</div>
-  <h2>Aanmelding ontvangen!</h2>
-  <p>Bedankt voor je aanmelding bij de BOB Wasclub. Je ontvangt binnen enkele minuten een bevestiging op <strong id="succes-email"></strong>.<br><br>Je kenteken(s) worden geactiveerd op de gekozen startdatum.</p>
-  <a href="BOB_Wasclub_Responsive.html" class="btn-terug">← Terug naar de Wasclub</a>
+
+  <!-- ① Bevestiging -->
+  <div class="succes-confirm">
+    <div class="succes-icon">✓</div>
+    <h2>Aanmelding ontvangen!</h2>
+    <p>Bedankt voor je aanmelding bij de BOB Wasclub.<br>
+    Je ontvangt binnen enkele minuten een bevestiging op <strong id="succes-email"></strong>.<br>
+    Je kenteken(s) worden geactiveerd op de gekozen startdatum.</p>
+  </div>
+
+  <!-- ② Upsell sectie (dynamisch gevuld via JS) -->
+  <div id="upsell-wrap"></div>
+
+  <!-- ③ Terug knop -->
+  <div style="text-align:center;margin-top:8px;">
+    <a href="BOB_Wasclub_Responsive.html" class="btn-terug">← Terug naar de Wasclub</a>
+  </div>
+
 </div>
 
 <script>
@@ -1654,6 +1798,8 @@ function submitForm() {
   document.getElementById('form-wrapper').style.display = 'none';
   document.getElementById('succes-screen').classList.add('show');
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Bouw de upsell sectie op basis van de gemaakte keuzes
+  bouwUpsell();
 }
 
 // ── INIT ─────────────────────────────────────────────────────
@@ -1771,6 +1917,182 @@ function simuleerReferralCode() {
   }
 }
 
+
+// ══ UPSELL BEDANKPAGINA ══════════════════════════════════════════
+function bouwUpsell() {
+  var wrap = document.getElementById('upsell-wrap');
+  if (!wrap) return;
+
+  var prog      = state.prog;
+  var intActief = state.interieur;
+  var autos     = state.aantalAutos;
+  var n         = Math.min(autos, 4) - 1;
+
+  var WAS_UP  = { normaal: [28,28,28,28], intensief: [34,25,22,21], proteqt: [39,29,26,24] };
+  var INT_UP  = { intensief: [20,18,15,12], proteqt: [18,16,13,10] };
+
+  var upsells = [];
+
+  if (prog === 'normaal') {
+    var diff = (WAS_UP.intensief[n] - WAS_UP.normaal[n]) * autos;
+    upsells.push({ id: 'upgrade-intensief', icon: '\u26a1', titel: 'Upgrade naar Intensief',
+      desc: 'Grondiger gewassen, betere lakbescherming. Het meest gekozen programma van BOB.',
+      diff: '+\u20ac' + diff + '/mnd', cta: 'Upgrade mijn abonnement naar Intensief \u2192' });
+  } else if (prog === 'intensief') {
+    var diff = (WAS_UP.proteqt[n] - WAS_UP.intensief[n]) * autos;
+    upsells.push({ id: 'upgrade-proteqt', icon: '\u2728', titel: 'Upgrade naar Proteqt',
+      desc: 'Maximale lakbescherming met een hydrofobe coating bij elke wasbeurt.',
+      diff: '+\u20ac' + diff + '/mnd', cta: 'Upgrade mijn abonnement naar Proteqt \u2192' });
+  }
+
+  if (!intActief) {
+    var intKey = prog === 'proteqt' ? 'proteqt' : 'intensief';
+    var intTot = INT_UP[intKey][n] * autos;
+    upsells.push({ id: 'add-interieur', icon: '\ud83e\udeba', titel: 'Voeg Interieurband toe',
+      desc: 'Professionele binnenreiniging bij elke wasbeurt. Stoelen, tapijt, dashboard en ruiten.',
+      diff: '+\u20ac' + intTot + '/mnd', cta: 'Voeg Interieurband toe aan mijn abonnement \u2192' });
+  }
+
+  if (upsells.length === 0) {
+    var div = document.createElement('div');
+    div.className = 'upsell-complete';
+    div.innerHTML = '<p>\ud83c\udfc6 Je hebt het maximale pakket gekozen \u2014 goed bezig! We zorgen dat je auto altijd in topvorm is.</p>';
+    wrap.appendChild(div);
+    return;
+  }
+
+  // Sectie header
+  var section = document.createElement('div');
+  section.className = 'upsell-section';
+
+  var label = document.createElement('span');
+  label.className = 'upsell-label';
+  label.textContent = 'Exclusief aanbod';
+  section.appendChild(label);
+
+  var h2 = document.createElement('h2');
+  h2.className = 'upsell-heading';
+  h2.innerHTML = 'Maak er het <em>meeste</em> van.';
+  section.appendChild(h2);
+
+  var sub = document.createElement('p');
+  sub.className = 'upsell-sub';
+  sub.textContent = 'Je aanmelding is geregeld. Wil je nog een stap verder gaan? Dit kun je nu direct toevoegen.';
+  section.appendChild(sub);
+
+  // Kaarten container
+  var cards = document.createElement('div');
+  cards.className = 'upsell-cards';
+  cards.id = 'upsell-cards';
+
+  window._upsellCtas = {};
+
+  upsells.forEach(function(u) {
+    window._upsellCtas[u.id] = u.cta;
+
+    var card = document.createElement('div');
+    card.className = 'upsell-card';
+    card.id = 'card-' + u.id;
+
+    var icon = document.createElement('span');
+    icon.className = 'upsell-card-icon';
+    icon.textContent = u.icon;
+    card.appendChild(icon);
+
+    var left = document.createElement('div');
+    left.className = 'upsell-card-left';
+    var title = document.createElement('div');
+    title.className = 'upsell-card-title';
+    title.textContent = u.titel;
+    var desc = document.createElement('div');
+    desc.className = 'upsell-card-desc';
+    desc.textContent = u.desc;
+    left.appendChild(title);
+    left.appendChild(desc);
+    card.appendChild(left);
+
+    var right = document.createElement('div');
+    right.className = 'upsell-card-right';
+    var diffEl = document.createElement('div');
+    diffEl.className = 'upsell-card-diff';
+    diffEl.textContent = u.diff;
+    var diffLabel = document.createElement('div');
+    diffLabel.className = 'upsell-card-diff-label';
+    diffLabel.textContent = 'per maand';
+    right.appendChild(diffEl);
+    right.appendChild(diffLabel);
+    card.appendChild(right);
+
+    var check = document.createElement('div');
+    check.className = 'upsell-check';
+    card.appendChild(check);
+
+    card.addEventListener('click', (function(id) {
+      return function() { selectUpsell(id); };
+    })(u.id));
+
+    cards.appendChild(card);
+  });
+  section.appendChild(cards);
+
+  // CTA wrap
+  var ctaWrap = document.createElement('div');
+  ctaWrap.className = 'upsell-cta-wrap';
+
+  var ctaBtn = document.createElement('button');
+  ctaBtn.className = 'upsell-cta-btn';
+  ctaBtn.id = 'upsell-cta-btn';
+  ctaBtn.textContent = 'Selecteer een optie om verder te gaan';
+  ctaBtn.addEventListener('click', bevestigUpsell);
+  ctaWrap.appendChild(ctaBtn);
+
+  var skip = document.createElement('span');
+  skip.className = 'upsell-skip';
+  skip.textContent = 'Nee bedankt, dit is goed zo \u2192';
+  skip.addEventListener('click', slaUpsellOver);
+  ctaWrap.appendChild(skip);
+
+  section.appendChild(ctaWrap);
+  wrap.appendChild(section);
+}
+
+var _geselecteerdeUpsell = null;
+
+function selectUpsell(id) {
+  _geselecteerdeUpsell = id;
+  document.querySelectorAll('.upsell-card').forEach(function(c) { c.classList.remove('selected'); });
+  var card = document.getElementById('card-' + id);
+  if (card) card.classList.add('selected');
+  var btn = document.getElementById('upsell-cta-btn');
+  if (btn) {
+    btn.textContent = window._upsellCtas[id] || 'Toevoegen \u2192';
+    btn.classList.add('show');
+  }
+}
+
+function bevestigUpsell() {
+  if (!_geselecteerdeUpsell) return;
+  var naam  = (document.getElementById('voornaam') || {}).value || '';
+  var email = (document.getElementById('email') || {}).value || '';
+  var label = window._upsellCtas[_geselecteerdeUpsell] || _geselecteerdeUpsell;
+  var subject = encodeURIComponent('Wasclub upgrade aanvraag \u2014 ' + naam);
+  var body = encodeURIComponent('Naam: ' + naam + '\nE-mail: ' + email + '\nGewenste upgrade: ' + label);
+  window.location = 'mailto:wasclub@bobautowas.nl?subject=' + subject + '&body=' + body;
+  var wrap = document.getElementById('upsell-wrap');
+  if (wrap) {
+    wrap.innerHTML = '';
+    var conf = document.createElement('div');
+    conf.className = 'upsell-complete';
+    conf.style.marginBottom = '24px';
+    conf.innerHTML = '<p>\u2713 Je upgrade-aanvraag is verstuurd! We passen je abonnement aan en bevestigen dit per e-mail.</p>';
+    wrap.appendChild(conf);
+  }
+}
+
+function slaUpsellOver() {
+  var wrap = document.getElementById('upsell-wrap');
+  if (wrap) wrap.innerHTML = '';
+}
 </script>
 </body>
 </html>
