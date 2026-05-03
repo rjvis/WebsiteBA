@@ -1191,68 +1191,103 @@ input[type="range"].autos-range::-webkit-slider-thumb {
         <!-- WAGENPARK -->
         <span class="form-section-label">Uw wagenpark</span>
 
+        <!-- Aantal wasbeurten per maand -->
         <div class="form-group">
-          <label class="form-label">Aantal auto's in de vloot <span class="req">*</span></label>
+          <label class="form-label">Aantal wasbeurten per maand <span class="req">*</span></label>
           <div class="autos-slider-wrap">
             <div class="autos-slider-header">
               <div>
-                <div class="autos-waarde"><em id="autos-val">10</em> auto's</div>
-                <div class="autos-price-hint" id="autos-price-hint">v.a. €24/auto/mnd · totaal ca. €240/mnd</div>
+                <div class="autos-waarde"><em id="autos-val">10</em> <span id="autos-unit">wasbeurten/mnd</span></div>
+                <div class="autos-price-hint" id="autos-price-hint"></div>
               </div>
             </div>
-            <input type="range" class="autos-range" id="autos-slider" min="5" max="100" value="10" style="--pct: 5%">
+            <input type="range" class="autos-range" id="autos-slider" min="1" max="50" value="10" style="--pct: 18.4%">
             <div class="autos-ticks">
-              <span class="autos-tick">5</span>
-              <span class="autos-tick">25</span>
+              <span class="autos-tick">1</span>
+              <span class="autos-tick">10</span>
+              <span class="autos-tick">20</span>
+              <span class="autos-tick">35</span>
               <span class="autos-tick">50</span>
-              <span class="autos-tick">75</span>
-              <span class="autos-tick">100+</span>
             </div>
           </div>
         </div>
 
-        <div class="form-group">
+        <!-- >50: offerte banner -->
+        <div id="offerte-banner" style="display:none;background:rgba(227,6,19,0.08);border:1px solid rgba(227,6,19,0.3);padding:14px 18px;margin-bottom:16px;">
+          <div style="font-family:var(--fd);font-weight:800;font-size:13px;color:var(--red);margin-bottom:4px;">Meer dan 50 wasbeurten per maand</div>
+          <div style="font-size:13px;color:var(--muted);">Voor grote vloten stellen wij een prijs op maat op. Onze accountmanager neemt binnen één werkdag contact met u op met een offerte.</div>
+        </div>
+
+        <!-- Gewenst wasprogramma -->
+        <div class="form-group" id="prog-sectie">
           <label class="form-label">Gewenst wasprogramma</label>
           <div class="prog-checks">
             <div class="prog-check-item">
               <input type="checkbox" id="prog-normaal" value="Normaal">
               <label class="prog-check-label" for="prog-normaal">
-                <span class="prog-check-naam" style="color:var(--muted)">Normaal</span>
-                <span class="prog-check-prijs">€28/mnd</span>
+                <span class="prog-check-naam" style="color:var(--bronze)">Normaal</span>
               </label>
             </div>
             <div class="prog-check-item">
               <input type="checkbox" id="prog-intensief" value="Intensief" checked>
               <label class="prog-check-label" for="prog-intensief">
                 <span class="prog-check-naam" style="color:#b8c4cc">Intensief</span>
-                <span class="prog-check-prijs">€34/mnd</span>
               </label>
             </div>
             <div class="prog-check-item">
               <input type="checkbox" id="prog-proteqt" value="Proteqt">
               <label class="prog-check-label" for="prog-proteqt">
                 <span class="prog-check-naam gold">Proteqt</span>
-                <span class="prog-check-prijs">€39/mnd</span>
               </label>
             </div>
           </div>
           <div style="font-size:12px;color:var(--subtle);margin-top:8px;">Meerdere programma's mogelijk — bijv. voor gemengde vloten</div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Interieurband</label>
+        <!-- Interieurband -->
+        <div class="form-group" id="int-sectie">
+          <label class="form-label">Interieurband (optioneel)</label>
           <div class="int-toggle-row" id="int-toggle-row" onclick="toggleInterieur()">
             <div>
               <div class="int-toggle-text">+ Interieurband toevoegen</div>
-              <div class="int-toggle-sub" id="int-toggle-sub">Binnenreiniging — +€18–20/auto/mnd (afhankelijk van programma)</div>
+              <div class="int-toggle-sub" id="int-toggle-sub">Selecteer indien gewenst</div>
             </div>
             <div class="toggle-switch" id="int-toggle-sw">
               <div class="toggle-knob"></div>
             </div>
           </div>
+          <div id="int-prog-wrap" style="display:none;margin-top:10px;">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Interieurprogramma:</div>
+            <div class="prog-checks" style="grid-template-columns:1fr 1fr;">
+              <div class="prog-check-item">
+                <input type="checkbox" id="int-intensief" value="Intensief">
+                <label class="prog-check-label" for="int-intensief">
+                  <span class="prog-check-naam" style="color:#b8c4cc">Intensief</span>
+                </label>
+              </div>
+              <div class="prog-check-item">
+                <input type="checkbox" id="int-proteqt" value="Proteqt">
+                <label class="prog-check-label" for="int-proteqt">
+                  <span class="prog-check-naam gold">Proteqt</span>
+                </label>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="form-group">
+        <!-- Prijsindicatie sidebar -->
+        <div id="prijs-indicatie" style="background:var(--dark);border:1px solid var(--border);padding:18px;margin-top:8px;">
+          <div style="font-family:var(--fd);font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Prijsindicatie</div>
+          <div id="prijs-regels" style="font-size:13px;color:var(--muted);line-height:1.8;"></div>
+          <div id="prijs-totaal-wrap" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="font-family:var(--fd);font-weight:700;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);">Indicatie/mnd</span>
+            <span id="prijs-totaal" style="font-family:var(--fd);font-weight:900;font-size:28px;color:var(--red);">—</span>
+          </div>
+          <div style="font-size:11px;color:var(--subtle);margin-top:8px;">Op basis van uw opgave. Definitieve prijs volgt uit offerte.</div>
+        </div>
+
+        <!-- Voorkeur vestiging -->
+        <div class="form-group" style="margin-top:16px;">
           <label class="form-label" for="voorkeur-vest">Voorkeur vestiging(en)</label>
           <select id="voorkeur-vest" class="form-select">
             <option value="">Geen voorkeur — alle 22 vestigingen</option>
@@ -1484,6 +1519,167 @@ function closeDrawer() {
   document.getElementById('nav-hamburger').classList.remove('open');
   document.body.style.overflow = '';
 }
+
+// ── ZAKELIJK STAFFEL ────────────────────────────────────────────
+// Bestand: WebsiteBA/Zakelijk/zakelijk_staffel.xlsx
+// Update de prijzen in het Excel bestand en kopieer de waarden hieronder
+// De kolommen zijn: [Normaal, Intensief, Proteqt, IntIntensief, IntProteqt] per wasbeurt
+var STAFFEL = {
+  1:  [11.50, 15.00, 18.50, 17.00, 15.00],
+  2:  [11.50, 15.00, 18.50, 17.00, 15.00],
+  3:  [11.50, 15.00, 18.50, 17.00, 15.00],
+  4:  [11.50, 15.00, 18.50, 17.00, 15.00],
+  5:  [11.50, 15.00, 18.50, 17.00, 15.00],
+  6:  [10.75, 14.00, 17.25, 15.50, 13.75],
+  7:  [10.75, 14.00, 17.25, 15.50, 13.75],
+  8:  [10.75, 14.00, 17.25, 15.50, 13.75],
+  9:  [10.75, 14.00, 17.25, 15.50, 13.75],
+  10: [10.75, 14.00, 17.25, 15.50, 13.75],
+  11: [10.00, 13.00, 16.00, 14.00, 12.50],
+  12: [10.00, 13.00, 16.00, 14.00, 12.50],
+  13: [10.00, 13.00, 16.00, 14.00, 12.50],
+  14: [10.00, 13.00, 16.00, 14.00, 12.50],
+  15: [10.00, 13.00, 16.00, 14.00, 12.50],
+  16: [10.00, 13.00, 16.00, 14.00, 12.50],
+  17: [10.00, 13.00, 16.00, 14.00, 12.50],
+  18: [10.00, 13.00, 16.00, 14.00, 12.50],
+  19: [10.00, 13.00, 16.00, 14.00, 12.50],
+  20: [10.00, 13.00, 16.00, 14.00, 12.50],
+  21: [9.25, 12.00, 14.75, 12.50, 11.25],
+  22: [9.25, 12.00, 14.75, 12.50, 11.25],
+  23: [9.25, 12.00, 14.75, 12.50, 11.25],
+  24: [9.25, 12.00, 14.75, 12.50, 11.25],
+  25: [9.25, 12.00, 14.75, 12.50, 11.25],
+  26: [9.25, 12.00, 14.75, 12.50, 11.25],
+  27: [9.25, 12.00, 14.75, 12.50, 11.25],
+  28: [9.25, 12.00, 14.75, 12.50, 11.25],
+  29: [9.25, 12.00, 14.75, 12.50, 11.25],
+  30: [9.25, 12.00, 14.75, 12.50, 11.25],
+  31: [9.25, 12.00, 14.75, 12.50, 11.25],
+  32: [9.25, 12.00, 14.75, 12.50, 11.25],
+  33: [9.25, 12.00, 14.75, 12.50, 11.25],
+  34: [9.25, 12.00, 14.75, 12.50, 11.25],
+  35: [9.25, 12.00, 14.75, 12.50, 11.25],
+  36: [8.75, 11.25, 14.00, 11.50, 10.50],
+  37: [8.75, 11.25, 14.00, 11.50, 10.50],
+  38: [8.75, 11.25, 14.00, 11.50, 10.50],
+  39: [8.75, 11.25, 14.00, 11.50, 10.50],
+  40: [8.75, 11.25, 14.00, 11.50, 10.50],
+  41: [8.75, 11.25, 14.00, 11.50, 10.50],
+  42: [8.75, 11.25, 14.00, 11.50, 10.50],
+  43: [8.75, 11.25, 14.00, 11.50, 10.50],
+  44: [8.75, 11.25, 14.00, 11.50, 10.50],
+  45: [8.75, 11.25, 14.00, 11.50, 10.50],
+  46: [8.75, 11.25, 14.00, 11.50, 10.50],
+  47: [8.75, 11.25, 14.00, 11.50, 10.50],
+  48: [8.75, 11.25, 14.00, 11.50, 10.50],
+  49: [8.75, 11.25, 14.00, 11.50, 10.50],
+  50: [8.75, 11.25, 14.00, 11.50, 10.50]
+};
+// Indexen: 0=Normaal, 1=Intensief, 2=Proteqt, 3=IntIntensief, 4=IntProteqt
+
+var zAantal = 10;
+var zInterieur = false;
+var zIntProg = '';
+
+function fmt(n) {
+  return '\u20ac' + n.toFixed(2).replace('.', ',');
+}
+
+function zakelijkCalc() {
+  var n = zAantal;
+  var banner = document.getElementById('offerte-banner');
+  var progSectie = document.getElementById('prog-sectie');
+  var intSectie = document.getElementById('int-sectie');
+  var prijsWrap = document.getElementById('prijs-indicatie');
+
+  if (n > 50) {
+    banner.style.display = 'block';
+    prijsWrap.style.display = 'none';
+    return;
+  }
+  banner.style.display = 'none';
+  prijsWrap.style.display = 'block';
+
+  var staffel = STAFFEL[n];
+  var progs = [];
+  if (document.getElementById('prog-normaal') && document.getElementById('prog-normaal').checked) progs.push({naam:'Normaal', prijs: staffel[0]});
+  if (document.getElementById('prog-intensief') && document.getElementById('prog-intensief').checked) progs.push({naam:'Intensief', prijs: staffel[1]});
+  if (document.getElementById('prog-proteqt') && document.getElementById('prog-proteqt').checked) progs.push({naam:'Proteqt', prijs: staffel[2]});
+
+  var intProgs = [];
+  if (zInterieur) {
+    if (document.getElementById('int-intensief') && document.getElementById('int-intensief').checked) intProgs.push({naam:'Int. Intensief', prijs: staffel[3]});
+    if (document.getElementById('int-proteqt') && document.getElementById('int-proteqt').checked) intProgs.push({naam:'Int. Proteqt', prijs: staffel[4]});
+  }
+
+  var regels = '';
+  var totaal = 0;
+
+  if (progs.length === 0 && intProgs.length === 0) {
+    document.getElementById('prijs-regels').innerHTML = '<span style="color:var(--subtle);">Maak een selectie hierboven.</span>';
+    document.getElementById('prijs-totaal').textContent = '\u2014';
+    return;
+  }
+
+  progs.forEach(function(p) {
+    var subtotaal = p.prijs * n;
+    totaal += subtotaal;
+    regels += '<div style="display:flex;justify-content:space-between;"><span>' + n + '\u00d7 ' + p.naam + ' (' + fmt(p.prijs) + '/was)</span><span style="color:var(--text);">' + fmt(subtotaal) + '</span></div>';
+  });
+
+  intProgs.forEach(function(p) {
+    var subtotaal = p.prijs * n;
+    totaal += subtotaal;
+    regels += '<div style="display:flex;justify-content:space-between;"><span>' + n + '\u00d7 ' + p.naam + ' (' + fmt(p.prijs) + '/beh.)</span><span style="color:var(--text);">' + fmt(subtotaal) + '</span></div>';
+  });
+
+  document.getElementById('prijs-regels').innerHTML = regels;
+  document.getElementById('prijs-totaal').textContent = fmt(totaal);
+}
+
+// Slider
+(function() {
+  var slider = document.getElementById('autos-slider');
+  if (!slider) return;
+
+  function updateSlider() {
+    var v = parseInt(slider.value);
+    zAantal = v;
+    var pct = ((v - 1) / 49) * 100;
+    slider.style.setProperty('--pct', pct + '%');
+    var valEl = document.getElementById('autos-val');
+    if (valEl) valEl.textContent = v;
+    zakelijkCalc();
+  }
+
+  slider.addEventListener('input', updateSlider);
+  updateSlider();
+})();
+
+// Programma checkboxes
+['prog-normaal','prog-intensief','prog-proteqt','int-intensief','int-proteqt'].forEach(function(id) {
+  var el = document.getElementById(id);
+  if (el) el.addEventListener('change', zakelijkCalc);
+});
+
+function toggleInterieur() {
+  zInterieur = !zInterieur;
+  var row = document.getElementById('int-toggle-row');
+  var sw  = document.getElementById('int-toggle-sw');
+  var sub = document.getElementById('int-toggle-sub');
+  var wrap = document.getElementById('int-prog-wrap');
+  if (row) row.classList.toggle('active', zInterieur);
+  if (sw) {
+    sw.style.background = zInterieur ? 'var(--red)' : '';
+    var knob = sw.querySelector('.toggle-knob');
+    if (knob) knob.style.transform = zInterieur ? 'translateX(22px)' : '';
+  }
+  if (sub) sub.textContent = zInterieur ? 'Kies het interieurprogramma hieronder' : 'Selecteer indien gewenst';
+  if (wrap) wrap.style.display = zInterieur ? 'block' : 'none';
+  zakelijkCalc();
+}
+
 </script>
 </body>
 </html>
