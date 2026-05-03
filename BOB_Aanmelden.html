@@ -267,9 +267,7 @@ to { opacity: 1; } }
   line-height: 0.92; letter-spacing: -0.5px; margin-bottom: 24px;
 }
 .section-h2 em { font-style: normal; color: var(--red); }
-.section-body {
-  font-size: 17px; color: var(--muted); line-height: 1.7; margin-bottom: 36px; max-width: 460px;
-}
+.section-/* blog-detail-body - verplaatst */
 .feature-list { list-style: none; margin-bottom: 44px; display: grid; gap: 16px; }
 .feature-item {
   display: flex; align-items: center; gap: 14px;
@@ -842,7 +840,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
   font-family: var(--fd); font-weight: 800; font-size: 15px;
   text-transform: uppercase; letter-spacing: 0.5px;
 }
-.form-section-body { padding: 24px; }
+.form-section-.form-section-body { padding: 24px; }
 
 /* ── FORM FIELDS ── */
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
@@ -1218,6 +1216,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
     <span></span><span></span><span></span>
   </button>
 </nav>
+<div id="form-wrapper">
 
 <!-- Prefill banner (zichtbaar als vanuit calculator) -->
 <div id="prefill-banner" style="display:none; background:rgba(227,6,19,0.08); border-bottom:1px solid rgba(227,6,19,0.2); padding:12px 24px; text-align:center;">
@@ -1516,6 +1515,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
 
 </div><!-- /form-layout -->
 </div><!-- /form-wrapper -->
+</div>
 
 <!-- SUCCES SCHERM -->
 <div class="succes-screen" id="succes-screen">
