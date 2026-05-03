@@ -1613,12 +1613,18 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
       </div>
       <div class="price-total-row">
         <div>
-          <div class="price-total-label">Totaal per maand</div>
+          <div class="price-total-label" id="price-total-label">Totaal per maand</div>
           <div class="price-total-sub" id="price-sub">1 auto · Intensief</div>
         </div>
         <div style="text-align:right;">
           <div class="price-total-amount" id="price-total">€34</div>
-          <div class="price-total-sub">/maand</div>
+          <div class="price-total-sub" id="price-total-sub">/maand</div>
+        </div>
+      </div>
+      <div id="price-daarna" style="display:none;padding:10px 20px 4px;background:rgba(34,197,94,0.04);border-top:1px solid rgba(34,197,94,0.12);">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-family:var(--fd);font-weight:700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(34,197,94,0.7);">Daarna per maand</span>
+          <span id="price-daarna-bedrag" style="font-family:var(--fd);font-weight:800;font-size:18px;color:rgba(255,255,255,0.7);">€34</span>
         </div>
       </div>
       <div class="price-note" id="price-note">
@@ -1838,11 +1844,25 @@ function updatePrijs() {
 
   document.getElementById('price-lines').innerHTML = lines;
 
-  var totalEl = document.getElementById('price-total');
+  var totalEl     = document.getElementById('price-total');
+  var labelEl     = document.getElementById('price-total-label');
+  var subEl       = document.getElementById('price-total-sub');
+  var daarnaWrap  = document.getElementById('price-daarna');
+  var daarnaEl    = document.getElementById('price-daarna-bedrag');
+
   if (kortingTotaal > 0) {
-    totalEl.innerHTML = '<span style="font-size:22px;color:var(--muted);text-decoration:line-through;margin-right:6px;">€' + totaal + '</span>€' + totaalNaKorting.toFixed(2).replace('.', ',');
+    // Eerste maand: kortingsbedrag
+    totalEl.innerHTML = '€' + totaalNaKorting.toFixed(2).replace('.', ',');
+    if (labelEl) labelEl.textContent = 'Eerste maand';
+    if (subEl)   subEl.textContent   = 'eenmalige korting verwerkt';
+    // Daarna: vol bedrag
+    if (daarnaWrap) daarnaWrap.style.display = 'block';
+    if (daarnaEl)   daarnaEl.textContent     = '€' + totaal;
   } else {
     totalEl.textContent = '€' + totaal;
+    if (labelEl) labelEl.textContent = 'Totaal per maand';
+    if (subEl)   subEl.textContent   = '/maand';
+    if (daarnaWrap) daarnaWrap.style.display = 'none';
   }
 
   document.getElementById('price-sub').textContent =
@@ -1852,8 +1872,11 @@ function updatePrijs() {
     document.getElementById('price-note').textContent =
       'Familietarief — prijs per auto daalt bij meer auto\'s. Maandelijks opzegbaar.';
   } else if (kortingTotaal > 0) {
+    var kortingOmschrijving = [];
+    if (kortingVandaag > 0) kortingOmschrijving.push('€2,50 bij direct activeren');
+    if (kortingRef > 0) kortingOmschrijving.push('€5,00 referral');
     document.getElementById('price-note').innerHTML =
-      '<span style="color:rgba(34,197,94,0.9);font-weight:600;">' + (kortingVandaag > 0 ? '€2,50 korting bij direct activeren' : '') + (kortingRef > 0 ? (kortingVandaag > 0 ? ' + €5,00 referral = €7,50 totaal' : '€5,00 referral-korting') : '') + '</span>';
+      '<span style="color:rgba(34,197,94,0.9);font-weight:600;">Korting eerste maand: ' + kortingOmschrijving.join(' + ') + ' = €' + kortingTotaal.toFixed(2).replace('.', ',') + ' · Daarna €' + totaal + '/mnd</span>';
   } else {
     document.getElementById('price-note').textContent =
       'Maandelijks opzegbaar · geen aansluitkosten · direct actief';
