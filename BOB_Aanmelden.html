@@ -733,8 +733,8 @@ to { opacity: 1; } }
   --fb: 'Inter', sans-serif;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body { background: var(--dark); color: var(--text); font-family: var(--fb); min-height: 100vh; }
+html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+body { background: var(--dark); color: var(--text); font-family: var(--fb); min-height: 100vh; padding-top: 72px; }
 
 
 
@@ -744,7 +744,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
 
 /* ── HERO STRIP ── */
 .form-hero {
-  padding: 140px 24px 48px; text-align: center;
+  padding: 48px 24px 48px; text-align: center;
   background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(227,6,19,0.08) 0%, transparent 70%);
 }
 .form-label {
@@ -1163,7 +1163,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
 @media (max-width: 860px) {
   .form-layout { grid-template-columns: 1fr; }
   .price-sidebar { position: static; }
-  .form-hero { padding: 120px 20px 48px; }
+  .form-hero { padding: 40px 20px 40px; }
 }
 @media (max-width: 600px) {
   .field-row { grid-template-columns: 1fr; }
