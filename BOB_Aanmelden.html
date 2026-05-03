@@ -1803,9 +1803,13 @@ function submitForm() {
   window._submitAutos = state.aantalAutos || 1;
 
   document.getElementById('form-wrapper').style.display = 'none';
+  // Leeg de upsell wrap voor het geval er nog iets in staat
+  var _uw = document.getElementById('upsell-wrap');
+  if (_uw) _uw.innerHTML = '';
   document.getElementById('succes-screen').classList.add('show');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  setTimeout(bouwUpsell, 100);
+  // Upsell alleen tonen als nog niet getoond na een upgrade
+  if (!_upsellGetoond) setTimeout(bouwUpsell, 100);
 }
 
 // ── INIT ─────────────────────────────────────────────────────
@@ -2163,6 +2167,9 @@ function verwerkUpsell() {
   // Verberg succes-screen, toon formulier opnieuw
   document.getElementById('succes-screen').classList.remove('show');
   document.getElementById('form-wrapper').style.display = '';
+  // Leeg de upsell wrap zodat hij na de volgende submit niet opnieuw verschijnt
+  var _wrap = document.getElementById('upsell-wrap');
+  if (_wrap) _wrap.innerHTML = '';
 
   // Scroll naar de prijs sidebar
   var sidebar = document.querySelector('.price-sidebar');
