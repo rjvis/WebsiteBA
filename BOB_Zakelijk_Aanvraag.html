@@ -1468,6 +1468,22 @@ document.getElementById('zakelijk-form').addEventListener('submit', function(e) 
     if (err) err.classList.remove('show');
   });
 });
+
+function toggleDrawer() {
+  const d = document.getElementById('nav-drawer');
+  const o = document.getElementById('nav-overlay');
+  const h = document.getElementById('nav-hamburger');
+  const open = d.classList.toggle('open');
+  o.classList.toggle('open', open);
+  h.classList.toggle('open', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+function closeDrawer() {
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('nav-overlay').classList.remove('open');
+  document.getElementById('nav-hamburger').classList.remove('open');
+  document.body.style.overflow = '';
+}
 </script>
 </body>
 </html>
