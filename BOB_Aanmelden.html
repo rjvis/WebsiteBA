@@ -746,7 +746,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
 
 /* ── HERO STRIP ── */
 .form-hero {
-  padding: 100px 24px 48px; text-align: center;
+  padding: 140px 24px 48px; text-align: center;
   background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(227,6,19,0.08) 0%, transparent 70%);
 }
 .form-label {
@@ -1798,8 +1798,8 @@ function submitForm() {
   document.getElementById('form-wrapper').style.display = 'none';
   document.getElementById('succes-screen').classList.add('show');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  // Bouw de upsell sectie op basis van de gemaakte keuzes
-  bouwUpsell();
+  // Bouw de upsell sectie na korte delay
+  setTimeout(bouwUpsell, 50);
 }
 
 // ── INIT ─────────────────────────────────────────────────────
@@ -1923,10 +1923,14 @@ function bouwUpsell() {
   var wrap = document.getElementById('upsell-wrap');
   if (!wrap) return;
 
-  var prog      = state.prog;
-  var intActief = state.interieur;
-  var autos     = state.aantalAutos;
-  var n         = Math.min(autos, 4) - 1;
+  // Lees prog direct uit geselecteerde knop voor betrouwbaarheid
+  var progEl = document.querySelector('.prog-opt.selected');
+  var prog = progEl ? (progEl.dataset.prog || state.prog) : state.prog;
+  if (!prog) prog = 'intensief';
+  var intEl = document.getElementById('int-opt');
+  var intActief = intEl ? intEl.classList.contains('on') : state.interieur;
+  var autos = state.aantalAutos || 1;
+  var n = Math.min(autos, 4) - 1;
 
   var WAS_UP  = { normaal: [28,28,28,28], intensief: [34,25,22,21], proteqt: [39,29,26,24] };
   var INT_UP  = { intensief: [20,18,15,12], proteqt: [18,16,13,10] };
