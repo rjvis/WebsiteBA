@@ -888,7 +888,7 @@ input[type="range"].autos-range::-webkit-slider-thumb {
 /* Programma checkboxes */
 .prog-checks { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 .prog-check-item { position: relative; }
-.prog-check-item input[type="checkbox"] { position: absolute; opacity: 0; width: 0; height: 0; }
+.prog-check-item input[type="checkbox"], .prog-check-item input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
 .prog-check-label {
   display: flex; flex-direction: column; align-items: center;
   padding: 14px 8px; background: var(--mid); border: 1px solid var(--border);
@@ -1194,7 +1194,7 @@ input[type="range"].autos-range::-webkit-slider-thumb {
         <!-- Aantal wasbeurten per maand -->
         <div class="form-group">
           <label class="form-label">Aantal wasbeurten per maand <span class="req">*</span></label>
-          <div class="autos-slider-wrap">
+          <div class="autos-slider-wrap" id="slider-wrap">
             <div class="autos-slider-header">
               <div>
                 <div class="autos-waarde"><em id="autos-val">10</em> <span id="autos-unit">wasbeurten/mnd</span></div>
@@ -1210,38 +1210,44 @@ input[type="range"].autos-range::-webkit-slider-thumb {
               <span class="autos-tick">50</span>
             </div>
           </div>
+          <!-- Meer dan 50 checkbox -->
+          <div style="margin-top:12px;">
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px;color:var(--muted);">
+              <input type="checkbox" id="meer-dan-50" style="width:16px;height:16px;accent-color:var(--red);cursor:pointer;" onchange="toggleMeerDan50()">
+              <span>Meer dan 50 wasbeurten per maand</span>
+            </label>
+          </div>
         </div>
 
-        <!-- >50: offerte banner -->
+        <!-- >50: offerte melding -->
         <div id="offerte-banner" style="display:none;background:rgba(227,6,19,0.08);border:1px solid rgba(227,6,19,0.3);padding:14px 18px;margin-bottom:16px;">
           <div style="font-family:var(--fd);font-weight:800;font-size:13px;color:var(--red);margin-bottom:4px;">Meer dan 50 wasbeurten per maand</div>
-          <div style="font-size:13px;color:var(--muted);">Voor grote vloten stellen wij een prijs op maat op. Onze accountmanager neemt binnen één werkdag contact met u op met een offerte.</div>
+          <div style="font-size:13px;color:var(--muted);">Voor grote vloten stellen wij een prijs op maat op. U kunt hieronder nog steeds uw programma- en interieurkeuze opgeven. Onze accountmanager neemt binnen één werkdag contact met u op met een offerte op maat.</div>
         </div>
 
         <!-- Gewenst wasprogramma -->
         <div class="form-group" id="prog-sectie">
-          <label class="form-label">Gewenst wasprogramma</label>
+          <label class="form-label">Gewenst wasprogramma <span class="req">*</span></label>
           <div class="prog-checks">
             <div class="prog-check-item">
-              <input type="checkbox" id="prog-normaal" value="Normaal">
+              <input type="radio" name="programma" id="prog-normaal" value="Normaal">
               <label class="prog-check-label" for="prog-normaal">
                 <span class="prog-check-naam" style="color:var(--bronze)">Normaal</span>
               </label>
             </div>
             <div class="prog-check-item">
-              <input type="checkbox" id="prog-intensief" value="Intensief" checked>
+              <input type="radio" name="programma" id="prog-intensief" value="Intensief" checked>
               <label class="prog-check-label" for="prog-intensief">
                 <span class="prog-check-naam" style="color:#b8c4cc">Intensief</span>
               </label>
             </div>
             <div class="prog-check-item">
-              <input type="checkbox" id="prog-proteqt" value="Proteqt">
+              <input type="radio" name="programma" id="prog-proteqt" value="Proteqt">
               <label class="prog-check-label" for="prog-proteqt">
                 <span class="prog-check-naam gold">Proteqt</span>
               </label>
             </div>
           </div>
-          <div style="font-size:12px;color:var(--subtle);margin-top:8px;">Meerdere programma's mogelijk — bijv. voor gemengde vloten</div>
         </div>
 
         <!-- Interieurband -->
@@ -1576,73 +1582,86 @@ var STAFFEL = {
   49: [8.75, 11.25, 14.00, 11.50, 10.50],
   50: [8.75, 11.25, 14.00, 11.50, 10.50]
 };
-// Indexen: 0=Normaal, 1=Intensief, 2=Proteqt, 3=IntIntensief, 4=IntProteqt
 
 var zAantal = 10;
 var zInterieur = false;
-var zIntProg = '';
+var zMeerDan50 = false;
 
 function fmt(n) {
   return '\u20ac' + n.toFixed(2).replace('.', ',');
 }
 
-function zakelijkCalc() {
-  var n = zAantal;
-  var banner = document.getElementById('offerte-banner');
-  var progSectie = document.getElementById('prog-sectie');
-  var intSectie = document.getElementById('int-sectie');
-  var prijsWrap = document.getElementById('prijs-indicatie');
+function getProg() {
+  var radios = document.querySelectorAll('input[name="programma"]');
+  for (var i = 0; i < radios.length; i++) {
+    if (radios[i].checked) return radios[i].value;
+  }
+  return 'Intensief';
+}
 
-  if (n > 50) {
-    banner.style.display = 'block';
+function getProgIdx() {
+  var p = getProg();
+  if (p === 'Normaal') return 0;
+  if (p === 'Intensief') return 1;
+  if (p === 'Proteqt') return 2;
+  return 1;
+}
+
+function zakelijkCalc() {
+  var prijsWrap = document.getElementById('prijs-indicatie');
+  if (!prijsWrap) return;
+
+  // Bij >50: verberg prijsindicatie
+  if (zMeerDan50) {
     prijsWrap.style.display = 'none';
     return;
   }
-  banner.style.display = 'none';
+
   prijsWrap.style.display = 'block';
-
+  var n = zAantal;
   var staffel = STAFFEL[n];
-  var progs = [];
-  if (document.getElementById('prog-normaal') && document.getElementById('prog-normaal').checked) progs.push({naam:'Normaal', prijs: staffel[0]});
-  if (document.getElementById('prog-intensief') && document.getElementById('prog-intensief').checked) progs.push({naam:'Intensief', prijs: staffel[1]});
-  if (document.getElementById('prog-proteqt') && document.getElementById('prog-proteqt').checked) progs.push({naam:'Proteqt', prijs: staffel[2]});
+  var progIdx = getProgIdx();
+  var wasPrijs = staffel[progIdx];
+  var wasTotal = wasPrijs * n;
 
-  var intProgs = [];
+  var regels = '<div style="display:flex;justify-content:space-between;"><span>' + n + '\u00d7 ' + getProg() + ' (' + fmt(wasPrijs) + '/was)</span><span style="color:var(--text);">' + fmt(wasTotal) + '</span></div>';
+  var totaal = wasTotal;
+
   if (zInterieur) {
-    if (document.getElementById('int-intensief') && document.getElementById('int-intensief').checked) intProgs.push({naam:'Int. Intensief', prijs: staffel[3]});
-    if (document.getElementById('int-proteqt') && document.getElementById('int-proteqt').checked) intProgs.push({naam:'Int. Proteqt', prijs: staffel[4]});
+    var intIdx = (progIdx === 0) ? 3 : (progIdx === 1 ? 3 : 4);
+    // Normaal -> IntIntensief, Intensief -> IntIntensief, Proteqt -> IntProteqt
+    if (document.getElementById('int-intensief') && document.getElementById('int-intensief').checked) {
+      intIdx = 3;
+    } else if (document.getElementById('int-proteqt') && document.getElementById('int-proteqt').checked) {
+      intIdx = 4;
+    }
+    var intPrijs = staffel[intIdx];
+    var intTotal = intPrijs * n;
+    totaal += intTotal;
+    var intNaam = intIdx === 3 ? 'Int. Intensief' : 'Int. Proteqt';
+    regels += '<div style="display:flex;justify-content:space-between;"><span>' + n + '\u00d7 ' + intNaam + ' (' + fmt(intPrijs) + '/beh.)</span><span style="color:var(--text);">' + fmt(intTotal) + '</span></div>';
   }
-
-  var regels = '';
-  var totaal = 0;
-
-  if (progs.length === 0 && intProgs.length === 0) {
-    document.getElementById('prijs-regels').innerHTML = '<span style="color:var(--subtle);">Maak een selectie hierboven.</span>';
-    document.getElementById('prijs-totaal').textContent = '\u2014';
-    return;
-  }
-
-  progs.forEach(function(p) {
-    var subtotaal = p.prijs * n;
-    totaal += subtotaal;
-    regels += '<div style="display:flex;justify-content:space-between;"><span>' + n + '\u00d7 ' + p.naam + ' (' + fmt(p.prijs) + '/was)</span><span style="color:var(--text);">' + fmt(subtotaal) + '</span></div>';
-  });
-
-  intProgs.forEach(function(p) {
-    var subtotaal = p.prijs * n;
-    totaal += subtotaal;
-    regels += '<div style="display:flex;justify-content:space-between;"><span>' + n + '\u00d7 ' + p.naam + ' (' + fmt(p.prijs) + '/beh.)</span><span style="color:var(--text);">' + fmt(subtotaal) + '</span></div>';
-  });
 
   document.getElementById('prijs-regels').innerHTML = regels;
   document.getElementById('prijs-totaal').textContent = fmt(totaal);
+}
+
+function toggleMeerDan50() {
+  var cb = document.getElementById('meer-dan-50');
+  zMeerDan50 = cb ? cb.checked : false;
+  var sliderWrap = document.getElementById('slider-wrap');
+  var banner = document.getElementById('offerte-banner');
+  var slider = document.getElementById('autos-slider');
+  if (sliderWrap) sliderWrap.style.opacity = zMeerDan50 ? '0.35' : '1';
+  if (sliderWrap) sliderWrap.style.pointerEvents = zMeerDan50 ? 'none' : '';
+  if (banner) banner.style.display = zMeerDan50 ? 'block' : 'none';
+  zakelijkCalc();
 }
 
 // Slider
 (function() {
   var slider = document.getElementById('autos-slider');
   if (!slider) return;
-
   function updateSlider() {
     var v = parseInt(slider.value);
     zAantal = v;
@@ -1652,13 +1671,17 @@ function zakelijkCalc() {
     if (valEl) valEl.textContent = v;
     zakelijkCalc();
   }
-
   slider.addEventListener('input', updateSlider);
   updateSlider();
 })();
 
-// Programma checkboxes
-['prog-normaal','prog-intensief','prog-proteqt','int-intensief','int-proteqt'].forEach(function(id) {
+// Radio programma
+document.querySelectorAll('input[name="programma"]').forEach(function(r) {
+  r.addEventListener('change', zakelijkCalc);
+});
+
+// Interieur checkboxes
+['int-intensief','int-proteqt'].forEach(function(id) {
   var el = document.getElementById(id);
   if (el) el.addEventListener('change', zakelijkCalc);
 });
