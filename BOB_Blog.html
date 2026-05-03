@@ -837,48 +837,31 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b, 
 
 /* ── BLOG GRID ── */
 .blog-grid-wrap {
-  max-width: 1100px; margin: 0 auto; padding: 56px 48px 100px;
+  max-width: 900px; margin: 0 auto; padding: 48px 48px 100px;
 }
 .blog-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2px;
+  display: flex; flex-direction: column; gap: 0;
 }
 
-/* ── BLOG KAART ── */
+/* ── BLOG KAART: foto links, tekst rechts ── */
 .blog-card {
   background: var(--dark); position: relative; overflow: hidden;
-  cursor: pointer; display: flex; flex-direction: column;
+  cursor: pointer; display: flex; flex-direction: row;
+  align-items: stretch;
   transition: background 0.3s;
   border: 1px solid var(--border);
+  border-top: none;
 }
+.blog-card:first-child { border-top: 1px solid var(--border); }
 .blog-card:hover { background: var(--mid); }
 .blog-card:hover .blog-card-img-inner { transform: scale(1.04); }
 .blog-card:hover .blog-read-more { color: var(--text); gap: 12px; }
 
-/* Uitgelichte kaart: eerste kaart breed */
-.blog-card.featured {
-  grid-column: 1 / -1;
-  flex-direction: row;
-}
-.blog-card.featured .blog-card-imgs {
-  width: 55%; flex-shrink: 0;
-}
-.blog-card.featured .blog-card-body {
-  padding: 48px 40px;
-  display: flex; flex-direction: column; justify-content: center;
-}
-.blog-card.featured .blog-card-title {
-  font-size: clamp(22px, 3vw, 34px);
-}
-
-/* Foto container */
+/* Foto container: vast breedte links */
 .blog-card-imgs {
+  width: 280px; flex-shrink: 0;
   position: relative; overflow: hidden;
-  aspect-ratio: 16/9;
-}
-.blog-card.featured .blog-card-imgs {
-  aspect-ratio: unset; height: 100%; min-height: 320px;
+  aspect-ratio: unset;
 }
 .blog-card-img-inner {
   position: absolute; inset: 0;
@@ -887,31 +870,66 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b, 
 .blog-card-img-main {
   width: 100%; height: 100%; object-fit: cover; display: block;
 }
-/* Tweede foto: zweeft rechtsonder */
-.blog-card-img-secondary {
-  position: absolute; bottom: 12px; right: 12px;
-  width: 38%; aspect-ratio: 4/3; object-fit: cover;
-  border: 2px solid var(--black);
-  box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1);
-}
-.blog-card:hover .blog-card-img-secondary {
-  transform: translate(-4px, -4px) scale(1.03);
-}
-/* Placeholder als geen foto beschikbaar */
+/* Tweede foto: verdwijnt in de lijst (alleen zichtbaar in detailpagina) */
+.blog-card-img-secondary { display: none; }
 .blog-img-placeholder {
-  width: 100%; height: 100%;
+  width: 100%; height: 100%; min-height: 200px;
   background: var(--mid);
   display: flex; align-items: center; justify-content: center;
   color: var(--muted); font-size: 28px;
 }
-.blog-img-placeholder-sm {
-  position: absolute; bottom: 12px; right: 12px;
-  width: 38%; aspect-ratio: 4/3;
-  background: rgba(255,255,255,0.04);
-  border: 2px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--muted); font-size: 18px;
+
+/* Categorie label */
+.blog-cat {
+  position: absolute; top: 14px; left: 14px; z-index: 2;
+  font-family: var(--fd); font-weight: 800;
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  background: var(--red); color: #fff; padding: 3px 9px;
+}
+
+/* Kaart body: rechts van de foto */
+.blog-card-body {
+  padding: 28px 32px;
+  flex: 1; display: flex; flex-direction: column; gap: 10px;
+  justify-content: center;
+}
+.blog-card-meta {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; color: var(--muted);
+  font-family: var(--fd); font-weight: 700; letter-spacing: 0.5px;
+}
+.blog-card-meta-dot {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--muted); flex-shrink: 0;
+}
+.blog-card-title {
+  font-family: var(--fd); font-weight: 900;
+  font-size: clamp(17px, 2vw, 22px); text-transform: uppercase;
+  letter-spacing: -0.3px; line-height: 1.1; color: var(--text);
+}
+.blog-card-excerpt {
+  font-size: 14px; color: var(--muted); line-height: 1.6; flex: 1;
+}
+.blog-read-more {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--fd); font-weight: 800;
+  font-size: 11px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--red); text-decoration: none;
+  transition: gap 0.2s, color 0.2s; margin-top: 4px;
+}
+
+/* ── MOBIEL: foto onder de tekst ── */
+@media (max-width: 768px) {
+  .blog-grid-wrap { padding: 32px 20px 80px; }
+  .blog-card { flex-direction: column-reverse; }
+  .blog-card-imgs {
+    width: 100%;
+    aspect-ratio: 16/9;
+    position: relative; height: auto;
+  }
+  .blog-card-img-inner { position: relative; height: 100%; }
+  .blog-card-img-main { height: 100%; }
+  .blog-card-body { padding: 20px 20px 16px; }
 }
 
 /* Rode balk categorie */
@@ -1048,10 +1066,6 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b, 
 
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
-  .blog-card.featured { flex-direction: column; }
-  .blog-card.featured .blog-card-imgs { width: 100%; height: auto; min-height: auto; aspect-ratio: 16/9; }
-  .blog-card.featured .blog-card-body { padding: 24px 28px 28px; }
-  .blog-card.featured .blog-card-title { font-size: 22px; }
 }
 @media (max-width: 768px) {
   /* NAV */
@@ -1065,7 +1079,6 @@ body { background: var(--black); color: var(--text); font-family: var(--font-b, 
   .blog-hero { padding: 100px 0 48px; }
   .blog-hero-inner, .blog-filter, .blog-grid-wrap { padding-left: 20px; padding-right: 20px; }
   .blog-grid { grid-template-columns: 1fr; gap: 2px; }
-  .blog-card.featured { grid-column: 1; }
   .blog-detail { padding: 90px 20px 60px; }
   .blog-detail-imgs { grid-template-columns: 1fr; }
 }
@@ -1298,7 +1311,7 @@ function renderBlogs() {
 
   gefilterd.forEach(function(blog, i) {
     var article = document.createElement('article');
-    article.className = 'blog-card' + (i === 0 ? ' featured' : '');
+    article.className = 'blog-card';
     article.onclick = (function(id) { return function() { openBlog(id); }; })(blog.id);
 
     var catLabel = CAT_LABELS[blog.categorie] || blog.categorie;
