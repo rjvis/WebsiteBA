@@ -1925,39 +1925,89 @@ function simuleerReferralCode() {
 
 
 // ══ UPSELL BEDANKPAGINA ══════════════════════════════════════════
+// Bijhoudt of de upsell al een keer getoond is (niet opnieuw vragen)
+var _upsellGetoond = false;
+
 function bouwUpsell() {
   var wrap = document.getElementById('upsell-wrap');
   if (!wrap) return;
+  if (_upsellGetoond) return; // slechts éénmalig tonen
 
-  // Lees opgeslagen keuzes uit (vastgelegd voor form-wrapper verdween)
-  var prog     = window._submitProg || state.prog || 'intensief';
+  var prog      = window._submitProg || state.prog || 'intensief';
   var intActief = window._submitInt !== undefined ? window._submitInt : state.interieur;
-  var autos    = window._submitAutos || state.aantalAutos || 1;
-  var n        = Math.min(autos, 4) - 1;
+  var autos     = window._submitAutos || state.aantalAutos || 1;
+  var n         = Math.min(autos, 4) - 1;
 
-  var WAS_UP  = { normaal: [28,28,28,28], intensief: [34,25,22,21], proteqt: [39,29,26,24] };
-  var INT_UP  = { intensief: [20,18,15,12], proteqt: [18,16,13,10] };
+  var WAS_PRIJS = { normaal:[28,28,28,28], intensief:[34,25,22,21], proteqt:[39,29,26,24] };
+  var INT_PRIJS = { normaal:[20,18,15,12], intensief:[20,18,15,12], proteqt:[18,16,13,10] };
+
+  // Bereken huidige maandprijs
+  var huidigWasPA  = WAS_PRIJS[prog][n];
+  var huidigIntPA  = intActief ? INT_PRIJS[prog][n] : 0;
+  var huidigTotaal = (huidigWasPA + huidigIntPA) * autos;
 
   var upsells = [];
+  var kanWasUpgrade  = prog !== 'proteqt';
+  var kanIntUpgrade  = !intActief;
 
-  if (prog === 'normaal') {
-    var diff = (WAS_UP.intensief[n] - WAS_UP.normaal[n]) * autos;
-    upsells.push({ id: 'upgrade-intensief', icon: '\u26a1', titel: 'Upgrade naar Intensief',
-      desc: 'Grondiger gewassen, betere lakbescherming. Het meest gekozen programma van BOB.',
-      diff: '+\u20ac' + diff + '/mnd', cta: 'Upgrade mijn abonnement naar Intensief \u2192' });
-  } else if (prog === 'intensief') {
-    var diff = (WAS_UP.proteqt[n] - WAS_UP.intensief[n]) * autos;
-    upsells.push({ id: 'upgrade-proteqt', icon: '\u2728', titel: 'Upgrade naar Proteqt',
-      desc: 'Maximale lakbescherming met een hydrofobe coating bij elke wasbeurt.',
-      diff: '+\u20ac' + diff + '/mnd', cta: 'Upgrade mijn abonnement naar Proteqt \u2192' });
+  // ── Optie 1: alleen wasprogramma upgrade ────────────────────────
+  if (kanWasUpgrade) {
+    var nieuwProg   = prog === 'normaal' ? 'intensief' : 'proteqt';
+    var nieuwWasPA  = WAS_PRIJS[nieuwProg][n];
+    var nieuwIntPA  = intActief ? INT_PRIJS[nieuwProg][n] : 0;
+    var nieuwTotaal = (nieuwWasPA + nieuwIntPA) * autos;
+    var diff        = nieuwTotaal - huidigTotaal;
+    var progLabel   = nieuwProg.charAt(0).toUpperCase() + nieuwProg.slice(1);
+    upsells.push({
+      id: 'upgrade-was',
+      icon: nieuwProg === 'proteqt' ? '\u2728' : '\u26a1',
+      titel: 'Upgrade naar ' + progLabel,
+      desc: nieuwProg === 'proteqt'
+        ? 'Maximale lakbescherming met hydrofobe coating bij elke wasbeurt. Jouw auto blijft langer nieuw.'
+        : 'Grondiger gewassen, betere lakbescherming. Het meest gekozen programma van BOB.',
+      diff: '+\u20ac' + diff + '/mnd',
+      nieuwProg: nieuwProg,
+      nieuwInt: intActief,
+      totaal: nieuwTotaal
+    });
   }
 
-  if (!intActief) {
-    var intKey = prog === 'proteqt' ? 'proteqt' : 'intensief';
-    var intTot = INT_UP[intKey][n] * autos;
-    upsells.push({ id: 'add-interieur', icon: '\ud83e\udeba', titel: 'Voeg Interieurband toe',
+  // ── Optie 2: alleen interieur toevoegen ─────────────────────────
+  if (kanIntUpgrade) {
+    var intPA       = INT_PRIJS[prog][n];
+    var nieuwTotaal = huidigTotaal + intPA * autos;
+    var diff        = intPA * autos;
+    upsells.push({
+      id: 'add-int',
+      icon: '\ud83e\udeba',
+      titel: 'Voeg Interieurband toe',
       desc: 'Professionele binnenreiniging bij elke wasbeurt. Stoelen, tapijt, dashboard en ruiten.',
-      diff: '+\u20ac' + intTot + '/mnd', cta: 'Voeg Interieurband toe aan mijn abonnement \u2192' });
+      diff: '+\u20ac' + diff + '/mnd',
+      nieuwProg: prog,
+      nieuwInt: true,
+      totaal: nieuwTotaal
+    });
+  }
+
+  // ── Optie 3: combi upgrade (was + interieur) — alleen als BEIDE kunnen ──
+  if (kanWasUpgrade && kanIntUpgrade) {
+    var nieuwProg   = prog === 'normaal' ? 'intensief' : 'proteqt';
+    var nieuwWasPA  = WAS_PRIJS[nieuwProg][n];
+    var nieuwIntPA  = INT_PRIJS[nieuwProg][n];
+    var nieuwTotaal = (nieuwWasPA + nieuwIntPA) * autos;
+    var diff        = nieuwTotaal - huidigTotaal;
+    var progLabel   = nieuwProg.charAt(0).toUpperCase() + nieuwProg.slice(1);
+    upsells.push({
+      id: 'upgrade-combi',
+      icon: '\ud83d\ude97\u2728',
+      titel: progLabel + ' + Interieurband',
+      desc: 'Het complete pakket: betere lakbescherming én een schoon interieur bij elke wasbeurt.',
+      diff: '+\u20ac' + diff + '/mnd',
+      badge: 'Beste keuze',
+      nieuwProg: nieuwProg,
+      nieuwInt: true,
+      totaal: nieuwTotaal
+    });
   }
 
   if (upsells.length === 0) {
@@ -1968,14 +2018,16 @@ function bouwUpsell() {
     return;
   }
 
-  // Sectie header
+  _upsellGetoond = true;
+
+  // ── Bouw de sectie ───────────────────────────────────────────────
   var section = document.createElement('div');
   section.className = 'upsell-section';
 
-  var label = document.createElement('span');
-  label.className = 'upsell-label';
-  label.textContent = 'Exclusief aanbod';
-  section.appendChild(label);
+  var lbl = document.createElement('span');
+  lbl.className = 'upsell-label';
+  lbl.textContent = 'Exclusief aanbod';
+  section.appendChild(lbl);
 
   var h2 = document.createElement('h2');
   h2.className = 'upsell-heading';
@@ -1984,22 +2036,27 @@ function bouwUpsell() {
 
   var sub = document.createElement('p');
   sub.className = 'upsell-sub';
-  sub.textContent = 'Je aanmelding is geregeld. Wil je nog een stap verder gaan? Dit kun je nu direct toevoegen.';
+  sub.textContent = 'Je aanmelding is geregeld. Wil je je abonnement direct upgraden? Kies een optie en we passen je aanvraag aan.';
   section.appendChild(sub);
 
-  // Kaarten container
   var cards = document.createElement('div');
   cards.className = 'upsell-cards';
   cards.id = 'upsell-cards';
 
-  window._upsellCtas = {};
+  window._upsellOpties = upsells;
 
   upsells.forEach(function(u) {
-    window._upsellCtas[u.id] = u.cta;
-
     var card = document.createElement('div');
     card.className = 'upsell-card';
     card.id = 'card-' + u.id;
+
+    if (u.badge) {
+      var bdg = document.createElement('div');
+      bdg.style.cssText = 'position:absolute;top:12px;right:12px;background:var(--red);color:#fff;font-family:var(--fd);font-weight:800;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:3px 9px;';
+      bdg.textContent = u.badge;
+      card.style.position = 'relative';
+      card.appendChild(bdg);
+    }
 
     var icon = document.createElement('span');
     icon.className = 'upsell-card-icon';
@@ -2023,11 +2080,11 @@ function bouwUpsell() {
     var diffEl = document.createElement('div');
     diffEl.className = 'upsell-card-diff';
     diffEl.textContent = u.diff;
-    var diffLabel = document.createElement('div');
-    diffLabel.className = 'upsell-card-diff-label';
-    diffLabel.textContent = 'per maand';
+    var diffLbl = document.createElement('div');
+    diffLbl.className = 'upsell-card-diff-label';
+    diffLbl.textContent = 'per maand extra';
     right.appendChild(diffEl);
-    right.appendChild(diffLabel);
+    right.appendChild(diffLbl);
     card.appendChild(right);
 
     var check = document.createElement('div');
@@ -2042,20 +2099,20 @@ function bouwUpsell() {
   });
   section.appendChild(cards);
 
-  // CTA wrap
+  // CTA knoppen
   var ctaWrap = document.createElement('div');
   ctaWrap.className = 'upsell-cta-wrap';
 
   var ctaBtn = document.createElement('button');
   ctaBtn.className = 'upsell-cta-btn';
   ctaBtn.id = 'upsell-cta-btn';
-  ctaBtn.textContent = 'Selecteer een optie om verder te gaan';
-  ctaBtn.addEventListener('click', bevestigUpsell);
+  ctaBtn.textContent = 'Selecteer een optie';
+  ctaBtn.addEventListener('click', verwerkUpsell);
   ctaWrap.appendChild(ctaBtn);
 
   var skip = document.createElement('span');
   skip.className = 'upsell-skip';
-  skip.textContent = 'Nee bedankt, dit is goed zo \u2192';
+  skip.textContent = 'Nee bedankt, mijn keuze is goed \u2192';
   skip.addEventListener('click', slaUpsellOver);
   ctaWrap.appendChild(skip);
 
@@ -2072,27 +2129,72 @@ function selectUpsell(id) {
   if (card) card.classList.add('selected');
   var btn = document.getElementById('upsell-cta-btn');
   if (btn) {
-    btn.textContent = window._upsellCtas[id] || 'Toevoegen \u2192';
+    var optie = (window._upsellOpties || []).find(function(u) { return u.id === id; });
+    btn.textContent = optie ? ('Upgrade naar ' + optie.titel + ' \u2192') : 'Toevoegen \u2192';
     btn.classList.add('show');
   }
 }
 
-function bevestigUpsell() {
+function verwerkUpsell() {
   if (!_geselecteerdeUpsell) return;
-  var naam  = (document.getElementById('voornaam') || {}).value || '';
-  var email = (document.getElementById('email') || {}).value || '';
-  var label = window._upsellCtas[_geselecteerdeUpsell] || _geselecteerdeUpsell;
-  var subject = encodeURIComponent('Wasclub upgrade aanvraag \u2014 ' + naam);
-  var body = encodeURIComponent('Naam: ' + naam + '\nE-mail: ' + email + '\nGewenste upgrade: ' + label);
-  window.location = 'mailto:wasclub@bobautowas.nl?subject=' + subject + '&body=' + body;
-  var wrap = document.getElementById('upsell-wrap');
-  if (wrap) {
-    wrap.innerHTML = '';
-    var conf = document.createElement('div');
-    conf.className = 'upsell-complete';
-    conf.style.marginBottom = '24px';
-    conf.innerHTML = '<p>\u2713 Je upgrade-aanvraag is verstuurd! We passen je abonnement aan en bevestigen dit per e-mail.</p>';
-    wrap.appendChild(conf);
+  var optie = (window._upsellOpties || []).find(function(u) { return u.id === _geselecteerdeUpsell; });
+  if (!optie) return;
+
+  // Pas state aan
+  state.prog       = optie.nieuwProg;
+  state.progAbo    = { normaal:28, intensief:34, proteqt:39 }[optie.nieuwProg] || 34;
+  state.interieur  = optie.nieuwInt;
+
+  // Update formulier visueel
+  document.querySelectorAll('.prog-opt').forEach(function(b) { b.classList.remove('selected'); });
+  var nieuwProgBtn = document.querySelector('.prog-opt.' + optie.nieuwProg);
+  if (nieuwProgBtn) nieuwProgBtn.classList.add('selected');
+
+  var intOpt = document.getElementById('int-opt');
+  if (intOpt) {
+    intOpt.classList.toggle('on', optie.nieuwInt);
+    var intDesc = document.getElementById('int-desc');
+    if (intDesc) intDesc.className = optie.nieuwInt ? 'int-desc on' : 'int-desc';
+  }
+
+  // Update de prijs sidebar
+  updatePrijs();
+
+  // Verberg succes-screen, toon formulier opnieuw
+  document.getElementById('succes-screen').classList.remove('show');
+  document.getElementById('form-wrapper').style.display = '';
+
+  // Scroll naar de prijs sidebar
+  var sidebar = document.querySelector('.price-sidebar');
+  if (sidebar) {
+    sidebar.style.border = '1px solid rgba(227,6,19,0.5)';
+    sidebar.style.boxShadow = '0 0 24px rgba(227,6,19,0.15)';
+    setTimeout(function() {
+      sidebar.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  }
+
+  // Scroll naar bevestigingssectie
+  var bevestig = document.querySelector('.form-section .step-badge');
+  var stap5 = null;
+  document.querySelectorAll('.step-badge').forEach(function(el) {
+    if (el.textContent === '5') stap5 = el.closest('.form-section');
+  });
+  if (stap5) {
+    setTimeout(function() {
+      stap5.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 400);
+  }
+
+  // Voeg een upgrade-bevestiging-banner toe bovenaan het formulier
+  var existBanner = document.getElementById('upgrade-banner');
+  if (!existBanner) {
+    var banner = document.createElement('div');
+    banner.id = 'upgrade-banner';
+    banner.style.cssText = 'background:rgba(227,6,19,0.08);border:1px solid rgba(227,6,19,0.3);padding:14px 24px;margin-bottom:16px;font-family:var(--fd);font-weight:700;font-size:13px;color:rgba(227,6,19,0.9);letter-spacing:0.5px;';
+    banner.textContent = '\u2713 Abonnement bijgewerkt naar ' + optie.titel + ' \u2014 controleer en verzend opnieuw';
+    var fw = document.getElementById('form-wrapper');
+    if (fw) fw.insertBefore(banner, fw.firstChild);
   }
 }
 
