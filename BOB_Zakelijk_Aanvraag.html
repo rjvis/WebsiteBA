@@ -1612,7 +1612,7 @@ function zakelijkCalc() {
   var totaal = wasTotal;
 
   if (zInterieur) {
-    // Interieur-tarief: Normaal en Intensief gebruiken IntIntensief (idx 3), Proteqt gebruikt IntProteqt (idx 4)
+    // Interieur-tarief: bij Normaal/Intensief gebruik index 3 (hoger tarief), bij Proteqt index 4 (lager tarief)
     var intIdx = (progIdx === 2) ? 4 : 3;
     var intPrijs = staffel[intIdx];
     var intTotal = intPrijs * n;
