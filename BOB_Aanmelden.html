@@ -1163,7 +1163,7 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
 @media (max-width: 860px) {
   .form-layout { grid-template-columns: 1fr; }
   .price-sidebar { position: static; }
-  .form-hero { padding: 90px 20px 36px; }
+  .form-hero { padding: 120px 20px 48px; }
 }
 @media (max-width: 600px) {
   .field-row { grid-template-columns: 1fr; }
@@ -1515,7 +1515,6 @@ body { background: var(--dark); color: var(--text); font-family: var(--fb); min-
 
 </div><!-- /form-layout -->
 </div><!-- /form-wrapper -->
-</div>
 
 <!-- SUCCES SCHERM -->
 <div class="succes-screen" id="succes-screen">
@@ -1795,11 +1794,19 @@ function submitForm() {
 
   // Toon succes
   document.getElementById('succes-email').textContent = document.getElementById('email').value;
+
+  // Sla formulierkeuzes op voor upsell VOORDAT form-wrapper verborgen wordt
+  var _progEl = document.querySelector('.prog-opt.selected');
+  window._submitProg = _progEl ? (_progEl.dataset.prog || state.prog) : state.prog;
+  if (!window._submitProg) window._submitProg = 'intensief';
+  var _intEl = document.getElementById('int-opt');
+  window._submitInt = _intEl ? _intEl.classList.contains('on') : state.interieur;
+  window._submitAutos = state.aantalAutos || 1;
+
   document.getElementById('form-wrapper').style.display = 'none';
   document.getElementById('succes-screen').classList.add('show');
   window.scrollTo({ top: 0, behavior: 'smooth' });
-  // Bouw de upsell sectie na korte delay
-  setTimeout(bouwUpsell, 50);
+  setTimeout(bouwUpsell, 100);
 }
 
 // ── INIT ─────────────────────────────────────────────────────
@@ -1923,14 +1930,11 @@ function bouwUpsell() {
   var wrap = document.getElementById('upsell-wrap');
   if (!wrap) return;
 
-  // Lees prog direct uit geselecteerde knop voor betrouwbaarheid
-  var progEl = document.querySelector('.prog-opt.selected');
-  var prog = progEl ? (progEl.dataset.prog || state.prog) : state.prog;
-  if (!prog) prog = 'intensief';
-  var intEl = document.getElementById('int-opt');
-  var intActief = intEl ? intEl.classList.contains('on') : state.interieur;
-  var autos = state.aantalAutos || 1;
-  var n = Math.min(autos, 4) - 1;
+  // Lees opgeslagen keuzes uit (vastgelegd voor form-wrapper verdween)
+  var prog     = window._submitProg || state.prog || 'intensief';
+  var intActief = window._submitInt !== undefined ? window._submitInt : state.interieur;
+  var autos    = window._submitAutos || state.aantalAutos || 1;
+  var n        = Math.min(autos, 4) - 1;
 
   var WAS_UP  = { normaal: [28,28,28,28], intensief: [34,25,22,21], proteqt: [39,29,26,24] };
   var INT_UP  = { intensief: [20,18,15,12], proteqt: [18,16,13,10] };
