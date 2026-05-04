@@ -2011,6 +2011,7 @@ updatePrijs();
     if (inp) {
       inp.value = refCode.toUpperCase();
       checkReferralCode(refCode);
+      updatePrijs(); // Verwerk de €5 referral korting direct in de prijsberekening
     }
   }
 })();
