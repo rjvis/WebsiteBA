@@ -2094,72 +2094,57 @@ function bouwUpsell() {
   var kanWasUpgrade  = prog !== 'proteqt';
   var kanIntUpgrade  = !intActief;
 
-  // ── Optie 1: alleen wasprogramma upgrade ────────────────────────
-  if (kanWasUpgrade) {
-    var nieuwProg   = prog === 'normaal' ? 'intensief' : 'proteqt';
-    var nieuwWasPA  = WAS_PRIJS[nieuwProg][n];
-    var nieuwIntPA  = intActief ? INT_PRIJS[nieuwProg][n] : 0;
-    var nieuwTotaal = (nieuwWasPA + nieuwIntPA) * autos;
-    var diff        = nieuwTotaal - huidigTotaal;
-    var progLabel   = nieuwProg.charAt(0).toUpperCase() + nieuwProg.slice(1);
-    upsells.push({
-      id: 'upgrade-was',
-      icon: nieuwProg === 'proteqt' ? '\u2728' : '\u26a1',
-      titel: 'Upgrade naar ' + progLabel,
-      desc: nieuwProg === 'proteqt'
-        ? 'Maximale lakbescherming met hydrofobe coating bij elke wasbeurt. Jouw auto blijft langer nieuw.'
-        : 'Grondiger gewassen, betere lakbescherming. Het meest gekozen programma van BOB.',
-      diff: '+\u20ac' + diff + '/mnd',
-      nieuwProg: nieuwProg,
-      nieuwInt: intActief,
-      totaal: nieuwTotaal
-    });
+  function addOpt(id, prog2, icon, titel, desc, nieuwInt, badge) {
+    var wasPA2 = WAS_PRIJS[prog2][n];
+    var intPA2 = nieuwInt ? INT_PRIJS[prog2][n] : (intActief ? INT_PRIJS[prog2][n] : 0);
+    var tot2   = (wasPA2 + intPA2) * autos;
+    var diff   = tot2 - huidigTotaal;
+    var obj = { id: id, icon: icon, titel: titel, desc: desc,
+      diff: '+\u20ac' + diff + '/mnd', nieuwProg: prog2, nieuwInt: nieuwInt, totaal: tot2 };
+    if (badge) obj.badge = badge;
+    upsells.push(obj);
   }
 
-  // ── Optie 2: alleen interieur toevoegen ─────────────────────────
-  if (kanIntUpgrade) {
-    var intPA       = INT_PRIJS[prog][n];
-    var nieuwTotaal = huidigTotaal + intPA * autos;
-    var diff        = intPA * autos;
-    upsells.push({
-      id: 'add-int',
-      icon: '\ud83e\udeba',
-      titel: 'Voeg Interieurband toe',
-      desc: 'Professionele binnenreiniging bij elke wasbeurt. Stoelen, tapijt, dashboard en ruiten.',
-      diff: '+\u20ac' + diff + '/mnd',
-      nieuwProg: prog,
-      nieuwInt: true,
-      totaal: nieuwTotaal
-    });
-  }
-
-  // ── Optie 3: combi upgrade (was + interieur) — alleen als BEIDE kunnen ──
-  if (kanWasUpgrade && kanIntUpgrade) {
-    var nieuwProg   = prog === 'normaal' ? 'intensief' : 'proteqt';
-    var nieuwWasPA  = WAS_PRIJS[nieuwProg][n];
-    var nieuwIntPA  = INT_PRIJS[nieuwProg][n];
-    var nieuwTotaal = (nieuwWasPA + nieuwIntPA) * autos;
-    var diff        = nieuwTotaal - huidigTotaal;
-    var progLabel   = nieuwProg.charAt(0).toUpperCase() + nieuwProg.slice(1);
-    upsells.push({
-      id: 'upgrade-combi',
-      icon: '\ud83d\ude97\u2728',
-      titel: progLabel + ' + Interieurband',
-      desc: 'Het complete pakket: betere lakbescherming én een schoon interieur bij elke wasbeurt.',
-      diff: '+\u20ac' + diff + '/mnd',
-      badge: 'Beste keuze',
-      nieuwProg: nieuwProg,
-      nieuwInt: true,
-      totaal: nieuwTotaal
-    });
-  }
-
-  if (upsells.length === 0) {
-    var div = document.createElement('div');
-    div.className = 'upsell-complete';
-    div.innerHTML = '<p>\ud83c\udfc6 Je hebt het maximale pakket gekozen \u2014 goed bezig! We zorgen dat je auto altijd in topvorm is.</p>';
-    wrap.appendChild(div);
-    return;
+  if (prog === 'normaal') {
+    addOpt('upgrade-int',  'intensief', '\u26a1',
+      'Upgrade naar Intensief',
+      'Grondiger gewassen, betere lakbescherming. Het meest gekozen programma van BOB.',
+      false, null);
+    addOpt('upgrade-prot', 'proteqt',  '\u2728',
+      'Upgrade naar Proteqt',
+      'Maximale lakbescherming met hydrofobe coating bij elke wasbeurt.',
+      false, null);
+    if (kanIntUpgrade) {
+      addOpt('combi-ni', 'normaal',   '\ud83e\udeba',
+        'Normaal + Interieurband',
+        'Jouw huidige wasprogramma met professionele binnenreiniging.', true, null);
+      addOpt('combi-ii', 'intensief', '\ud83d\ude97',
+        'Intensief + Interieurband',
+        'Beter wassen \xe9n een schoon interieur bij elke wasbeurt.', true, null);
+      addOpt('combi-pp', 'proteqt',   '\u2728\ud83e\udeba',
+        'Proteqt + Interieurband',
+        'Het complete pakket: maximale lakbescherming \xe9n interieurreiniging.', true, 'Beste keuze');
+    }
+  } else if (prog === 'intensief') {
+    addOpt('upgrade-was',   'proteqt',   '\u2728',
+      'Upgrade naar Proteqt',
+      'Maximale lakbescherming met hydrofobe coating bij elke wasbeurt.', false, null);
+    if (kanIntUpgrade) {
+      addOpt('add-int',       'intensief', '\ud83e\udeba',
+        'Voeg Interieurband toe',
+        'Professionele binnenreiniging bij elke wasbeurt. Stoelen, tapijt, dashboard en ruiten.',
+        true, null);
+      addOpt('upgrade-combi', 'proteqt',   '\u2728\ud83e\udeba',
+        'Proteqt + Interieurband',
+        'Het complete pakket: maximale lakbescherming \xe9n interieurreiniging.', true, 'Beste keuze');
+    }
+  } else {
+    if (kanIntUpgrade) {
+      addOpt('add-int', 'proteqt', '\ud83e\udeba',
+        'Voeg Interieurband toe',
+        'Professionele binnenreiniging bij elke wasbeurt. Stoelen, tapijt, dashboard en ruiten.',
+        true, null);
+    }
   }
 
   _upsellGetoond = true;
@@ -2276,9 +2261,14 @@ function selectUpsell(id) {
     var optie = (window._upsellOpties || []).find(function(u) { return u.id === id; });
         var ctaTekst = 'Toevoegen →';
     if (optie) {
-      if (optie.id === 'upgrade-was')   ctaTekst = optie.titel + ' →';
-      if (optie.id === 'add-int')       ctaTekst = 'Voeg Interieurband toe aan mijn abonnement →';
-      if (optie.id === 'upgrade-combi') { var delen = optie.titel.split(' + '); ctaTekst = 'Upgrade naar ' + delen[0] + ' en voeg ' + (delen[1] || 'Interieurband') + ' toe →'; }
+      if (optie.nieuwInt && optie.nieuwProg !== prog) {
+        var pl = optie.nieuwProg.charAt(0).toUpperCase() + optie.nieuwProg.slice(1);
+        ctaTekst = 'Upgrade naar ' + pl + ' en voeg Interieurband toe →';
+      } else if (optie.nieuwInt && optie.nieuwProg === prog) {
+        ctaTekst = 'Voeg Interieurband toe aan mijn abonnement →';
+      } else {
+        ctaTekst = optie.titel + ' →';
+      }
     }
     btn.textContent = ctaTekst;
     btn.classList.add('show');
