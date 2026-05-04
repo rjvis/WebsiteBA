@@ -2274,7 +2274,13 @@ function selectUpsell(id) {
   var btn = document.getElementById('upsell-cta-btn');
   if (btn) {
     var optie = (window._upsellOpties || []).find(function(u) { return u.id === id; });
-    btn.textContent = optie ? ('Upgrade naar ' + optie.titel + ' \u2192') : 'Toevoegen \u2192';
+        var ctaTekst = 'Toevoegen →';
+    if (optie) {
+      if (optie.id === 'upgrade-was')   ctaTekst = 'Upgrade naar ' + optie.titel + ' →';
+      if (optie.id === 'add-int')       ctaTekst = 'Voeg Interieurband toe aan mijn abonnement →';
+      if (optie.id === 'upgrade-combi') { var delen = optie.titel.split(' + '); ctaTekst = 'Upgrade naar ' + delen[0] + ' en voeg ' + (delen[1] || 'Interieurband') + ' toe →'; }
+    }
+    btn.textContent = ctaTekst;
     btn.classList.add('show');
   }
 }
