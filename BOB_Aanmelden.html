@@ -2259,12 +2259,14 @@ function selectUpsell(id) {
   var btn = document.getElementById('upsell-cta-btn');
   if (btn) {
     var optie = (window._upsellOpties || []).find(function(u) { return u.id === id; });
-        var ctaTekst = 'Toevoegen →';
+    var origProg = window._submitProg || 'intensief';
+    var ctaTekst = optie ? optie.titel + ' →' : 'Toevoegen →';
     if (optie) {
-      if (optie.nieuwInt && optie.nieuwProg !== prog) {
+      var wasUpgrade = optie.nieuwProg !== origProg;
+      if (optie.nieuwInt && wasUpgrade) {
         var pl = optie.nieuwProg.charAt(0).toUpperCase() + optie.nieuwProg.slice(1);
         ctaTekst = 'Upgrade naar ' + pl + ' en voeg Interieurband toe →';
-      } else if (optie.nieuwInt && optie.nieuwProg === prog) {
+      } else if (optie.nieuwInt && !wasUpgrade) {
         ctaTekst = 'Voeg Interieurband toe aan mijn abonnement →';
       } else {
         ctaTekst = optie.titel + ' →';
