@@ -2276,7 +2276,7 @@ function selectUpsell(id) {
     var optie = (window._upsellOpties || []).find(function(u) { return u.id === id; });
         var ctaTekst = 'Toevoegen →';
     if (optie) {
-      if (optie.id === 'upgrade-was')   ctaTekst = 'Upgrade naar ' + optie.titel + ' →';
+      if (optie.id === 'upgrade-was')   ctaTekst = optie.titel + ' →';
       if (optie.id === 'add-int')       ctaTekst = 'Voeg Interieurband toe aan mijn abonnement →';
       if (optie.id === 'upgrade-combi') { var delen = optie.titel.split(' + '); ctaTekst = 'Upgrade naar ' + delen[0] + ' en voeg ' + (delen[1] || 'Interieurband') + ' toe →'; }
     }
